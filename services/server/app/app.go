@@ -1,10 +1,10 @@
 package app
 
 import (
-	api "github.com/ilovelili/dongfeng/core/services/proto"
-	handlers "github.com/ilovelili/dongfeng/core/services/server/handlers"
+	api "github.com/ilovelili/dongfeng-core/services/proto"
+	handlers "github.com/ilovelili/dongfeng-core/services/server/handlers"
 
-	"github.com/ilovelili/dongfeng/core/services/utils"
+	"github.com/ilovelili/dongfeng-core/services/utils"
 	micro "github.com/micro/go-micro"
 	_ "github.com/micro/go-plugins/registry/kubernetes"
 )

@@ -12,4 +12,7 @@ debug.test
 k8s
 
 # bash scripts
-run.sh
+scripts
+
+# go dep
+Gopkg.*

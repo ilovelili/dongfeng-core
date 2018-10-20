@@ -1,7 +1,7 @@
 package repositories
 
 import (
-	"github.com/ilovelili/dongfeng/core/services/server/core/models"
+	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 )
 
 // UserRepository user info repository

@@ -4,9 +4,9 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/ilovelili/dongfeng/core/services/server/core/models"
-	"github.com/ilovelili/dongfeng/core/services/server/core/repositories"
-	"github.com/ilovelili/dongfeng/sharedlib"
+	"github.com/ilovelili/dongfeng-core/services/server/core/models"
+	"github.com/ilovelili/dongfeng-core/services/server/core/repositories"
+	"github.com/ilovelili/dongfeng-shared-lib"
 )
 
 // UserController user profile controller

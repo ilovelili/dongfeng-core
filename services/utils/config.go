@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ilovelili/dongfeng/sharedlib"
+	"github.com/ilovelili/dongfeng-shared-lib"
 )
 
 var once sync.Once

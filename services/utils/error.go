@@ -1,17 +1,24 @@
 package utils
 
 import (
-	"github.com/micro/go-micro/errors"
+	"time"
+
+	errorcode "github.com/ilovelili/dongfeng-errorcode"
+	logger "github.com/ilovelili/dongfeng-logger"
 )
 
 // NewError new rpc error
-func NewError(detail string, httpcode ...int32) error {
-	var code int32
-	if len(httpcode) == 0 {
-		code = errors.Parse(detail).Code
-	} else {
-		code = httpcode[0]
-	}
+func NewError(customerror *errorcode.Error, detail ...string) error {
+	e := customerror.NewError(detail...)
 
-	return errors.New("dongfeng.svc.core.server", detail, code)
+	go func() {
+		errorlog := &logger.Log{
+			Category: "ErrorLog",
+			Content:  e.Error(),
+			Time:     time.Now(),
+		}
+		errorlog.ErrorLog(logger.CoreServer)
+	}()
+
+	return e
 }

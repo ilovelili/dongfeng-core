@@ -5,7 +5,7 @@ package repositories
 import (
 	"database/sql"
 
-	"github.com/ilovelili/dongfeng/core/services/utils"
+	"github.com/ilovelili/dongfeng-core/services/utils"
 	"github.com/olivere/dapper"
 
 	"sync"

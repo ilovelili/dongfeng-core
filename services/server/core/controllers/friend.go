@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/ilovelili/dongfeng/core/services/server/core/models"
-	"github.com/ilovelili/dongfeng/core/services/server/core/repositories"
+	"github.com/ilovelili/dongfeng-core/services/server/core/models"
+	"github.com/ilovelili/dongfeng-core/services/server/core/repositories"
 )
 
 // FriendController user profile controller

@@ -4,13 +4,13 @@ package handlers
 import (
 	"context"
 	"encoding/json"
-	"net/http"
 
-	api "github.com/ilovelili/dongfeng/core/services/proto"
-	"github.com/ilovelili/dongfeng/core/services/server/core/controllers"
-	"github.com/ilovelili/dongfeng/core/services/server/core/models"
-	"github.com/ilovelili/dongfeng/core/services/utils"
-	"github.com/ilovelili/dongfeng/sharedlib"
+	"github.com/ilovelili/dongfeng-core/services/server/core/controllers"
+	"github.com/ilovelili/dongfeng-core/services/server/core/models"
+	"github.com/ilovelili/dongfeng-core/services/utils"
+	"github.com/ilovelili/dongfeng-errorcode"
+	proto "github.com/ilovelili/dongfeng-protobuf"
+	"github.com/ilovelili/dongfeng-shared-lib"
 	"github.com/micro/go-micro/metadata"
 )
 
@@ -20,11 +20,10 @@ const (
 )
 
 // Login return 200
-// TBD: jaeger
-func (f *Facade) Login(ctx context.Context, req *api.LoginRequest, rsp *api.LoginResponse) error {
+func (f *Facade) Login(ctx context.Context, req *proto.LoginRequest, rsp *proto.LoginResponse) error {
 	md, ok := metadata.FromContext(ctx)
 	if !ok {
-		return utils.NewError("No metadata received", http.StatusBadRequest)
+		return utils.NewError(errorcode.GenericInvalidMetaData)
 	}
 
 	idtoken := md[sharedlib.MetaDataToken]
@@ -33,7 +32,7 @@ func (f *Facade) Login(ctx context.Context, req *api.LoginRequest, rsp *api.Logi
 
 	// vaidate the token
 	if err != nil || !token.Valid {
-		return utils.NewError("Token invalid", http.StatusUnauthorized)
+		return utils.NewError(errorcode.GenericInvalidToken)
 	}
 
 	// Unmarshal user info
@@ -54,7 +53,7 @@ func (f *Facade) Login(ctx context.Context, req *api.LoginRequest, rsp *api.Logi
 
 		// new user, save to database
 		if err = usercontroller.Save(user); err != nil {
-			return utils.NewError("Unable to save user", http.StatusInternalServerError)
+			return utils.NewError(errorcode.CoreFailedToSaveUser)
 		}
 	} else {
 		user = exsitinguser
@@ -64,7 +63,7 @@ func (f *Facade) Login(ctx context.Context, req *api.LoginRequest, rsp *api.Logi
 	rsp.Version = utils.Version()
 
 	// user profile
-	rsp.User = &api.User{
+	rsp.User = &proto.User{
 		Newuser:  newUser,
 		Role:     user.Role,
 		Id:       user.ID,
@@ -81,14 +80,14 @@ func (f *Facade) Login(ctx context.Context, req *api.LoginRequest, rsp *api.Logi
 	uid := agentsmith
 	operations, err := operationcontroller.GetOperations(uid, true)
 	if err != nil {
-		return utils.NewError(err.Error(), http.StatusInternalServerError)
+		return utils.NewError(errorcode.CoreFailedToGetOperation)
 	}
 	rsp.SystemBroadcasting = convertOperations(operations)
 
 	// 2. user updates
 	operations, err = operationcontroller.GetOperations(user.ID, user.Role == "admin")
 	if err != nil {
-		return utils.NewError(err.Error(), http.StatusInternalServerError)
+		return utils.NewError(errorcode.CoreFailedToGetOperation)
 	}
 	rsp.UserUpdates = convertOperations(operations)
 
@@ -96,14 +95,14 @@ func (f *Facade) Login(ctx context.Context, req *api.LoginRequest, rsp *api.Logi
 	friendcontroller := controllers.NewFriendController()
 	friends, err := friendcontroller.GetFriends(user.ID)
 	if err != nil {
-		return utils.NewError(err.Error(), http.StatusInternalServerError)
+		return utils.NewError(errorcode.CoreFailedToGetFriends)
 	}
 
 	operations = make([]*models.Operation, 0)
 	for _, friend := range friends {
 		ops, err := operationcontroller.GetOperations(friend.ID, friend.Role == "admin")
 		if err != nil {
-			return utils.NewError(err.Error(), http.StatusInternalServerError)
+			return utils.NewError(errorcode.CoreFailedToGetOperation)
 		}
 
 		operations = append(operations, ops...)
@@ -113,10 +112,10 @@ func (f *Facade) Login(ctx context.Context, req *api.LoginRequest, rsp *api.Logi
 	return err
 }
 
-func convertSettings(settings []*models.Settings) []*api.Setting {
-	result := make([]*api.Setting, 0)
+func convertSettings(settings []*models.Settings) []*proto.Setting {
+	result := make([]*proto.Setting, 0)
 	for _, setting := range settings {
-		result = append(result, &api.Setting{
+		result = append(result, &proto.Setting{
 			Id:      setting.ID,
 			Name:    setting.Name,
 			Enabled: setting.Enabled,
@@ -126,15 +125,15 @@ func convertSettings(settings []*models.Settings) []*api.Setting {
 	return result
 }
 
-func convertOperations(operations []*models.Operation) []*api.Operation {
-	result := make([]*api.Operation, 0)
+func convertOperations(operations []*models.Operation) []*proto.Operation {
+	result := make([]*proto.Operation, 0)
 	for _, operation := range operations {
 		var uid string
 		if operation.UserID != agentsmith {
 			uid = operation.UserID
 		}
 
-		result = append(result, &api.Operation{
+		result = append(result, &proto.Operation{
 			UserId:    uid,
 			Time:      operation.Time,
 			Operation: operation.Operation,

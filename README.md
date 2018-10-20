@@ -6,7 +6,6 @@ Core is the microservice architecture interacts with frontend.
 
 - [Go 1.10](https://golang.org/) aka Golang
 - [Micro](https://micro.mu/) Microservice toolkit written in Go
-- [Glide](https://glide.sh/) Package management for Go
 - [NATS](http://nats.io/) High performance message broker
 - [Redis](https://redis.io/) Cache server meanwhile saves session
 - [MySQL](https://www.mysql.com/) RDBMS to save core business data
@@ -18,7 +17,7 @@ Core is the microservice architecture interacts with frontend.
 
 ### Public packages
 
-- Please check `glide.yaml`
+- Please check `Gopkg.lock`
 
 ## Spinup
 
