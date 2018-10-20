@@ -1,0 +1,7 @@
+# debugging file
+debug
+
+# config files
+# config.dev.json
+config.test.json
+config.prod.json

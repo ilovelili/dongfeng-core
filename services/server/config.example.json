@@ -1,0 +1,23 @@
+{    
+    "services": {  
+        "redis": {            
+            "host": "redis:6379",
+            "maxconnectioncount": 10
+        },
+        "mysql": {
+            "host": "mysql:3306",
+            "database": "database",
+            "user": "user",
+            "password": "password",
+            "allow_debug": true
+        }   
+    },
+    "servicenames": {        
+        "core_server": "dongfeng.svc.core.server.api"
+    },
+    "servicemeta": {
+        "registry_ttl": 30,
+        "registry_heartbeat": 10,
+        "api_version": "0.0.1"
+    }
+}

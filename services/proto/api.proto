@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package dongfeng.svc.core.server;
+
+// api
+service api {
+    rpc Healthcheck(HealthcheckRequest) returns(HealthcheckResponse) {};
+    rpc Login(LoginRequest) returns(LoginResponse) {}; 
+}
+
+message HealthcheckRequest {}
+
+message HealthcheckResponse {	
+	string message = 1;
+}
+
+message LoginRequest {}
+
+message LoginResponse {
+	string version = 1;
+	User user = 2;	
+	repeated Operation system_broadcasting = 3;
+	repeated Operation user_updates = 4;
+	repeated Operation friend_updates = 5;
+}
+
+// User user profile
+message User {
+	bool newuser = 1;
+	string role = 2;
+	string id = 3;
+	string email = 4;
+	string name = 5;	
+	string avatar = 6;
+	repeated Setting settings = 7;
+}
+
+// Setting user setting
+message Setting {
+	int64 id = 1;
+	string name = 2;	
+	bool enabled = 3;
+}
+
+message Operation {
+	string user_id = 1;
+	string time = 2;	
+	string operation = 3;
+	string category = 4;
+}
