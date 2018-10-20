@@ -1,4 +1,4 @@
-FROM golang as builder
+FROM golang:1.11 as builder
 
 LABEL maintainer="min<route666@live.cn>"
 
