@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: dongfeng-core
+  namespace: dongfeng-back
+  name: dongfeng-core
+spec:
+  clusterIP: None
+  ports:
+  - name: headless
+    port: 55550
+    targetPort: 0
+  selector:    
+    app: dongfeng-core
