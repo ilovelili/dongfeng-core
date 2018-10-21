@@ -19,20 +19,4 @@ Core is the microservice architecture interacts with frontend.
 
 - Please check `Gopkg.lock`
 
-## Spinup
-
-Step 1. Start local services
-
-```bash
-cd local && run.sh
-```
-
-Step 2. Start core
-
-```bash
-cd core && run.sh
-```
-
-[Git Bash](https://git-scm.com/downloads) for Windows
-
 ## Endpoints (TBD)
