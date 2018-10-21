@@ -11,7 +11,4 @@ build:
 proto:
 	cd ./scripts && ./proto_compiler.sh
 
-test:
-	cd ./scripts && ./test.sh
-
-.PTHONY: all local build proto test
+.PTHONY: all local build proto

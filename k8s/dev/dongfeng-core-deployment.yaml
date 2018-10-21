@@ -38,7 +38,7 @@ spec:
           "--server_name=dongfeng.svc.core.server.api",
           "--server_address=0.0.0.0:9091",
         ]
-        image: microhq/health:latest
+        image: ilovelili/micro-health:latest
         livenessProbe:
           httpGet:
             path: /health
