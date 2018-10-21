@@ -9,8 +9,6 @@ import (
 	"strings"
 	"sync"
 	"time"
-
-	"github.com/ilovelili/dongfeng-shared-lib"
 )
 
 var once sync.Once
@@ -39,15 +37,13 @@ func GetConfig() *Config {
 		configFile, err := os.Open(filepath)
 		defer configFile.Close()
 		if err != nil {
-			sharedlib.NewStdOutLogger().Panic("Failed to load config")
-			return
+			panic(err)
 		}
 
 		jsonParser := json.NewDecoder(configFile)
 		err = jsonParser.Decode(&config)
 		if err != nil {
-			sharedlib.NewStdOutLogger().Panic("Failed to load config")
-			return
+			panic(err)
 		}
 
 		instance = config
