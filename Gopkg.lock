@@ -63,7 +63,7 @@
 
 [[projects]]
   branch = "master"
-  name = "github.com/ilovelili/dongfeng-errorcode"
+  name = "github.com/ilovelili/dongfeng-error-code"
   packages = ["."]
   revision = "f0710b342d9c6f835790c3ddc50f3ca75e0f0684"
 

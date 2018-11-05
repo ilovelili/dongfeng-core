@@ -8,7 +8,7 @@ import (
 	"github.com/ilovelili/dongfeng-core/services/server/core/controllers"
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 	"github.com/ilovelili/dongfeng-core/services/utils"
-	"github.com/ilovelili/dongfeng-errorcode"
+	"github.com/ilovelili/dongfeng-error-code"
 	proto "github.com/ilovelili/dongfeng-protobuf"
 	"github.com/ilovelili/dongfeng-shared-lib"
 	"github.com/micro/go-micro/metadata"

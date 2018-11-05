@@ -3,7 +3,7 @@ package utils
 import (
 	"time"
 
-	errorcode "github.com/ilovelili/dongfeng-errorcode"
+	errorcode "github.com/ilovelili/dongfeng-error-code"
 	logger "github.com/ilovelili/dongfeng-logger"
 )
 

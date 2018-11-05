@@ -31,7 +31,7 @@
 
 [[constraint]]
   branch = "master"
-  name = "github.com/ilovelili/dongfeng-errorcode"
+  name = "github.com/ilovelili/dongfeng-error-code"
 
 [[constraint]]
   branch = "master"
