@@ -1,6 +1,6 @@
 FROM golang:1.11 as builder
 
-LABEL maintainer="min<route666@live.cn>"
+LABEL maintainer="<route666@live.cn>"
 
 ENV SRC_DIR=/go/src/dongfeng/dongfeng-core
 WORKDIR $SRC_DIR
@@ -16,7 +16,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o server .
 
 FROM alpine
 
-LABEL maintainer="min<route666@live.cn>"
+LABEL maintainer="<route666@live.cn>"
 
 ENV BUILDER_DIR=/go/src/dongfeng/dongfeng-core/services/server
 RUN apk --no-cache add ca-certificates tzdata
