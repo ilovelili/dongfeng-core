@@ -46,15 +46,14 @@ CREATE TABLE `categories` (
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `operation_logs` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `user_id` varchar(12) NOT NULL COMMENT 'User ID',
-  `operation` varchar(255) NOT NULL COMMENT 'Operation',
+CREATE TABLE `notifications` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(12) NOT NULL,
+  `custom_code` varchar(6) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `details` text NOT NULL,
   `link` varchar(255) DEFAULT NULL,
-  `category_id` int(11) NOT NULL COMMENT 'Category',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'detailed link',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`),
-  KEY `fk_operation_logs_catefory_idx` (`category_id`),
-  CONSTRAINT `fk_operation_logs_catefory` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

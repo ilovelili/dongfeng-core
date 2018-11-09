@@ -4,15 +4,12 @@ package repositories
 
 import (
 	"database/sql"
-
-	"github.com/ilovelili/dongfeng-core/services/utils"
-	"github.com/olivere/dapper"
-
+	"fmt"
 	"sync"
 
-	"fmt"
-
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/ilovelili/dongfeng-core/services/utils"
+	"github.com/olivere/dapper"
 )
 
 type dbclient struct {

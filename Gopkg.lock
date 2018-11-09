@@ -65,25 +65,25 @@
   branch = "master"
   name = "github.com/ilovelili/dongfeng-error-code"
   packages = ["."]
-  revision = "5c1ff9ad3e450d5c00a24d778d3f974fa3c8b1b5"
+  revision = "d5c7caff8f4b31459abba71afa81c22d2e617835"
 
 [[projects]]
   branch = "master"
   name = "github.com/ilovelili/dongfeng-logger"
   packages = ["."]
-  revision = "2d492425221b6ba4ca0d423d62e2c650603fad53"
+  revision = "e508c36b17cddc7f21175913b304ed83a916e8f6"
 
 [[projects]]
   branch = "master"
   name = "github.com/ilovelili/dongfeng-protobuf"
   packages = ["."]
-  revision = "9b9e69a048c4d6067aac5f3113c255b805f7a167"
+  revision = "2c56957b6d1c321cb2c1d6af102bc25eb691bcb4"
 
 [[projects]]
   branch = "master"
   name = "github.com/ilovelili/dongfeng-shared-lib"
   packages = ["."]
-  revision = "9d9c11d177ecbb79bb664d86c7a67202916ee99c"
+  revision = "953f46cb10754ac8de18bb1625c6f8fc24db32ee"
 
 [[projects]]
   name = "github.com/konsorten/go-windows-terminal-sequences"
@@ -197,19 +197,19 @@
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["ed25519","ed25519/internal/edwards25519","ssh/terminal"]
-  revision = "bfa7d42eb568d3c454e1853744768cc80718040d"
+  revision = "e4dc69e5b2fd71dcaf8bd5d054eb936deb78d1fa"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/net"
   packages = ["bpf","context","internal/iana","internal/socket","ipv4","ipv6"]
-  revision = "10aee181995363b41f712a55844a0dd52ea04646"
+  revision = "03003ca0c849e57b6ea29a4bab8d3cb6e4d568fe"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix","windows"]
-  revision = "3a76605856fddce5718553cbb8bd50ca492a7274"
+  revision = "66b7b1311ac80bbafcd2daeef9a5e6e2cd1e2399"
 
 [[projects]]
   name = "google.golang.org/appengine"
