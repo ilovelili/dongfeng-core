@@ -77,7 +77,7 @@
   branch = "master"
   name = "github.com/ilovelili/dongfeng-protobuf"
   packages = ["."]
-  revision = "912c4b7ec4d550ef6b8498f64c66af9bb84a1548"
+  revision = "169df7924cfa16cb819dd976c0904b1304f328f8"
 
 [[projects]]
   branch = "master"

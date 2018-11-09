@@ -75,7 +75,6 @@ func (f *Facade) Login(ctx context.Context, req *proto.LoginRequest, rsp *proto.
 		return utils.NewError(errorcode.CoreFailedToGetNotification)
 	}
 	rsp.Notifications = resolvecNotifications(notifications)
-
 	return err
 }
 

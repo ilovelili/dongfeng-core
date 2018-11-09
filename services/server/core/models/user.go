@@ -6,15 +6,15 @@ type User struct {
 	Email    string      `json:"email" dapper:"email"`
 	Name     string      `json:"name" dapper:"name"`
 	Avatar   string      `json:"picture,omitempty" dapper:"avatar"`
-	Setting  int64       `dapper:"settings"`
+	Setting  int32       `dapper:"settings"`
 	Settings []*Settings `json:"settings" dapper:"-"`
 	Role     string      `json:"role" dapper:"role"`
 }
 
 // Settings settings master
 type Settings struct {
-	ID      int64  `json:"id" dapper:"id,primarykey,autoincrement,table=settings"`
+	ID      int32  `json:"id" dapper:"id,primarykey,autoincrement,table=settings"`
 	Name    string `json:"name" dapper:"name"`
-	Value   int64  `json:"value" dapper:"value"`
+	Value   int32  `json:"value" dapper:"value"`
 	Enabled bool   `json:"enabled"`
 }

@@ -2,7 +2,7 @@ package models
 
 // Notification notification entry
 type Notification struct {
-	ID         string `dapper:"uid,primarykey,table=notifications"`
+	ID         int32  `dapper:"uid,primarykey,table=notifications"`
 	UserID     string `dapper:"user_id"`
 	CustomCode string `dapper:"custom_code"`
 	Details    string `dapper:"details"`
