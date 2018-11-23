@@ -13,9 +13,9 @@ fi
 rm -f Gopkg.lock Gopkg.toml
 rm -rf ./vendor
 
+# since dep ensure will use cache, which will not update the other dongfeng repos
 dep init
 
 # compile protobuf
 make proto
-
 echo "Bye"

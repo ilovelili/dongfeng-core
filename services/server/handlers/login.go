@@ -21,7 +21,7 @@ func (f *Facade) Login(ctx context.Context, req *proto.LoginRequest, rsp *proto.
 		return utils.NewError(errorcode.GenericInvalidMetaData)
 	}
 
-	idtoken := md[sharedlib.MetaDataToken]
+	idtoken := req.GetToken()
 	jwks := md[sharedlib.MetaDataJwks]
 	claims, token, err := sharedlib.ParseJWT(idtoken, jwks)
 

@@ -22,8 +22,8 @@
 [[projects]]
   name = "github.com/go-sql-driver/mysql"
   packages = ["."]
-  revision = "d523deb1b23d913de5bdada721a6071e71283618"
-  version = "v1.4.0"
+  revision = "72cd26f257d44c1114970e19afddcd812016007e"
+  version = "v1.4.1"
 
 [[projects]]
   name = "github.com/golang/protobuf"
@@ -34,14 +34,14 @@
 [[projects]]
   name = "github.com/google/uuid"
   packages = ["."]
-  revision = "d460ce9f8df2e77fb1ba55ca87fafed96c607494"
-  version = "v1.0.0"
+  revision = "9b3b1e0f5f99ae461456d768e7d301a7acdaa2d8"
+  version = "v1.1.0"
 
 [[projects]]
   name = "github.com/hashicorp/consul"
   packages = ["api","watch"]
-  revision = "e8757838a49feeb682c7e6ad6b78694a78b2096b"
-  version = "v1.3.0"
+  revision = "0bddfa23a2ebe3c0773d917fc104f53d74f7a5ec"
+  version = "v1.4.0"
 
 [[projects]]
   name = "github.com/hashicorp/go-cleanhttp"
@@ -77,7 +77,7 @@
   branch = "master"
   name = "github.com/ilovelili/dongfeng-protobuf"
   packages = ["."]
-  revision = "169df7924cfa16cb819dd976c0904b1304f328f8"
+  revision = "10d2366163d75f2c8ec01cd3cc0a86bf59a921c1"
 
 [[projects]]
   branch = "master"
@@ -118,20 +118,26 @@
 [[projects]]
   name = "github.com/micro/go-micro"
   packages = [".","broker","broker/codec","broker/codec/json","broker/http","client","cmd","codec","codec/jsonrpc","codec/protorpc","errors","metadata","registry","registry/consul","registry/mdns","selector","selector/cache","server","server/debug","server/debug/proto","transport","transport/codec","transport/http"]
-  revision = "4cee1f19f6748700518a8ca647e26ab3ad7f2a2f"
-  version = "v0.12.0"
+  revision = "4dc593eca385b58eabb350bbac8b5917ab1307c6"
+  version = "v0.14.1"
 
 [[projects]]
   name = "github.com/micro/go-plugins"
   packages = ["registry/kubernetes","registry/kubernetes/client","registry/kubernetes/client/api","registry/kubernetes/client/watch"]
-  revision = "f3fcfcdf77392b4e053c8d5b361abfabc0c623d3"
-  version = "v0.15.0"
+  revision = "27e02eff71790966536e17a1749388c62cb69a1e"
+  version = "v0.16.1"
 
 [[projects]]
   branch = "master"
   name = "github.com/micro/go-rcache"
   packages = ["."]
   revision = "a581a57b513351792b9f21fc8b95d87b1c5a95da"
+
+[[projects]]
+  name = "github.com/micro/h2c"
+  packages = ["."]
+  revision = "b2f7b8ee5ff4fd7a8af036ecda297deb1c584460"
+  version = "v1.0.0"
 
 [[projects]]
   branch = "master"
@@ -143,7 +149,7 @@
   branch = "master"
   name = "github.com/micro/util"
   packages = ["go/lib/addr","go/lib/net","go/lib/tls"]
-  revision = "4b7ed83e8520ab8fe6e5ef61fa2ede94b32f8602"
+  revision = "2d4f591dc5383712927e372348c0885478402595"
 
 [[projects]]
   name = "github.com/miekg/dns"
@@ -176,12 +182,6 @@
   revision = "11d01232a968925e8f49b2f9164027ca31f78c90"
 
 [[projects]]
-  name = "github.com/pborman/uuid"
-  packages = ["."]
-  revision = "adf5a7427709b9deb95d29d3fa8a2bf9cfd388f1"
-  version = "v1.2"
-
-[[projects]]
   name = "github.com/pkg/errors"
   packages = ["."]
   revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
@@ -197,19 +197,25 @@
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["ed25519","ed25519/internal/edwards25519","ssh/terminal"]
-  revision = "e4dc69e5b2fd71dcaf8bd5d054eb936deb78d1fa"
+  revision = "3d3f9f413869b949e48070b5bc593aa22cc2b8f2"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/net"
-  packages = ["bpf","context","internal/iana","internal/socket","ipv4","ipv6"]
-  revision = "03003ca0c849e57b6ea29a4bab8d3cb6e4d568fe"
+  packages = ["bpf","context","http/httpguts","http2","http2/hpack","idna","internal/iana","internal/socket","ipv4","ipv6"]
+  revision = "adae6a3d119ae4890b46832a2e88a95adc62b8e7"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix","windows"]
-  revision = "66b7b1311ac80bbafcd2daeef9a5e6e2cd1e2399"
+  revision = "62eef0e2fa9b2c385f7b2778e763486da6880d37"
+
+[[projects]]
+  name = "golang.org/x/text"
+  packages = ["collate","collate/build","internal/colltab","internal/gen","internal/tag","internal/triegen","internal/ucd","language","secure/bidirule","transform","unicode/bidi","unicode/cldr","unicode/norm","unicode/rangetable"]
+  revision = "f21a4dfb5e38f5895301dc265a8def02365cc3d0"
+  version = "v0.3.0"
 
 [[projects]]
   name = "google.golang.org/appengine"
@@ -220,6 +226,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "67878744e32763b18ac0ffe780d737c40a93483bd113078d363f15a7a0af0491"
+  inputs-digest = "f5cc9c6bcc3f259a58496d971bc0bd2be1a1a83dedcee10d81f5450df745a459"
   solver-name = "gps-cdcl"
   solver-version = 1
