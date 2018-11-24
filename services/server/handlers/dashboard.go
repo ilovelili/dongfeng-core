@@ -14,8 +14,8 @@ import (
 	"github.com/micro/go-micro/metadata"
 )
 
-// Login handler returns all data needed by front end
-func (f *Facade) Login(ctx context.Context, req *proto.LoginRequest, rsp *proto.LoginResponse) error {
+// Dashboard handler returns data needed by dashboard
+func (f *Facade) Dashboard(ctx context.Context, req *proto.DashboardRequest, rsp *proto.DashboardResponse) error {
 	md, ok := metadata.FromContext(ctx)
 	if !ok {
 		return utils.NewError(errorcode.GenericInvalidMetaData)
@@ -36,45 +36,33 @@ func (f *Facade) Login(ctx context.Context, req *proto.LoginRequest, rsp *proto.
 	err = json.Unmarshal(userinfo, &user)
 
 	// check if user exists or not
-	var newUser bool
 	usercontroller := controllers.NewUserController()
 	exsitinguser, err := usercontroller.GetUserByEmail(user.Email)
-	newUser = err != nil
-
-	if newUser {
-		if user.Role == "" {
-			user.Role = "user"
-		}
-
-		// new user, save to database
-		if err = usercontroller.Save(user); err != nil {
-			return utils.NewError(errorcode.CoreFailedToSaveUser)
-		}
-	} else {
-		user = exsitinguser
+	if err != nil {
+		return utils.NewError(errorcode.CoreNoUser)
 	}
 
-	// user profile
-	rsp.User = &proto.User{
-		Newuser:  newUser,
-		Role:     user.Role,
-		Id:       user.ID,
-		Name:     user.Name,
-		Email:    user.Email,
-		Avatar:   user.Avatar,
-		Settings: resolveSettings(user.Settings),
+	rsp.UserId = exsitinguser.ID
+	// fetch operation logs
+	notificationcontroller := controllers.NewNotificationController()
+	notifications, err := notificationcontroller.GetNotifications(user.ID, true)
+	if err != nil {
+		return utils.NewError(errorcode.CoreFailedToGetNotification)
 	}
-
+	rsp.Notifications = resolvecNotifications(notifications)
 	return err
 }
 
-func resolveSettings(settings []*models.Settings) []*proto.Setting {
-	result := make([]*proto.Setting, 0)
-	for _, setting := range settings {
-		result = append(result, &proto.Setting{
-			Id:      setting.ID,
-			Name:    setting.Name,
-			Enabled: setting.Enabled,
+func resolvecNotifications(notifications []*models.Notification) []*proto.Notification {
+	result := make([]*proto.Notification, 0)
+	for _, notification := range notifications {
+		result = append(result, &proto.Notification{
+			UserId:     notification.UserID,
+			CustomCode: notification.CustomCode,
+			Category:   notification.Category,
+			Details:    notification.Details,
+			Link:       notification.Link,
+			Time:       notification.Time,
 		})
 	}
 

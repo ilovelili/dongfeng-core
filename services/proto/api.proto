@@ -5,5 +5,6 @@ import "github.com/ilovelili/dongfeng-protobuf/dongfeng.proto";
 
 // api
 service api { 
-    rpc Login(dongfeng.protobuf.LoginRequest) returns(dongfeng.protobuf.LoginResponse) {}; 
+    rpc Login(dongfeng.protobuf.LoginRequest) returns(dongfeng.protobuf.LoginResponse) {};
+    rpc Dashboard(dongfeng.protobuf.DashboardRequest) returns(dongfeng.protobuf.DashboardResponse) {};
 }
