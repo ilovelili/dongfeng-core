@@ -39,6 +39,10 @@
 
 [[constraint]]
   branch = "master"
+  name = "github.com/ilovelili/dongfeng-notification"
+
+[[constraint]]
+  branch = "master"
   name = "github.com/ilovelili/dongfeng-protobuf"
 
 [[constraint]]
@@ -51,8 +55,12 @@
 
 [[constraint]]
   name = "github.com/micro/go-plugins"
-  version = "0.16.1"
+  version = "0.16.2"
 
 [[constraint]]
   branch = "master"
   name = "github.com/olivere/dapper"
+
+[[override]]
+  branch = "master"
+  name = "github.com/golang/protobuf"

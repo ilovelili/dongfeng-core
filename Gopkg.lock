@@ -26,10 +26,10 @@
   version = "v1.4.1"
 
 [[projects]]
+  branch = "master"
   name = "github.com/golang/protobuf"
   packages = ["proto"]
-  revision = "aa810b61a9c79d51363740d207bb46cf8e620ed5"
-  version = "v1.2.0"
+  revision = "1d3f30b51784bec5aad268e59fd3c2fc1c2fe73f"
 
 [[projects]]
   name = "github.com/google/uuid"
@@ -65,7 +65,7 @@
   branch = "master"
   name = "github.com/ilovelili/dongfeng-error-code"
   packages = ["."]
-  revision = "c12bb23007c8a746dab71ed93655ad99b1e494c6"
+  revision = "be33549c1c9f38d64a3959e829150d7a43abb986"
 
 [[projects]]
   branch = "master"
@@ -75,15 +75,21 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/ilovelili/dongfeng-notification"
+  packages = ["."]
+  revision = "fdba2c9b8f36267ba22a16e3ea27b6b6fe677f37"
+
+[[projects]]
+  branch = "master"
   name = "github.com/ilovelili/dongfeng-protobuf"
   packages = ["."]
-  revision = "10d2366163d75f2c8ec01cd3cc0a86bf59a921c1"
+  revision = "d1426f7a310fa24eadd3bd7490a683360921224d"
 
 [[projects]]
   branch = "master"
   name = "github.com/ilovelili/dongfeng-shared-lib"
   packages = ["."]
-  revision = "953f46cb10754ac8de18bb1625c6f8fc24db32ee"
+  revision = "86e10310bde009b7897e68bc77fa0bea38e18720"
 
 [[projects]]
   name = "github.com/konsorten/go-windows-terminal-sequences"
@@ -124,8 +130,8 @@
 [[projects]]
   name = "github.com/micro/go-plugins"
   packages = ["registry/kubernetes","registry/kubernetes/client","registry/kubernetes/client/api","registry/kubernetes/client/watch"]
-  revision = "27e02eff71790966536e17a1749388c62cb69a1e"
-  version = "v0.16.1"
+  revision = "d3d26cc3683734d0329b4c65760041807ea80eb2"
+  version = "v0.16.2"
 
 [[projects]]
   branch = "master"
@@ -143,7 +149,7 @@
   branch = "master"
   name = "github.com/micro/mdns"
   packages = ["."]
-  revision = "cdf30746f9f70dc7a366d3d885792a092fd83102"
+  revision = "9c3770d4057a5adca108c15ca317fee54766f9f7"
 
 [[projects]]
   branch = "master"
@@ -154,8 +160,8 @@
 [[projects]]
   name = "github.com/miekg/dns"
   packages = ["."]
-  revision = "7064f7248f5fa5fd79382a76328b4e200b79e4ae"
-  version = "v1.0.15"
+  revision = "a220737569d8137d4c610f80bd33f1dc762522e5"
+  version = "v1.1.0"
 
 [[projects]]
   name = "github.com/mitchellh/go-homedir"
@@ -197,19 +203,19 @@
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["ed25519","ed25519/internal/edwards25519","ssh/terminal"]
-  revision = "3d3f9f413869b949e48070b5bc593aa22cc2b8f2"
+  revision = "eb0de9b17e854e9b1ccd9963efafc79862359959"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/net"
-  packages = ["bpf","context","http/httpguts","http2","http2/hpack","idna","internal/iana","internal/socket","ipv4","ipv6"]
-  revision = "adae6a3d119ae4890b46832a2e88a95adc62b8e7"
+  packages = ["bpf","http/httpguts","http2","http2/hpack","idna","internal/iana","internal/socket","ipv4","ipv6"]
+  revision = "351d144fa1fc0bd934e2408202be0c29f25e35a0"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix","windows"]
-  revision = "62eef0e2fa9b2c385f7b2778e763486da6880d37"
+  revision = "4ed8d59d0b35e1e29334a206d1b3f38b1e5dfb31"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -226,6 +232,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "f5cc9c6bcc3f259a58496d971bc0bd2be1a1a83dedcee10d81f5450df745a459"
+  inputs-digest = "edb23e4fb4d5b4a4b384b4a294adc2e2e1dcb77ea6d70972f8371d409f1c11f9"
   solver-name = "gps-cdcl"
   solver-version = 1

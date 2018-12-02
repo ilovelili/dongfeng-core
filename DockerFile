@@ -9,7 +9,7 @@ COPY . $SRC_DIR
 
 # Go dep
 RUN go get -u github.com/golang/dep/cmd/dep
-RUN dep init
+RUN dep ensure
 
 WORKDIR $SRC_DIR/services/server
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o server .

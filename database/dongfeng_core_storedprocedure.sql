@@ -11,29 +11,16 @@ BEGIN
     -- if admin only, we show all the categories
     IF ( AdminOnly = 1 ) THEN
       SELECT 
-        n.id, 
-        n.user_id, 
-        n.details,
-        n.link, 
-        n.created_at,
-        c.description AS category
+        n.*
       FROM
-        `dongfeng_core`.`notifications` n
-      JOIN
-        `dongfeng_core`.`categories` c
-      ON n.category_id = c.id
+        `dongfeng_core`.`notifications` n      
       WHERE n.user_id in (UserID,  'AgentSmith')
       ORDER BY n.user_id ASC, n.created_at DESC ;
 
     ELSE
 
       SELECT 
-        n.id, 
-        n.user_id, 
-        n.details,
-        n.link, 
-        n.created_at,
-        c.description AS category
+        n.*
       FROM
         `dongfeng_core`.`notifications` n
       JOIN

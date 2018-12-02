@@ -6,3 +6,4 @@ INSERT INTO categories(`id`, `description`, `admin_only`) VALUES (3, '仓库管�
 INSERT INTO categories(`id`, `description`, `admin_only`) VALUES (4, '学校资产管理', 1);
 INSERT INTO categories(`id`, `description`, `admin_only`) VALUES (5, '营养膳食', 1);
 INSERT INTO categories(`id`, `description`, `admin_only`) VALUES (6, '出勤管理', 1);
+INSERT INTO categories(`id`, `description`, `admin_only`) VALUES (7, '系统通知', 0);

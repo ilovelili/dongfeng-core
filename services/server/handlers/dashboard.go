@@ -37,12 +37,12 @@ func (f *Facade) Dashboard(ctx context.Context, req *proto.DashboardRequest, rsp
 
 	// check if user exists or not
 	usercontroller := controllers.NewUserController()
-	exsitinguser, err := usercontroller.GetUserByEmail(user.Email)
+	user, err = usercontroller.GetUserByEmail(user.Email)
 	if err != nil {
 		return utils.NewError(errorcode.CoreNoUser)
 	}
 
-	rsp.UserId = exsitinguser.ID
+	rsp.UserId = user.ID
 	// fetch operation logs
 	notificationcontroller := controllers.NewNotificationController()
 	notifications, err := notificationcontroller.GetNotifications(user.ID, true)
@@ -57,12 +57,13 @@ func resolvecNotifications(notifications []*models.Notification) []*proto.Notifi
 	result := make([]*proto.Notification, 0)
 	for _, notification := range notifications {
 		result = append(result, &proto.Notification{
+			Id:         int32(notification.ID),
 			UserId:     notification.UserID,
 			CustomCode: notification.CustomCode,
-			Category:   notification.Category,
+			Category:   notification.Category(),
 			Details:    notification.Details,
 			Link:       notification.Link,
-			Time:       notification.Time,
+			Time:       sharedlib.NewTime(notification.Time).FormatTime(),
 		})
 	}
 
