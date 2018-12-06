@@ -62,10 +62,10 @@ CREATE TABLE `attendances` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `date` varchar(10) NOT NULL,
   `class` varchar(10) NOT NULL,
-  `name` varchar(10) NOT NULL,
-  `attend` tinyint(1) NOT NULL,
+  `name` varchar(10) NOT NULL,  
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`)
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `date_class_name_UNIQUE` (`date`,`class`,`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

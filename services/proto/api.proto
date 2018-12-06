@@ -8,4 +8,5 @@ service api {
     rpc Login(dongfeng.protobuf.LoginRequest) returns(dongfeng.protobuf.LoginResponse) {};
     rpc Dashboard(dongfeng.protobuf.DashboardRequest) returns(dongfeng.protobuf.DashboardResponse) {};
     rpc UpdateUser(dongfeng.protobuf.UpdateUserRequest) returns(dongfeng.protobuf.UpdateUserResponse) {};
+    rpc UpdateAttendance(dongfeng.protobuf.AttendanceRequest) returns(dongfeng.protobuf.AttendanceResponse) {};
 }

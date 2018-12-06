@@ -5,7 +5,7 @@ import (
 	"github.com/ilovelili/dongfeng-core/services/server/core/repositories"
 )
 
-// NotificationController user profile controller
+// NotificationController notification controller
 type NotificationController struct {
 	repository *repositories.NotificationRepository
 }
