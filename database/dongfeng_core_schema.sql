@@ -58,6 +58,13 @@ CREATE TABLE `notifications` (
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `classes` (
+  `id` varchar(5) NOT NULL,
+  `name` varchar(9) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `class_code_UNIQUE` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `attendances` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `date` varchar(10) NOT NULL,

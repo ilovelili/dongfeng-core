@@ -82,10 +82,15 @@ func (f *Facade) UpdateAttendance(ctx context.Context, req *proto.UpdateAttendan
 	attendances := make([]*models.Attendance, 0)
 	for _, attendance := range req.Attendances {
 		for _, day := range attendance.GetAttendances() {
+			class, err := resolveClass(attendance.GetClass())
+			if err != nil {
+				utils.NewError(errorcode.CoreFailedToSaveAttendance)
+			}
+
 			attendances = append(attendances, &models.Attendance{
 				CreatedBy: user.Email,
 				Date:      fmt.Sprintf("%04d-%02d-%02d", attendance.GetYear(), attendance.GetMonth(), day),
-				Class:     attendance.GetClass(),
+				Class:     class,
 				Name:      attendance.GetName(),
 			})
 		}
@@ -99,4 +104,111 @@ func (f *Facade) UpdateAttendance(ctx context.Context, req *proto.UpdateAttendan
 
 	f.syslog(notification.AttendanceUpdated(user.ID))
 	return nil
+}
+
+func resolveClass(class string) (classid string, err error) {
+	switch class {
+	case "小一班":
+		fallthrough
+	case "小1班":
+		fallthrough
+	case "小1":
+		fallthrough
+	case "小一":
+		classid = "01"
+		return
+
+	case "小二班":
+		fallthrough
+	case "小2班":
+		fallthrough
+	case "小2":
+		fallthrough
+	case "小二":
+		classid = "02"
+		return
+
+	case "小三班":
+		fallthrough
+	case "小3班":
+		fallthrough
+	case "小3":
+		fallthrough
+	case "小三":
+		classid = "03"
+		return
+
+	case "小四班":
+		fallthrough
+	case "小4班":
+		fallthrough
+	case "小4":
+		fallthrough
+	case "小四":
+		classid = "04"
+		return
+
+	case "中一班":
+		fallthrough
+	case "中1班":
+		fallthrough
+	case "中一":
+		fallthrough
+	case "中1":
+		classid = "11"
+		return
+
+	case "中二班":
+		fallthrough
+	case "中2班":
+		fallthrough
+	case "中二":
+		fallthrough
+	case "中2":
+		classid = "12"
+		return
+
+	case "中三班":
+		fallthrough
+	case "中3班":
+		fallthrough
+	case "中三":
+		fallthrough
+	case "中3":
+		classid = "13"
+		return
+
+	case "大一班":
+		fallthrough
+	case "大1班":
+		fallthrough
+	case "大一":
+		fallthrough
+	case "大1":
+		classid = "21"
+		return
+
+	case "大二班":
+		fallthrough
+	case "大2班":
+		fallthrough
+	case "大二":
+		fallthrough
+	case "大2":
+		classid = "22"
+		return
+
+	case "大三班":
+		fallthrough
+	case "大3班":
+		fallthrough
+	case "大三":
+		fallthrough
+	case "大3":
+		classid = "23"
+		return
+	}
+
+	err = fmt.Errorf("invalid class")
+	return
 }
