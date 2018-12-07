@@ -12,19 +12,33 @@ func NewAttendanceRepository() *AttendanceRepository {
 	return &AttendanceRepository{}
 }
 
-// Insert insert attendances
-func (r *AttendanceRepository) Insert(attendances []*models.Attendance) (err error) {
+// Upsert upsert attendances
+func (r *AttendanceRepository) Upsert(attendances []*models.Attendance) (err error) {
 	tx, err := session().Begin()
 	if err != nil {
 		return
 	}
 
-	// insert by loop (use bulk insert?)
+	// upsert by loop
 	for _, attendance := range attendances {
-		err = session().InsertTx(tx, attendance)
+		query := Table("attendances").Alias("a").Project("a.id").Where().
+			Eq("a.date", attendance.Date).
+			Eq("a.class", attendance.Class).
+			Eq("a.name", attendance.Name).
+			Sql()
+
+		var id int64
+		err := session().Find(query, nil).Scalar(&id)
+		if err != nil || 0 == id {
+			err = session().InsertTx(tx, attendance)
+		} else {
+			attendance.ID = id
+			err = session().UpdateTx(tx, attendance)
+		}
+
 		if err != nil {
 			session().Rollback(tx)
-			return
+			return err
 		}
 	}
 

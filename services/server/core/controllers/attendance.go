@@ -19,5 +19,5 @@ func NewAttendanceController() *AttendanceController {
 
 // Save save attendence
 func (c *AttendanceController) Save(attendances []*models.Attendance) error {
-	return c.repository.Insert(attendances)
+	return c.repository.Upsert(attendances)
 }
