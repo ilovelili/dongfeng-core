@@ -17,6 +17,11 @@ func NewAttendanceController() *AttendanceController {
 	}
 }
 
+// Get get attendence
+func (c *AttendanceController) Get(from, to, class, name string) (attendances []*models.Attendance, err error) {
+	return c.repository.Select(from, to, class, name)
+}
+
 // Save save attendence
 func (c *AttendanceController) Save(attendances []*models.Attendance) error {
 	return c.repository.Upsert(attendances)

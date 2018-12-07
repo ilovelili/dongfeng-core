@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"fmt"
+
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 )
 
@@ -10,6 +12,44 @@ type AttendanceRepository struct{}
 // NewAttendanceRepository init UserProfile repository
 func NewAttendanceRepository() *AttendanceRepository {
 	return &AttendanceRepository{}
+}
+
+// Select select attendances
+func (r *AttendanceRepository) Select(from, to, class, name string) (attendances []*models.Attendance, err error) {
+	var query string
+	table := Table("attendances").Alias("a")
+	if from == "" && to == "" && class == "" && name == "" {
+		query = table.Sql()
+	} else {
+		querybuilder := table.Where()
+
+		if from != "" && to != "" && from > to {
+			err = fmt.Errorf("invalid parameter")
+			return
+		}
+
+		if from != "" {
+			querybuilder.Gte("a.date", from)
+		}
+		if to != "" {
+			querybuilder.Lte("a.date", to)
+		}
+		if class != "" {
+			querybuilder.Eq("a.class", class)
+		}
+		if name != "" {
+			querybuilder.Eq("a.name", name)
+		}
+
+		query = querybuilder.Sql()
+	}
+
+	// no rows is actually not an error
+	if err = session().Find(query, nil).All(&attendances); err != nil && norows(err) {
+		err = nil
+	}
+
+	return
 }
 
 // Upsert upsert attendances
