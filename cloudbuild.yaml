@@ -6,9 +6,9 @@ steps:
   args: ['push', 'gcr.io/$PROJECT_ID/dongfeng-core:1.0.$BUILD_ID']
 - name: 'gcr.io/cloud-builders/kubectl'
   args: ['set', 'image', 'deployment/dongfeng-core', 'dongfeng-core=gcr.io/$PROJECT_ID/dongfeng-core:1.0.$BUILD_ID']
-# substitutions:
-#   _COMPUTE_ZONE: 'asia-east1-a'
-#   _CONTAINER_CLUSTER: 'cloud-build-example'
+substitutions:
+  _COMPUTE_ZONE: 'asia-east1-a'
+  _CONTAINER_CLUSTER: 'cloud-build-example'
   env:
-  - 'CLOUDSDK_COMPUTE_ZONE=asia-east1-a'
-  - 'CLOUDSDK_CONTAINER_CLUSTER=cloud-build-example'
+  - 'CLOUDSDK_COMPUTE_ZONE=${_COMPUTE_ZONE}'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=${_CONTAINER_CLUSTER}'
