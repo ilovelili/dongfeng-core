@@ -13,7 +13,7 @@ steps:
   - web=gcr.io/$PROJECT_ID/dongfeng-core:1.0.$BUILD_ID
 substitutions:
   _COMPUTE_ZONE: asia-east1-a
-  __CONTAINER_CLUSTER: cloud-build-example
+  _CONTAINER_CLUSTER: cloud-build-example
   env:
   - 'CLOUDSDK_COMPUTE_ZONE=${_COMPUTE_ZONE}'
-  - 'CLOUDSDK_CONTAINER_CLUSTER=${__CONTAINER_CLUSTER}'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=${_CONTAINER_CLUSTER}'
