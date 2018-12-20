@@ -68,11 +68,25 @@ CREATE TABLE `classes` (
 CREATE TABLE `attendances` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `date` varchar(10) NOT NULL,
-  `class` varchar(10) NOT NULL,
+  `class_id` varchar(10) NOT NULL,
   `name` varchar(10) NOT NULL,  
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` varchar(45) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
-  UNIQUE KEY `date_class_name_UNIQUE` (`date`,`class`,`name`)
+  UNIQUE KEY `date_class_name_UNIQUE` (`date`,`class_id`,`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `namelists` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `year` varchar(10) NOT NULL,
+  `class_id` varchar(10) NOT NULL,
+  `name` varchar(10) NOT NULL,  
+  `created_by` varchar(45) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `year_class_name_UNIQUE` (`year`,`class_id`,`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

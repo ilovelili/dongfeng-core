@@ -12,8 +12,8 @@ func NewFriendRepository() *FriendRepository {
 	return &FriendRepository{}
 }
 
-// SelectFriends select friends by user id
-func (r *FriendRepository) SelectFriends(uid string) (friends []*models.User, err error) {
+// Select select friends by user id
+func (r *FriendRepository) Select(uid string) (friends []*models.User, err error) {
 	query := Table("user_friends").Alias("f").
 		Join("users").Alias("u").On("f.friend_id", "u.id").
 		Project("u.*").

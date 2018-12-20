@@ -19,7 +19,7 @@ func NewNotificationController() *NotificationController {
 
 // GetNotifications get Notifications
 func (c *NotificationController) GetNotifications(uid string, adminonly bool) ([]*models.Notification, error) {
-	return c.repository.SelectNotifications(uid, adminonly)
+	return c.repository.Select(uid, adminonly)
 }
 
 // Save save Notifications

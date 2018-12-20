@@ -26,7 +26,7 @@ import (
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
-var _ = dongfeng_protobuf.UpdateUserResponse{}
+var _ = dongfeng_protobuf.GetNamelistResponse{}
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -45,6 +45,7 @@ type ApiService interface {
 	Login(ctx context.Context, in *dongfeng_protobuf.LoginRequest, opts ...client.CallOption) (*dongfeng_protobuf.LoginResponse, error)
 	Dashboard(ctx context.Context, in *dongfeng_protobuf.DashboardRequest, opts ...client.CallOption) (*dongfeng_protobuf.DashboardResponse, error)
 	UpdateUser(ctx context.Context, in *dongfeng_protobuf.UpdateUserRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateUserResponse, error)
+	GetNamelist(ctx context.Context, in *dongfeng_protobuf.GetNamelistRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetNamelistResponse, error)
 }
 
 type apiService struct {
@@ -95,12 +96,23 @@ func (c *apiService) UpdateUser(ctx context.Context, in *dongfeng_protobuf.Updat
 	return out, nil
 }
 
+func (c *apiService) GetNamelist(ctx context.Context, in *dongfeng_protobuf.GetNamelistRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetNamelistResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.GetNamelist", in)
+	out := new(dongfeng_protobuf.GetNamelistResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Api service
 
 type ApiHandler interface {
 	Login(context.Context, *dongfeng_protobuf.LoginRequest, *dongfeng_protobuf.LoginResponse) error
 	Dashboard(context.Context, *dongfeng_protobuf.DashboardRequest, *dongfeng_protobuf.DashboardResponse) error
 	UpdateUser(context.Context, *dongfeng_protobuf.UpdateUserRequest, *dongfeng_protobuf.UpdateUserResponse) error
+	GetNamelist(context.Context, *dongfeng_protobuf.GetNamelistRequest, *dongfeng_protobuf.GetNamelistResponse) error
 }
 
 func RegisterApiHandler(s server.Server, hdlr ApiHandler, opts ...server.HandlerOption) {
@@ -108,6 +120,7 @@ func RegisterApiHandler(s server.Server, hdlr ApiHandler, opts ...server.Handler
 		Login(ctx context.Context, in *dongfeng_protobuf.LoginRequest, out *dongfeng_protobuf.LoginResponse) error
 		Dashboard(ctx context.Context, in *dongfeng_protobuf.DashboardRequest, out *dongfeng_protobuf.DashboardResponse) error
 		UpdateUser(ctx context.Context, in *dongfeng_protobuf.UpdateUserRequest, out *dongfeng_protobuf.UpdateUserResponse) error
+		GetNamelist(ctx context.Context, in *dongfeng_protobuf.GetNamelistRequest, out *dongfeng_protobuf.GetNamelistResponse) error
 	}
 	type Api struct {
 		api
@@ -130,4 +143,8 @@ func (h *apiHandler) Dashboard(ctx context.Context, in *dongfeng_protobuf.Dashbo
 
 func (h *apiHandler) UpdateUser(ctx context.Context, in *dongfeng_protobuf.UpdateUserRequest, out *dongfeng_protobuf.UpdateUserResponse) error {
 	return h.ApiHandler.UpdateUser(ctx, in, out)
+}
+
+func (h *apiHandler) GetNamelist(ctx context.Context, in *dongfeng_protobuf.GetNamelistRequest, out *dongfeng_protobuf.GetNamelistResponse) error {
+	return h.ApiHandler.GetNamelist(ctx, in, out)
 }

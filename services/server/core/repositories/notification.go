@@ -14,8 +14,8 @@ func NewNotificationRepository() *NotificationRepository {
 	return &NotificationRepository{}
 }
 
-// SelectNotifications select Notification logs
-func (r *NotificationRepository) SelectNotifications(uid string, adminonly bool) (notifications []*models.Notification, err error) {
+// Select select notification logs
+func (r *NotificationRepository) Select(uid string, adminonly bool) (notifications []*models.Notification, err error) {
 	query := fmt.Sprintf("CALL spSelectNotifications('%s', %d)", uid, resolveAdminOnly(adminonly))
 	err = session().Find(query, nil).All(&notifications)
 	if norows(err) {

@@ -19,7 +19,7 @@ func NewFriendController() *FriendController {
 
 // GetFriends get user friends
 func (c *FriendController) GetFriends(uid string) ([]*models.User, error) {
-	return c.repository.SelectFriends(uid)
+	return c.repository.Select(uid)
 }
 
 // Save save friends
