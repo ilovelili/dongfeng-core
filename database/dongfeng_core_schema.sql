@@ -90,3 +90,13 @@ CREATE TABLE `namelists` (
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `year_class_name_UNIQUE` (`year`,`class_id`,`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `recipes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `ingredient_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,  
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `name_ingredient_UNIQUE` (`name`,`ingredient_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
