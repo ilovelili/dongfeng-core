@@ -57,7 +57,7 @@ func resolvecNotifications(notifications []*models.Notification) []*proto.Notifi
 	result := make([]*proto.Notification, 0)
 	for _, notification := range notifications {
 		result = append(result, &proto.Notification{
-			Id:         int32(notification.ID),
+			Id:         int64(notification.ID),
 			UserId:     notification.UserID,
 			CustomCode: notification.CustomCode,
 			Category:   notification.Category(),

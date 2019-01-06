@@ -6,12 +6,12 @@ import (
 
 // Notification notification entry
 type Notification struct {
-	ID         int       `dapper:"id,primarykey,table=notifications"`
+	ID         int64     `dapper:"id,primarykey,table=notifications"`
 	UserID     string    `dapper:"user_id"`
 	CustomCode string    `dapper:"custom_code"`
 	Details    string    `dapper:"details"`
 	Link       string    `dapper:"link"`
-	CategoryID int       `dapper:"category_id"`
+	CategoryID int64     `dapper:"category_id"`
 	Time       time.Time `dapper:"created_at"`
 }
 
