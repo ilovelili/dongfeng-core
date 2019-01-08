@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 )
@@ -26,8 +27,9 @@ func (r *NotificationRepository) Select(uid string, adminonly bool) (notificatio
 }
 
 // Insert insert Notification
-func (r *NotificationRepository) Insert(Notification *models.Notification) error {
-	return insertTx(Notification)
+func (r *NotificationRepository) Insert(notification *models.Notification) error {
+	notification.Time = time.Now()
+	return insertTx(notification)
 }
 
 func resolveAdminOnly(adminonly bool) int {
