@@ -109,3 +109,43 @@ CREATE TABLE `recipes` (
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `name_ingredient_UNIQUE` (`name`,`ingredient_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `nutritions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ingredient_id` int(11) NOT NULL,
+  `protein_100g` decimal(7,4) NOT NULL DEFAULT '0.0000',
+  `protein_daily` decimal(7,4) NOT NULL DEFAULT '0.0000',
+  `fat_100g` decimal(7,4) NOT NULL DEFAULT '0.0000',
+  `fat_daily` decimal(7,4) NOT NULL DEFAULT '0.0000',
+  `carbohydrate_100g` decimal(7,4) NOT NULL DEFAULT '0.0000',
+  `carbohydrate_daily` decimal(7,4) NOT NULL DEFAULT '0.0000',
+  `heat_100g` decimal(7,4) NOT NULL DEFAULT '0.0000',
+  `heat_daily` decimal(7,4) NOT NULL DEFAULT '0.0000',
+  `calcium_100g` decimal(7,4) NOT NULL DEFAULT '0.0000',
+  `calcium_daily` decimal(7,4) NOT NULL DEFAULT '0.0000',
+  `iron_100g` decimal(7,4) NOT NULL DEFAULT '0.0000',
+  `iron_daily` decimal(7,4) NOT NULL DEFAULT '0.0000',
+  `zinc_100g` decimal(7,4) NOT NULL DEFAULT '0.0000',
+  `zinc_daily` decimal(7,4) NOT NULL DEFAULT '0.0000',
+  `va_100g` decimal(7,4) NOT NULL DEFAULT '0.0000',
+  `va_daily` decimal(7,4) NOT NULL DEFAULT '0.0000',
+  `vb1_100g` decimal(7,4) NOT NULL DEFAULT '0.0000',
+  `vb1_daily` decimal(7,4) NOT NULL DEFAULT '0.0000',
+  `vb2_100g` decimal(7,4) NOT NULL DEFAULT '0.0000',
+  `vb2_daily` decimal(7,4) NOT NULL DEFAULT '0.0000',
+  `vc_100g` decimal(7,4) NOT NULL DEFAULT '0.0000',
+  `vc_daily` decimal(7,4) NOT NULL DEFAULT '0.0000',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `ingredient_id_UNIQUE` (`ingredient_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `menus` (
+  `date` varchar(10) NOT NULL,
+  `recipe` varchar(45) NOT NULL,
+  `breakfast_or_lunch` int(1) NOT NULL COMMENT '0: breakfast\n1: lunch\n2: snack',
+  `junior_or_senior_class` int(1) NOT NULL COMMENT '0: junior\n1: senior',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
