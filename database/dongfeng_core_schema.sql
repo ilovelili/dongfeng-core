@@ -142,10 +142,13 @@ CREATE TABLE `nutritions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `menus` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `date` varchar(10) NOT NULL,
   `recipe` varchar(45) NOT NULL,
   `breakfast_or_lunch` int(1) NOT NULL COMMENT '0: breakfast\n1: lunch\n2: snack',
   `junior_or_senior_class` int(1) NOT NULL COMMENT '0: junior\n1: senior',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
