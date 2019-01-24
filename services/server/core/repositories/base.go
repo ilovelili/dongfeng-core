@@ -1,5 +1,3 @@
-// Package repositories is the database access layer
-// We use dapper lib to handle sql ORM
 package repositories
 
 import (
