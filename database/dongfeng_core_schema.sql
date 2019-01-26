@@ -110,7 +110,7 @@ CREATE TABLE `recipes` (
   UNIQUE KEY `name_ingredient_UNIQUE` (`name`,`ingredient_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `nutritions` (
+CREATE TABLE `ingredient_nutritions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ingredient` varchar(50) NOT NULL,
   `protein_100g` decimal(10,4) NOT NULL DEFAULT '0.0000',
@@ -138,8 +138,22 @@ CREATE TABLE `nutritions` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
-  UNIQUE KEY `ingredient_id_UNIQUE` (`ingredient`)
+  UNIQUE KEY `ingredient_UNIQUE` (`ingredient`)
 ) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `recipe_nutritions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `recipe` varchar(50) NOT NULL,
+  `carbohydrate` decimal(10,4) NOT NULL DEFAULT '0.0000',
+  `dietaryfiber` decimal(10,4) NOT NULL DEFAULT '0.0000',
+  `protein` decimal(10,4) NOT NULL DEFAULT '0.0000',
+  `fat` decimal(10,4) NOT NULL DEFAULT '0.0000',
+  `heat` decimal(10,4) NOT NULL DEFAULT '0.0000',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `recipe_UNIQUE` (`recipe`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `menus` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
