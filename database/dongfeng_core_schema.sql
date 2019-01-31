@@ -103,7 +103,8 @@ CREATE TABLE `recipes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   `ingredient_id` int(11) NOT NULL,
-  `created_by` varchar(45) DEFAULT NULL,
+  `unit_amount` decimal(5,2) NOT NULL DEFAULT '0.00',
+  `created_by` varchar(45) NOT NULL DEFAULT 'AgentSmith',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
@@ -139,7 +140,7 @@ CREATE TABLE `ingredient_nutritions` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `ingredient_UNIQUE` (`ingredient`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `recipe_nutritions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
