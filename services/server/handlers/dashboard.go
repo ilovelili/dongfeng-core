@@ -61,6 +61,7 @@ func resolvecNotifications(notifications []*models.Notification) []*proto.Notifi
 			UserId:     notification.UserID,
 			CustomCode: notification.CustomCode,
 			Category:   notification.Category(),
+			CategoryId: notification.CategoryID,
 			Details:    notification.Details,
 			Link:       notification.Link,
 			Time:       sharedlib.NewTime(notification.Time).FormatTime(),

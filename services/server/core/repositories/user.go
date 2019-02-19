@@ -25,7 +25,7 @@ func (r *UserRepository) SelectByMail(email string) (user *models.User, err erro
 	// step1, get settings master
 	var settingsmaster []*models.Settings
 	query = Table("settings").Alias("s").Where().Eq("s.enabled", 1).Sql()
-	if err = session().Find(query, nil).All(&settingsmaster); err != nil {
+	if err = session().Find(query, nil).All(&settingsmaster); err != nil && !norows(err) {
 		return
 	}
 
