@@ -16,8 +16,8 @@ func NewNotificationRepository() *NotificationRepository {
 }
 
 // Select select notification logs
-func (r *NotificationRepository) Select(uid string, adminonly bool) (notifications []*models.Notification, err error) {
-	query := fmt.Sprintf("CALL spSelectNotifications('%s', %d)", uid, resolveAdminOnly(adminonly))
+func (r *NotificationRepository) Select(uid string, adminonly bool, excluderead bool) (notifications []*models.Notification, err error) {
+	query := fmt.Sprintf("CALL spSelectNotifications('%s', %d, %d)", uid, resolveAdminOnly(adminonly), resolveExcludeRead(excluderead))
 	err = session().Find(query, nil).All(&notifications)
 	if norows(err) {
 		err = nil
@@ -60,7 +60,15 @@ func (r *NotificationRepository) Upsert(notifications []*models.Notification) (e
 }
 
 func resolveAdminOnly(adminonly bool) int {
-	if adminonly {
+	return resolveBool(adminonly)
+}
+
+func resolveExcludeRead(excluderead bool) int {
+	return resolveBool(excluderead)
+}
+
+func resolveBool(b bool) int {
+	if b {
 		return 1
 	}
 	return 0

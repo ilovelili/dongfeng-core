@@ -45,7 +45,7 @@ func (f *Facade) Dashboard(ctx context.Context, req *proto.DashboardRequest, rsp
 	rsp.UserId = user.ID
 	// fetch operation logs
 	notificationcontroller := controllers.NewNotificationController()
-	notifications, err := notificationcontroller.GetNotifications(user.ID, true)
+	notifications, err := notificationcontroller.GetNotifications(user.ID, true, true)
 	if err != nil {
 		return utils.NewError(errorcode.CoreFailedToGetNotification)
 	}
