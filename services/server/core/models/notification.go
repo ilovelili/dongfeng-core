@@ -12,6 +12,7 @@ type Notification struct {
 	Details    string    `dapper:"details"`
 	Link       string    `dapper:"link"`
 	CategoryID int64     `dapper:"category_id"`
+	Read       int64     `dapper:"read"`
 	Time       time.Time `dapper:"created_at"`
 }
 

@@ -23,6 +23,6 @@ func (c *NotificationController) GetNotifications(uid string, adminonly bool) ([
 }
 
 // Save save Notifications
-func (c *NotificationController) Save(notification *models.Notification) error {
-	return c.repository.Insert(notification)
+func (c *NotificationController) Save(notifications []*models.Notification) error {
+	return c.repository.Upsert(notifications)
 }

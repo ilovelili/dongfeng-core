@@ -26,10 +26,37 @@ func (r *NotificationRepository) Select(uid string, adminonly bool) (notificatio
 	return
 }
 
-// Insert insert Notification
-func (r *NotificationRepository) Insert(notification *models.Notification) error {
-	notification.Time = time.Now()
-	return insertTx(notification)
+// Upsert upsert notification
+func (r *NotificationRepository) Upsert(notifications []*models.Notification) (err error) {
+	tx, err := session().Begin()
+	if err != nil {
+		return
+	}
+
+	// upsert by loop
+	for _, notification := range notifications {
+		query := Table("notifications").Alias("n").
+			Where().Eq("n.id", notification.ID).
+			Sql()
+
+		var n models.Notification
+		err := session().Find(query, nil).Single(&n)
+		if err != nil || 0 == n.ID {
+			notification.Time = time.Now()
+			err = session().InsertTx(tx, notification)
+		} else {
+			n.Read = 1
+			n.Time = time.Now()
+			err = session().UpdateTx(tx, n)
+		}
+
+		if err != nil {
+			session().Rollback(tx)
+			return err
+		}
+	}
+
+	return session().Commit(tx)
 }
 
 func resolveAdminOnly(adminonly bool) int {

@@ -19,13 +19,16 @@ func NewFacade() *Facade {
 func (f *Facade) syslog(notification *notification.Notification) {
 	go func() {
 		notificationcontroller := controllers.NewNotificationController()
-		notificationcontroller.Save(&models.Notification{
-			UserID:     notification.UserID,
-			CustomCode: notification.CustomCode,
-			Details:    notification.Details,
-			Link:       notification.Link,
-			CategoryID: notification.CategoryID,
-			Time:       notification.Time,
+		notificationcontroller.Save([]*models.Notification{
+			&models.Notification{
+				UserID:     notification.UserID,
+				CustomCode: notification.CustomCode,
+				Details:    notification.Details,
+				Link:       notification.Link,
+				CategoryID: notification.CategoryID,
+				Read:       0,
+				Time:       notification.Time,
+			},
 		})
 	}()
 }
