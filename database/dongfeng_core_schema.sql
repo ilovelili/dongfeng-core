@@ -53,6 +53,7 @@ CREATE TABLE `notifications` (
   `category_id` int(11) NOT NULL,
   `details` text NOT NULL,
   `link` varchar(255) DEFAULT NULL,
+  `read` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
