@@ -19,23 +19,17 @@ CREATE TABLE `settings` (
 CREATE TABLE `users` (
   `id` varchar(12) NOT NULL COMMENT 'User ID',
   `email` varchar(255) NOT NULL COMMENT 'Email',
-  `name` varchar(100) DEFAULT NULL COMMENT 'Full name',  
+  `name` varchar(100) DEFAULT NULL COMMENT 'Full name',
   `avatar` varchar(255) DEFAULT NULL COMMENT 'Avatar',
-  `settings` int(11) NOT NULL COMMENT 'Bitwise settings', -- The default setting need to be discussed
-  `enabled` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'Enabled',  
+  `settings` int(11) NOT NULL COMMENT 'Bitwise settings',
+  `role` varchar(45) NOT NULL,
+  `enabled` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'Enabled',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Updated time',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `email_UNIQUE` (`email`),
   KEY `idx_users_email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE `user_friends` (
-  `user_id` varchar(12) NOT NULL COMMENT 'User id',
-  `friend_id` varchar(12) NOT NULL COMMENT 'Friend id',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Created time',
-  PRIMARY KEY (`user_id`,`friend_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `categories` (
