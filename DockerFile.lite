@@ -1,0 +1,13 @@
+FROM alpine
+
+LABEL maintainer="<route666@live.cn>"
+
+RUN apk --no-cache add ca-certificates tzdata
+
+ENV CONTAINER_TIMEZONE Asia/Beijing
+# https://wiki.alpinelinux.org/wiki/Setting_the_timezone
+RUN echo $CONTAINER_TIMEZONE >/etc/timezone && \
+    ln -sf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime
+
+WORKDIR /root/
+COPY config.*.json server /root/
