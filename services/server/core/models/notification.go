@@ -6,7 +6,7 @@ import (
 
 // Notification notification entry
 type Notification struct {
-	ID         int64     `dapper:"id,primarykey,table=notifications"`
+	ID         int64     `dapper:"id,primarykey,autoincrement,table=notifications"`
 	UserID     string    `dapper:"user_id"`
 	CustomCode string    `dapper:"custom_code"`
 	Details    string    `dapper:"details"`

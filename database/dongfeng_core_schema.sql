@@ -18,8 +18,8 @@ CREATE TABLE `settings` (
 
 CREATE TABLE `users` (
   `id` varchar(12) NOT NULL COMMENT 'User ID',
-  `email` varchar(255) NOT NULL COMMENT 'Email',
-  `name` varchar(100) DEFAULT NULL COMMENT 'Full name',
+  `email` varchar(125) NOT NULL COMMENT 'Email',
+  `name` varchar(50) DEFAULT NULL COMMENT 'Full name',
   `avatar` varchar(255) DEFAULT NULL COMMENT 'Avatar',
   `settings` int(11) NOT NULL COMMENT 'Bitwise settings',
   `role` varchar(45) NOT NULL,
@@ -63,27 +63,27 @@ CREATE TABLE `classes` (
 CREATE TABLE `attendances` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `date` varchar(10) NOT NULL,
-  `class_id` varchar(10) NOT NULL,
+  `class` varchar(10) NOT NULL,
   `name` varchar(10) NOT NULL,  
   `created_by` varchar(45) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
-  UNIQUE KEY `date_class_name_UNIQUE` (`date`,`class_id`,`name`)
+  UNIQUE KEY `date_class_name_UNIQUE` (`date`,`class`,`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `namelists` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `year` varchar(10) NOT NULL,
-  `class_id` varchar(10) NOT NULL,
+  `year` varchar(10),
+  `class` varchar(10) NOT NULL,
   `name` varchar(10) NOT NULL,  
   `created_by` varchar(45) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
-  UNIQUE KEY `year_class_name_UNIQUE` (`year`,`class_id`,`name`)
+  UNIQUE KEY `year_class_name_UNIQUE` (`year`,`class`,`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `ingredients` (

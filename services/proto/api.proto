@@ -10,5 +10,6 @@ service api {
     rpc UpdateUser(dongfeng.protobuf.UpdateUserRequest) returns(dongfeng.protobuf.UpdateUserResponse) {};
     rpc UpdateNotification(dongfeng.protobuf.UpdateNotificationsRequest) returns(dongfeng.protobuf.UpdateNotificationsResponse) {};
     rpc GetNamelist(dongfeng.protobuf.GetNamelistRequest) returns(dongfeng.protobuf.GetNamelistResponse) {};
+    rpc UpdateNamelist(dongfeng.protobuf.UpdateNamelistRequest) returns(dongfeng.protobuf.UpdateNamelistResponse) {};
     rpc SaveNotification(dongfeng.protobuf.SaveNotificationRequest) returns(dongfeng.protobuf.SaveNotificationResponse) {};
 }

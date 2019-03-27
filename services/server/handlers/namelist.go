@@ -2,10 +2,12 @@ package handlers
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"strings"
 
 	"github.com/ilovelili/dongfeng-core/services/server/core/controllers"
+	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 	"github.com/ilovelili/dongfeng-core/services/utils"
 	"github.com/ilovelili/dongfeng-error-code"
 	proto "github.com/ilovelili/dongfeng-protobuf"
@@ -56,5 +58,47 @@ func (f *Facade) GetNamelist(ctx context.Context, req *proto.GetNamelistRequest,
 	}
 
 	rsp.Items = items
+	return nil
+}
+
+// UpdateNamelist update name list master data
+func (f *Facade) UpdateNamelist(ctx context.Context, req *proto.UpdateNamelistRequest, rsp *proto.UpdateNamelistResponse) error {
+	md, ok := metadata.FromContext(ctx)
+	if !ok {
+		return utils.NewError(errorcode.GenericInvalidMetaData)
+	}
+
+	idtoken := req.GetToken()
+	jwks := md[sharedlib.MetaDataJwks]
+	claims, token, err := sharedlib.ParseJWT(idtoken, jwks)
+
+	// vaidate the token
+	if err != nil || !token.Valid {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
+
+	// Unmarshal user info
+	userinfo, _ := json.Marshal(claims)
+	var user *models.User
+	err = json.Unmarshal(userinfo, &user)
+
+	// check if user exists or not
+	usercontroller := controllers.NewUserController()
+	exsitinguser, err := usercontroller.GetUserByEmail(user.Email)
+	if err != nil {
+		return utils.NewError(errorcode.CoreNoUser)
+	}
+
+	namelists := req.GetItems()
+	for _, namelist := range namelists {
+		namelist.CreatedBy = exsitinguser.Email
+	}
+	namelistcontroller := controllers.NewNamelistController()
+
+	err = namelistcontroller.UpdateNamelists(namelists)
+	if err != nil {
+		return utils.NewError(errorcode.CoreFailedToUpdateNamelist)
+	}
+
 	return nil
 }
