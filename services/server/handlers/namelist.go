@@ -37,13 +37,19 @@ func (f *Facade) GetNamelist(ctx context.Context, req *proto.GetNamelistRequest,
 		return utils.NewError(errorcode.CoreFailedToGetNamelist)
 	}
 
-	itemmap := make(map[string] /*year_classid*/ []string)
+	itemmap := make(map[string] /*year_classid*/ []*proto.NameItem)
 	for _, namelist := range namelists {
 		key := fmt.Sprintf("%s_%s", namelist.Year, namelist.Class)
 		if names, ok := itemmap[key]; ok {
-			itemmap[key] = append(names, namelist.Name)
+			itemmap[key] = append(names, &proto.NameItem{
+				Id:   namelist.ID,
+				Name: namelist.Name,
+			})
 		} else {
-			itemmap[key] = []string{namelist.Name}
+			itemmap[key] = []*proto.NameItem{&proto.NameItem{
+				Id:   namelist.ID,
+				Name: namelist.Name,
+			}}
 		}
 	}
 

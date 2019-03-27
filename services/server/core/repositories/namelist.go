@@ -58,7 +58,7 @@ func (r *NamelistRepository) DeleteInsert(namelists []*proto.NamelistItem) (err 
 			err = session().InsertTx(tx, &models.Namelist{
 				Year:      year,
 				Class:     class,
-				Name:      name,
+				Name:      name.Name,
 				CreatedBy: createdBy,
 			})
 
