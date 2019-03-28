@@ -55,20 +55,18 @@ func (r *TeacherlistRepository) DeleteInsert(teacherlists []*proto.TeacherlistIt
 		}
 
 		for _, teacher := range teachers {
-			for _, class := range teacher.Class {
-				err = session().InsertTx(tx, &models.Teacherlist{
-					Year:      year,
-					Class:     class,
-					Name:      teacher.Name,
-					Email:     teacher.Email,
-					Role:      teacher.Role,
-					CreatedBy: createdBy,
-				})
+			err = session().InsertTx(tx, &models.Teacherlist{
+				Year:      year,
+				Class:     teacher.Class,
+				Name:      teacher.Name,
+				Email:     teacher.Email,
+				Role:      teacher.Role,
+				CreatedBy: createdBy,
+			})
 
-				if err != nil {
-					session().Rollback(tx)
-					return
-				}
+			if err != nil {
+				session().Rollback(tx)
+				return
 			}
 		}
 	}

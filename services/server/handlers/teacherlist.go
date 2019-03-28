@@ -3,7 +3,6 @@ package handlers
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 
 	"github.com/ilovelili/dongfeng-core/services/server/core/controllers"
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
@@ -36,29 +35,14 @@ func (f *Facade) GetTeacherlist(ctx context.Context, req *proto.GetTeacherlistRe
 		return utils.NewError(errorcode.CoreFailedToGetTeacherlist)
 	}
 
-	classmap := make(map[string] /*year_email*/ []string)
-	for _, teacherlist := range teacherlists {
-		key := fmt.Sprintf("%s_%s", teacherlist.Year, teacherlist.Email)
-		if class, ok := classmap[key]; !ok {
-			classmap[key] = []string{teacherlist.Class}
-		} else {
-			classmap[key] = append(class, teacherlist.Class)
-		}
-	}
-
 	itemmap := make(map[string] /*year*/ []*proto.TeacherItem)
 	for _, teacherlist := range teacherlists {
-		class, ok := classmap[fmt.Sprintf("%s_%s", teacherlist.Year, teacherlist.Email)]
-		if !ok {
-			class = []string{}
-		}
-
 		key := teacherlist.Year
 		if items, ok := itemmap[key]; ok {
 			itemmap[key] = append(items, &proto.TeacherItem{
 				Id:    teacherlist.ID,
 				Name:  teacherlist.Name,
-				Class: class,
+				Class: teacherlist.Class,
 				Email: teacherlist.Email,
 				Role:  teacherlist.Role,
 			})
@@ -66,7 +50,7 @@ func (f *Facade) GetTeacherlist(ctx context.Context, req *proto.GetTeacherlistRe
 			itemmap[key] = []*proto.TeacherItem{&proto.TeacherItem{
 				Id:    teacherlist.ID,
 				Name:  teacherlist.Name,
-				Class: class,
+				Class: teacherlist.Class,
 				Email: teacherlist.Email,
 				Role:  teacherlist.Role,
 			}}

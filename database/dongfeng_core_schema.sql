@@ -97,8 +97,7 @@ CREATE TABLE `teacherlists` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`),
-  UNIQUE KEY `email_UNIQUE` (`email`),
+  UNIQUE KEY `id_UNIQUE` (`id`),  
   UNIQUE KEY `year_class_name_UNIQUE` (`year`,`class`,`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
