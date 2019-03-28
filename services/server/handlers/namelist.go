@@ -99,8 +99,8 @@ func (f *Facade) UpdateNamelist(ctx context.Context, req *proto.UpdateNamelistRe
 	for _, namelist := range namelists {
 		namelist.CreatedBy = exsitinguser.Email
 	}
-	namelistcontroller := controllers.NewNamelistController()
 
+	namelistcontroller := controllers.NewNamelistController()
 	err = namelistcontroller.UpdateNamelists(namelists)
 	if err != nil {
 		return utils.NewError(errorcode.CoreFailedToUpdateNamelist)

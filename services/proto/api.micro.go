@@ -48,6 +48,8 @@ type ApiService interface {
 	UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationsRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateNotificationsResponse, error)
 	GetNamelist(ctx context.Context, in *dongfeng_protobuf.GetNamelistRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetNamelistResponse, error)
 	UpdateNamelist(ctx context.Context, in *dongfeng_protobuf.UpdateNamelistRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateNamelistResponse, error)
+	GetTeacherlist(ctx context.Context, in *dongfeng_protobuf.GetTeacherlistRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetTeacherlistResponse, error)
+	UpdateTeacherlist(ctx context.Context, in *dongfeng_protobuf.UpdateTeacherlistRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateTeacherlistResponse, error)
 	SaveNotification(ctx context.Context, in *dongfeng_protobuf.SaveNotificationRequest, opts ...client.CallOption) (*dongfeng_protobuf.SaveNotificationResponse, error)
 }
 
@@ -129,6 +131,26 @@ func (c *apiService) UpdateNamelist(ctx context.Context, in *dongfeng_protobuf.U
 	return out, nil
 }
 
+func (c *apiService) GetTeacherlist(ctx context.Context, in *dongfeng_protobuf.GetTeacherlistRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetTeacherlistResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.GetTeacherlist", in)
+	out := new(dongfeng_protobuf.GetTeacherlistResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *apiService) UpdateTeacherlist(ctx context.Context, in *dongfeng_protobuf.UpdateTeacherlistRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateTeacherlistResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.UpdateTeacherlist", in)
+	out := new(dongfeng_protobuf.UpdateTeacherlistResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *apiService) SaveNotification(ctx context.Context, in *dongfeng_protobuf.SaveNotificationRequest, opts ...client.CallOption) (*dongfeng_protobuf.SaveNotificationResponse, error) {
 	req := c.c.NewRequest(c.name, "Api.SaveNotification", in)
 	out := new(dongfeng_protobuf.SaveNotificationResponse)
@@ -148,6 +170,8 @@ type ApiHandler interface {
 	UpdateNotification(context.Context, *dongfeng_protobuf.UpdateNotificationsRequest, *dongfeng_protobuf.UpdateNotificationsResponse) error
 	GetNamelist(context.Context, *dongfeng_protobuf.GetNamelistRequest, *dongfeng_protobuf.GetNamelistResponse) error
 	UpdateNamelist(context.Context, *dongfeng_protobuf.UpdateNamelistRequest, *dongfeng_protobuf.UpdateNamelistResponse) error
+	GetTeacherlist(context.Context, *dongfeng_protobuf.GetTeacherlistRequest, *dongfeng_protobuf.GetTeacherlistResponse) error
+	UpdateTeacherlist(context.Context, *dongfeng_protobuf.UpdateTeacherlistRequest, *dongfeng_protobuf.UpdateTeacherlistResponse) error
 	SaveNotification(context.Context, *dongfeng_protobuf.SaveNotificationRequest, *dongfeng_protobuf.SaveNotificationResponse) error
 }
 
@@ -159,6 +183,8 @@ func RegisterApiHandler(s server.Server, hdlr ApiHandler, opts ...server.Handler
 		UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationsRequest, out *dongfeng_protobuf.UpdateNotificationsResponse) error
 		GetNamelist(ctx context.Context, in *dongfeng_protobuf.GetNamelistRequest, out *dongfeng_protobuf.GetNamelistResponse) error
 		UpdateNamelist(ctx context.Context, in *dongfeng_protobuf.UpdateNamelistRequest, out *dongfeng_protobuf.UpdateNamelistResponse) error
+		GetTeacherlist(ctx context.Context, in *dongfeng_protobuf.GetTeacherlistRequest, out *dongfeng_protobuf.GetTeacherlistResponse) error
+		UpdateTeacherlist(ctx context.Context, in *dongfeng_protobuf.UpdateTeacherlistRequest, out *dongfeng_protobuf.UpdateTeacherlistResponse) error
 		SaveNotification(ctx context.Context, in *dongfeng_protobuf.SaveNotificationRequest, out *dongfeng_protobuf.SaveNotificationResponse) error
 	}
 	type Api struct {
@@ -194,6 +220,14 @@ func (h *apiHandler) GetNamelist(ctx context.Context, in *dongfeng_protobuf.GetN
 
 func (h *apiHandler) UpdateNamelist(ctx context.Context, in *dongfeng_protobuf.UpdateNamelistRequest, out *dongfeng_protobuf.UpdateNamelistResponse) error {
 	return h.ApiHandler.UpdateNamelist(ctx, in, out)
+}
+
+func (h *apiHandler) GetTeacherlist(ctx context.Context, in *dongfeng_protobuf.GetTeacherlistRequest, out *dongfeng_protobuf.GetTeacherlistResponse) error {
+	return h.ApiHandler.GetTeacherlist(ctx, in, out)
+}
+
+func (h *apiHandler) UpdateTeacherlist(ctx context.Context, in *dongfeng_protobuf.UpdateTeacherlistRequest, out *dongfeng_protobuf.UpdateTeacherlistResponse) error {
+	return h.ApiHandler.UpdateTeacherlist(ctx, in, out)
 }
 
 func (h *apiHandler) SaveNotification(ctx context.Context, in *dongfeng_protobuf.SaveNotificationRequest, out *dongfeng_protobuf.SaveNotificationResponse) error {

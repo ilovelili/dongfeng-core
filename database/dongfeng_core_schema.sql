@@ -65,7 +65,7 @@ CREATE TABLE `attendances` (
   `date` varchar(10) NOT NULL,
   `class` varchar(10) NOT NULL,
   `name` varchar(10) NOT NULL,  
-  `created_by` varchar(45) NOT NULL,
+  `created_by` varchar(100) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  
   PRIMARY KEY (`id`),
@@ -78,11 +78,27 @@ CREATE TABLE `namelists` (
   `year` varchar(10),
   `class` varchar(10) NOT NULL,
   `name` varchar(10) NOT NULL,  
-  `created_by` varchar(45) NOT NULL,
+  `created_by` varchar(100) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `year_class_name_UNIQUE` (`year`,`class`,`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `teacherlists` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `year` varchar(10),
+  `class` varchar(10) NOT NULL,
+  `name` varchar(10) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `role` varchar(10) NOT NULL,
+  `created_by` varchar(100) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `email_UNIQUE` (`email`),
   UNIQUE KEY `year_class_name_UNIQUE` (`year`,`class`,`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -99,7 +115,7 @@ CREATE TABLE `recipes` (
   `name` varchar(50) NOT NULL,
   `ingredient_id` int(11) NOT NULL,
   `unit_amount` decimal(5,2) NOT NULL DEFAULT '0.00',
-  `created_by` varchar(45) NOT NULL DEFAULT 'AgentSmith',
+  `created_by` varchar(100) NOT NULL DEFAULT 'AgentSmith',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
