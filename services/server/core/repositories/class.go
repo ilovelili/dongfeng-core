@@ -38,16 +38,14 @@ func (r *ClassRepository) DeleteInsert(classes []*proto.ClassItem) (err error) {
 			}
 		}
 
-		for _, class := range classes {
-			err = session().InsertTx(tx, &models.Class{
-				Name:      class.Name,
-				CreatedBy: createdBy,
-			})
+		err = session().InsertTx(tx, &models.Class{
+			Name:      class.Name,
+			CreatedBy: createdBy,
+		})
 
-			if err != nil {
-				session().Rollback(tx)
-				return
-			}
+		if err != nil {
+			session().Rollback(tx)
+			return
 		}
 	}
 
