@@ -8,6 +8,7 @@ import (
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 	"github.com/ilovelili/dongfeng-core/services/utils"
 	"github.com/ilovelili/dongfeng-error-code"
+	notification "github.com/ilovelili/dongfeng-notification"
 	proto "github.com/ilovelili/dongfeng-protobuf"
 	sharedlib "github.com/ilovelili/dongfeng-shared-lib"
 	"github.com/micro/go-micro/metadata"
@@ -108,5 +109,6 @@ func (f *Facade) UpdateTeacherlist(ctx context.Context, req *proto.UpdateTeacher
 		return utils.NewError(errorcode.CoreFailedToUpdateTeacherlist)
 	}
 
+	f.syslog(notification.TeacherlistUpdated(user.ID))
 	return nil
 }

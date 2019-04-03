@@ -7,10 +7,10 @@ import (
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 )
 
-// NotificationRepository friends repository
+// NotificationRepository notification repository
 type NotificationRepository struct{}
 
-// NewNotificationRepository init UserProfile repository
+// NewNotificationRepository init notification repository
 func NewNotificationRepository() *NotificationRepository {
 	return &NotificationRepository{}
 }

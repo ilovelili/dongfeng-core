@@ -3,8 +3,6 @@ package handlers
 import (
 	"context"
 	"encoding/json"
-	"fmt"
-	"strings"
 
 	"github.com/ilovelili/dongfeng-core/services/server/core/controllers"
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
@@ -16,8 +14,8 @@ import (
 	"github.com/micro/go-micro/metadata"
 )
 
-// GetNamelist get name list master data
-func (f *Facade) GetNamelist(ctx context.Context, req *proto.GetNamelistRequest, rsp *proto.GetNamelistResponse) error {
+// GetClasslist get class list master data
+func (f *Facade) GetClasslist(ctx context.Context, req *proto.GetClasslistRequest, rsp *proto.GetClasslistResponse) error {
 	md, ok := metadata.FromContext(ctx)
 	if !ok {
 		return utils.NewError(errorcode.GenericInvalidMetaData)
@@ -32,35 +30,18 @@ func (f *Facade) GetNamelist(ctx context.Context, req *proto.GetNamelistRequest,
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
 
-	namelistcontroller := controllers.NewNamelistController()
-	namelists, err := namelistcontroller.GetNamelists(req.GetClass(), req.GetYear())
+	classcontroller := controllers.NewClassController()
+	classes, err := classcontroller.GetClasses()
 	if err != nil {
-		return utils.NewError(errorcode.CoreFailedToGetNamelist)
+		return utils.NewError(errorcode.CoreFailedToGetClasses)
 	}
 
-	itemmap := make(map[string] /*year_classid*/ []*proto.NameItem)
-	for _, namelist := range namelists {
-		key := fmt.Sprintf("%s_%s", namelist.Year, namelist.Class)
-		if names, ok := itemmap[key]; ok {
-			itemmap[key] = append(names, &proto.NameItem{
-				Id:   namelist.ID,
-				Name: namelist.Name,
-			})
-		} else {
-			itemmap[key] = []*proto.NameItem{&proto.NameItem{
-				Id:   namelist.ID,
-				Name: namelist.Name,
-			}}
-		}
-	}
-
-	items := make([]*proto.NamelistItem, 0)
-	for k, v := range itemmap {
-		year, class := strings.Split(k, "_")[0], strings.Split(k, "_")[1]
-		items = append(items, &proto.NamelistItem{
-			Year:  year,
-			Class: class,
-			Names: v,
+	items := make([]*proto.ClassItem, 0)
+	for _, class := range classes {
+		items = append(items, &proto.ClassItem{
+			Name:      class.Name,
+			Id:        class.ID,
+			CreatedBy: class.CreatedBy,
 		})
 	}
 
@@ -68,8 +49,8 @@ func (f *Facade) GetNamelist(ctx context.Context, req *proto.GetNamelistRequest,
 	return nil
 }
 
-// UpdateNamelist update name list master data
-func (f *Facade) UpdateNamelist(ctx context.Context, req *proto.UpdateNamelistRequest, rsp *proto.UpdateNamelistResponse) error {
+// UpdateClasslist update class list master data
+func (f *Facade) UpdateClasslist(ctx context.Context, req *proto.UpdateClasslistRequest, rsp *proto.UpdateClasslistResponse) error {
 	md, ok := metadata.FromContext(ctx)
 	if !ok {
 		return utils.NewError(errorcode.GenericInvalidMetaData)
@@ -96,17 +77,17 @@ func (f *Facade) UpdateNamelist(ctx context.Context, req *proto.UpdateNamelistRe
 		return utils.NewError(errorcode.CoreNoUser)
 	}
 
-	namelists := req.GetItems()
-	for _, namelist := range namelists {
-		namelist.CreatedBy = exsitinguser.Email
+	classes := req.GetItems()
+	for _, class := range classes {
+		class.CreatedBy = exsitinguser.Email
 	}
 
-	namelistcontroller := controllers.NewNamelistController()
-	err = namelistcontroller.UpdateNamelists(namelists)
+	classcontroller := controllers.NewClassController()
+	err = classcontroller.UpdateClasses(classes)
 	if err != nil {
-		return utils.NewError(errorcode.CoreFailedToUpdateNamelist)
+		return utils.NewError(errorcode.CoreFailedToUpdateClasses)
 	}
 
-	f.syslog(notification.NamelistUpdated(user.ID))
+	f.syslog(notification.ClasslistUpdated(user.ID))
 	return nil
 }

@@ -7,10 +7,10 @@ import (
 	proto "github.com/ilovelili/dongfeng-protobuf"
 )
 
-// NamelistRepository friends repository
+// NamelistRepository name list repository
 type NamelistRepository struct{}
 
-// NewNamelistRepository init UserProfile repository
+// NewNamelistRepository init name list repository
 func NewNamelistRepository() *NamelistRepository {
 	return &NamelistRepository{}
 }

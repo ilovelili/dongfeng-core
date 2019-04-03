@@ -7,15 +7,15 @@ import (
 	proto "github.com/ilovelili/dongfeng-protobuf"
 )
 
-// TeacherlistRepository friends repository
+// TeacherlistRepository teacher list repository
 type TeacherlistRepository struct{}
 
-// NewTeacherlistRepository init UserProfile repository
+// NewTeacherlistRepository init teacher list repository
 func NewTeacherlistRepository() *TeacherlistRepository {
 	return &TeacherlistRepository{}
 }
 
-// Select select Teacherlist
+// Select select teacher list
 func (r *TeacherlistRepository) Select(class, year string) (teacherlists []*models.Teacherlist, err error) {
 	querybuilder := Table("teacherlists").Alias("t").Where()
 	var query string
@@ -37,7 +37,7 @@ func (r *TeacherlistRepository) Select(class, year string) (teacherlists []*mode
 	return
 }
 
-// DeleteInsert delete insert Teacherlist
+// DeleteInsert delete insert teacher list
 func (r *TeacherlistRepository) DeleteInsert(teacherlists []*proto.TeacherlistItem) (err error) {
 	tx, err := session().Begin()
 	if err != nil {

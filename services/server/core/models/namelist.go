@@ -1,8 +1,8 @@
 package models
 
-// Namelist namelist entity
+// Namelist name list entity
 type Namelist struct {
-	ID        int64  `dapper:"id,primarykey,autoincrement,table=namelists"`
+	ID        int64  `dapper:"id,primarykey,autoincrement,table=pupils"`
 	Year      string `dapper:"year"`
 	Name      string `dapper:"name"`
 	Class     string `dapper:"class"`
