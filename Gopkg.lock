@@ -83,7 +83,7 @@
   branch = "master"
   name = "github.com/ilovelili/dongfeng-error-code"
   packages = ["."]
-  revision = "e3aee3eb0b4e15b207be9c787d3ac1de0bef4588"
+  revision = "b59a7f3fe1a31c26917625d8cab98f221d8a4ebe"
 
 [[projects]]
   branch = "master"
@@ -101,7 +101,7 @@
   branch = "master"
   name = "github.com/ilovelili/dongfeng-protobuf"
   packages = ["."]
-  revision = "631ed164b160ba74d84016488968b76b90a9050f"
+  revision = "ec920597149ae41183faf5fb3a814ec35d861ab2"
 
 [[projects]]
   branch = "master"
@@ -221,19 +221,19 @@
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["ed25519","ed25519/internal/edwards25519"]
-  revision = "a5d413f7728c81fb97d96a2b722368945f651e78"
+  revision = "8e1b8d32e692162a446e97250c5d34f5a52efed6"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/net"
   packages = ["bpf","http/httpguts","http2","http2/hpack","idna","internal/iana","internal/socket","ipv4","ipv6"]
-  revision = "74de082e2cca95839e88aa0aeee5aadf6ce7710f"
+  revision = "b630fd6fe46bcfc98f989005d8b8ec1400e60a6e"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "baf5eb976a8cd65845293cd814ea151018552292"
+  revision = "81d4e9dc473e5e8c933f2aaeba2a3d81efb9aed2"
 
 [[projects]]
   name = "golang.org/x/text"
