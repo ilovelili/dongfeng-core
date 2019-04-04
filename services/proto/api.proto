@@ -9,11 +9,11 @@ service api {
     rpc Dashboard(dongfeng.protobuf.DashboardRequest) returns(dongfeng.protobuf.DashboardResponse) {};
     rpc UpdateUser(dongfeng.protobuf.UpdateUserRequest) returns(dongfeng.protobuf.UpdateUserResponse) {};
     rpc UpdateNotification(dongfeng.protobuf.UpdateNotificationsRequest) returns(dongfeng.protobuf.UpdateNotificationsResponse) {};
-    rpc GetClasslist(dongfeng.protobuf.GetClasslistRequest) returns(dongfeng.protobuf.GetClasslistResponse) {};
-    rpc UpdateClasslist(dongfeng.protobuf.UpdateClasslistRequest) returns(dongfeng.protobuf.UpdateClasslistResponse) {};
-    rpc GetNamelist(dongfeng.protobuf.GetNamelistRequest) returns(dongfeng.protobuf.GetNamelistResponse) {};
-    rpc UpdateNamelist(dongfeng.protobuf.UpdateNamelistRequest) returns(dongfeng.protobuf.UpdateNamelistResponse) {};
-    rpc GetTeacherlist(dongfeng.protobuf.GetTeacherlistRequest) returns(dongfeng.protobuf.GetTeacherlistResponse) {};
-    rpc UpdateTeacherlist(dongfeng.protobuf.UpdateTeacherlistRequest) returns(dongfeng.protobuf.UpdateTeacherlistResponse) {};
+    rpc GetClasses(dongfeng.protobuf.GetClassRequest) returns(dongfeng.protobuf.GetClassResponse) {};
+    rpc UpdateClasses(dongfeng.protobuf.UpdateClassRequest) returns(dongfeng.protobuf.UpdateClassResponse) {};
+    rpc GetPupils(dongfeng.protobuf.GetPupilRequest) returns(dongfeng.protobuf.GetPupilResponse) {};
+    rpc UpdatePupils(dongfeng.protobuf.UpdatePupilRequest) returns(dongfeng.protobuf.UpdatePupilResponse) {};
+    rpc GetTeachers(dongfeng.protobuf.GetTeacherRequest) returns(dongfeng.protobuf.GetTeacherResponse) {};
+    rpc UpdateTeachers(dongfeng.protobuf.UpdateTeacherRequest) returns(dongfeng.protobuf.UpdateTeacherResponse) {};
     rpc SaveNotification(dongfeng.protobuf.SaveNotificationRequest) returns(dongfeng.protobuf.SaveNotificationResponse) {};
 }

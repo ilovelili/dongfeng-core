@@ -57,7 +57,8 @@ CREATE TABLE `classes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(9) NOT NULL,
   `created_by` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)  
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name_UNIQUE` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `attendances` (
@@ -73,7 +74,7 @@ CREATE TABLE `attendances` (
   UNIQUE KEY `date_class_name_UNIQUE` (`date`,`class`,`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `namelists` (
+CREATE TABLE `pupils` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `year` varchar(10),
   `class` varchar(10) NOT NULL,
@@ -86,7 +87,7 @@ CREATE TABLE `namelists` (
   UNIQUE KEY `year_class_name_UNIQUE` (`year`,`class`,`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `teacherlists` (
+CREATE TABLE `teachers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `year` varchar(10),
   `class` varchar(10) NOT NULL,

@@ -6,12 +6,12 @@ import (
 	proto "github.com/ilovelili/dongfeng-protobuf"
 )
 
-// ClassController Class controller
+// ClassController class controller
 type ClassController struct {
 	repository *repositories.ClassRepository
 }
 
-// NewClassController new controller
+// NewClassController new class controller
 func NewClassController() *ClassController {
 	return &ClassController{
 		repository: repositories.NewClassRepository(),
@@ -24,6 +24,6 @@ func (c *ClassController) GetClasses() ([]*models.Class, error) {
 }
 
 // UpdateClasses update Classes
-func (c *ClassController) UpdateClasses(items []*proto.ClassItem) error {
-	return c.repository.DeleteInsert(items)
+func (c *ClassController) UpdateClasses(classes []*proto.Class) error {
+	return c.repository.DeleteInsert(classes)
 }

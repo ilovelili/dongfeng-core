@@ -60,7 +60,7 @@ func (f *Facade) UpdateNotification(ctx context.Context, req *proto.UpdateNotifi
 
 	ids := req.GetNotifications()
 	notificationcontroller := controllers.NewNotificationController()
-	notifications := make([]*models.Notification, 0)
+	notifications := []*models.Notification{}
 	for _, id := range ids {
 		notifications = append(notifications, &models.Notification{
 			ID: id,

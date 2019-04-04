@@ -54,7 +54,7 @@ func (f *Facade) Dashboard(ctx context.Context, req *proto.DashboardRequest, rsp
 }
 
 func resolvecNotifications(notifications []*models.Notification) []*proto.Notification {
-	result := make([]*proto.Notification, 0)
+	result := []*proto.Notification{}
 	for _, notification := range notifications {
 		result = append(result, &proto.Notification{
 			Id:         int64(notification.ID),

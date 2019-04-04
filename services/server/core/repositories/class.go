@@ -21,15 +21,14 @@ func (r *ClassRepository) Select() (classes []*models.Class, err error) {
 }
 
 // DeleteInsert delete insert Class
-func (r *ClassRepository) DeleteInsert(classes []*proto.ClassItem) (err error) {
+func (r *ClassRepository) DeleteInsert(classes []*proto.Class) (err error) {
 	tx, err := session().Begin()
 	if err != nil {
 		return
 	}
 
 	for idx, class := range classes {
-		createdBy := class.GetCreatedBy()
-
+		name, createdBy := class.GetName(), class.GetCreatedBy()
 		if idx == 0 {
 			_, err = session().ExecTx(tx, "CALL spDeleteClasses()")
 			if err != nil {
@@ -39,7 +38,7 @@ func (r *ClassRepository) DeleteInsert(classes []*proto.ClassItem) (err error) {
 		}
 
 		err = session().InsertTx(tx, &models.Class{
-			Name:      class.Name,
+			Name:      name,
 			CreatedBy: createdBy,
 		})
 

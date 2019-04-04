@@ -29,7 +29,7 @@ func (r *UserRepository) SelectByMail(email string) (user *models.User, err erro
 		return
 	}
 
-	usersettings := make([]*models.Settings, 0)
+	usersettings := []*models.Settings{}
 	for _, settingsitem := range settingsmaster {
 		inneritem := &models.Settings{
 			ID:      settingsitem.ID,

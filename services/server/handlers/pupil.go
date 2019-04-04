@@ -14,8 +14,8 @@ import (
 	"github.com/micro/go-micro/metadata"
 )
 
-// GetClasses get classes
-func (f *Facade) GetClasses(ctx context.Context, req *proto.GetClassRequest, rsp *proto.GetClassResponse) error {
+// GetPupils get pupils
+func (f *Facade) GetPupils(ctx context.Context, req *proto.GetPupilRequest, rsp *proto.GetPupilResponse) error {
 	md, ok := metadata.FromContext(ctx)
 	if !ok {
 		return utils.NewError(errorcode.GenericInvalidMetaData)
@@ -30,27 +30,29 @@ func (f *Facade) GetClasses(ctx context.Context, req *proto.GetClassRequest, rsp
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
 
-	classcontroller := controllers.NewClassController()
-	classes, err := classcontroller.GetClasses()
+	pupilcontroller := controllers.NewPupilController()
+	pupils, err := pupilcontroller.GetPupils(req.GetClass(), req.GetYear())
 	if err != nil {
-		return utils.NewError(errorcode.CoreFailedToGetClasses)
+		return utils.NewError(errorcode.CoreFailedToGetPupils)
 	}
 
-	items := []*proto.Class{}
-	for _, class := range classes {
-		items = append(items, &proto.Class{
-			Id:        class.ID,
-			Name:      class.Name,
-			CreatedBy: class.CreatedBy,
+	items := []*proto.Pupil{}
+	for _, pupil := range pupils {
+		items = append(items, &proto.Pupil{
+			Id:        pupil.ID,
+			Year:      pupil.Year,
+			Class:     pupil.Class,
+			Name:      pupil.Name,
+			CreatedBy: pupil.CreatedBy,
 		})
 	}
 
-	rsp.Classes = items
+	rsp.Pupils = items
 	return nil
 }
 
-// UpdateClasses update classes
-func (f *Facade) UpdateClasses(ctx context.Context, req *proto.UpdateClassRequest, rsp *proto.UpdateClassResponse) error {
+// UpdatePupils update pupils
+func (f *Facade) UpdatePupils(ctx context.Context, req *proto.UpdatePupilRequest, rsp *proto.UpdatePupilResponse) error {
 	md, ok := metadata.FromContext(ctx)
 	if !ok {
 		return utils.NewError(errorcode.GenericInvalidMetaData)
@@ -77,17 +79,17 @@ func (f *Facade) UpdateClasses(ctx context.Context, req *proto.UpdateClassReques
 		return utils.NewError(errorcode.CoreNoUser)
 	}
 
-	classes := req.GetClasses()
-	for _, class := range classes {
-		class.CreatedBy = exsitinguser.Email
+	pupils := req.GetPupils()
+	for _, pupil := range pupils {
+		pupil.CreatedBy = exsitinguser.Email
 	}
 
-	classcontroller := controllers.NewClassController()
-	err = classcontroller.UpdateClasses(classes)
+	pupilcontroller := controllers.NewPupilController()
+	err = pupilcontroller.UpdatePupils(pupils)
 	if err != nil {
-		return utils.NewError(errorcode.CoreFailedToUpdateClasses)
+		return utils.NewError(errorcode.CoreFailedToUpdatePupils)
 	}
 
-	f.syslog(notification.ClasslistUpdated(user.ID))
+	f.syslog(notification.NamelistUpdated(user.ID))
 	return nil
 }

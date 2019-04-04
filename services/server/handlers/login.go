@@ -69,7 +69,7 @@ func (f *Facade) Login(ctx context.Context, req *proto.LoginRequest, rsp *proto.
 }
 
 func resolveSettings(settings []*models.Settings) []*proto.Setting {
-	result := make([]*proto.Setting, 0)
+	result := []*proto.Setting{}
 	for _, setting := range settings {
 		result = append(result, &proto.Setting{
 			Id:      setting.ID,

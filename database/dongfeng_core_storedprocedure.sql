@@ -76,25 +76,25 @@ DELIMITER ;
 
 /* -------------------------------------------------------------------------------------------------------------------- */
 DELIMITER $$
-CREATE PROCEDURE spDeleteNamelist
+CREATE PROCEDURE spDeletePupils
 (
     IN Year VARCHAR(4),
     IN Class VARCHAR(10)
 )
 BEGIN
-    DELETE FROM `dongfeng_core`.`namelists` WHERE year = Year AND class = Class;
+    DELETE FROM `dongfeng_core`.`pupils` WHERE year = Year AND class = Class;
 END$$
 DELIMITER ;
 /* -------------------------------------------------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------------------------------------------------- */
 DELIMITER $$
-CREATE PROCEDURE spDeleteTeacherlist
+CREATE PROCEDURE spDeleteTeachers
 (
     IN Year VARCHAR(4)
 )
 BEGIN
-    DELETE FROM `dongfeng_core`.`teacherlists` WHERE year = Year;
+    DELETE FROM `dongfeng_core`.`teachers` WHERE year = Year;
 END$$
 DELIMITER ;
 /* -------------------------------------------------------------------------------------------------------------------- */
