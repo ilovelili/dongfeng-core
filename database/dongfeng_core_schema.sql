@@ -90,7 +90,7 @@ CREATE TABLE `pupils` (
 CREATE TABLE `teachers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `year` varchar(10),
-  `class` varchar(10) NOT NULL,
+  `class` varchar(100) NOT NULL,
   `name` varchar(10) NOT NULL,
   `email` varchar(100) NOT NULL,
   `role` varchar(10) NOT NULL,
