@@ -88,6 +88,6 @@ func (f *Facade) UpdateClasses(ctx context.Context, req *proto.UpdateClassReques
 		return utils.NewError(errorcode.CoreFailedToUpdateClasses)
 	}
 
-	f.syslog(notification.ClasslistUpdated(user.ID))
+	f.syslog(notification.ClasslistUpdated(exsitinguser.ID))
 	return nil
 }

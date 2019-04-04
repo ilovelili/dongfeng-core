@@ -90,6 +90,6 @@ func (f *Facade) UpdatePupils(ctx context.Context, req *proto.UpdatePupilRequest
 		return utils.NewError(errorcode.CoreFailedToUpdatePupils)
 	}
 
-	f.syslog(notification.NamelistUpdated(user.ID))
+	f.syslog(notification.NamelistUpdated(exsitinguser.ID))
 	return nil
 }

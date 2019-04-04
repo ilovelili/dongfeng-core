@@ -24,7 +24,7 @@ func (r *TeacherRepository) Select(class, year string) (teachers []*models.Teach
 		querybuilder = querybuilder.Eq("1", "1")
 	} else {
 		if class != "" {
-			querybuilder = querybuilder.Eq("t.class", class)
+			querybuilder = querybuilder.Like("t.class", fmt.Sprintf("%%%s%%", class))
 		}
 
 		if year != "" {

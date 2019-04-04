@@ -92,6 +92,6 @@ func (f *Facade) UpdateTeachers(ctx context.Context, req *proto.UpdateTeacherReq
 		return utils.NewError(errorcode.CoreFailedToUpdateTeachers)
 	}
 
-	f.syslog(notification.TeacherlistUpdated(user.ID))
+	f.syslog(notification.TeacherlistUpdated(exsitinguser.ID))
 	return nil
 }
