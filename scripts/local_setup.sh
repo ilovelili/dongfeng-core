@@ -10,6 +10,11 @@ if ! [ -x "$(command -v dep)" ]; then
     go get -u github.com/golang/dep/cmd/dep
 fi
 
+# init when necessary
+if [ ! -f Gopkg.toml ]; then
+    dep init
+fi
+
 rm -f Gopkg.lock
 rm -rf ./vendor
 
