@@ -63,12 +63,13 @@ CREATE TABLE `classes` (
 
 CREATE TABLE `attendances` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `year` varchar(10) NOT NULL,
   `date` varchar(10) NOT NULL,
   `class` varchar(10) NOT NULL,
-  `name` varchar(10) NOT NULL,  
+  `name` varchar(10) NOT NULL,
   `created_by` varchar(100) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `date_class_name_UNIQUE` (`date`,`class`,`name`)

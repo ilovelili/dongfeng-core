@@ -52,6 +52,8 @@ type ApiService interface {
 	UpdatePupils(ctx context.Context, in *dongfeng_protobuf.UpdatePupilRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdatePupilResponse, error)
 	GetTeachers(ctx context.Context, in *dongfeng_protobuf.GetTeacherRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetTeacherResponse, error)
 	UpdateTeachers(ctx context.Context, in *dongfeng_protobuf.UpdateTeacherRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateTeacherResponse, error)
+	GetAttendances(ctx context.Context, in *dongfeng_protobuf.GetAttendanceRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetAttendanceResponse, error)
+	UpdateAttendances(ctx context.Context, in *dongfeng_protobuf.UpdateAttendanceRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateAttendanceResponse, error)
 	SaveNotification(ctx context.Context, in *dongfeng_protobuf.SaveNotificationRequest, opts ...client.CallOption) (*dongfeng_protobuf.SaveNotificationResponse, error)
 }
 
@@ -173,6 +175,26 @@ func (c *apiService) UpdateTeachers(ctx context.Context, in *dongfeng_protobuf.U
 	return out, nil
 }
 
+func (c *apiService) GetAttendances(ctx context.Context, in *dongfeng_protobuf.GetAttendanceRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetAttendanceResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.GetAttendances", in)
+	out := new(dongfeng_protobuf.GetAttendanceResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *apiService) UpdateAttendances(ctx context.Context, in *dongfeng_protobuf.UpdateAttendanceRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateAttendanceResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.UpdateAttendances", in)
+	out := new(dongfeng_protobuf.UpdateAttendanceResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *apiService) SaveNotification(ctx context.Context, in *dongfeng_protobuf.SaveNotificationRequest, opts ...client.CallOption) (*dongfeng_protobuf.SaveNotificationResponse, error) {
 	req := c.c.NewRequest(c.name, "Api.SaveNotification", in)
 	out := new(dongfeng_protobuf.SaveNotificationResponse)
@@ -196,6 +218,8 @@ type ApiHandler interface {
 	UpdatePupils(context.Context, *dongfeng_protobuf.UpdatePupilRequest, *dongfeng_protobuf.UpdatePupilResponse) error
 	GetTeachers(context.Context, *dongfeng_protobuf.GetTeacherRequest, *dongfeng_protobuf.GetTeacherResponse) error
 	UpdateTeachers(context.Context, *dongfeng_protobuf.UpdateTeacherRequest, *dongfeng_protobuf.UpdateTeacherResponse) error
+	GetAttendances(context.Context, *dongfeng_protobuf.GetAttendanceRequest, *dongfeng_protobuf.GetAttendanceResponse) error
+	UpdateAttendances(context.Context, *dongfeng_protobuf.UpdateAttendanceRequest, *dongfeng_protobuf.UpdateAttendanceResponse) error
 	SaveNotification(context.Context, *dongfeng_protobuf.SaveNotificationRequest, *dongfeng_protobuf.SaveNotificationResponse) error
 }
 
@@ -211,6 +235,8 @@ func RegisterApiHandler(s server.Server, hdlr ApiHandler, opts ...server.Handler
 		UpdatePupils(ctx context.Context, in *dongfeng_protobuf.UpdatePupilRequest, out *dongfeng_protobuf.UpdatePupilResponse) error
 		GetTeachers(ctx context.Context, in *dongfeng_protobuf.GetTeacherRequest, out *dongfeng_protobuf.GetTeacherResponse) error
 		UpdateTeachers(ctx context.Context, in *dongfeng_protobuf.UpdateTeacherRequest, out *dongfeng_protobuf.UpdateTeacherResponse) error
+		GetAttendances(ctx context.Context, in *dongfeng_protobuf.GetAttendanceRequest, out *dongfeng_protobuf.GetAttendanceResponse) error
+		UpdateAttendances(ctx context.Context, in *dongfeng_protobuf.UpdateAttendanceRequest, out *dongfeng_protobuf.UpdateAttendanceResponse) error
 		SaveNotification(ctx context.Context, in *dongfeng_protobuf.SaveNotificationRequest, out *dongfeng_protobuf.SaveNotificationResponse) error
 	}
 	type Api struct {
@@ -262,6 +288,14 @@ func (h *apiHandler) GetTeachers(ctx context.Context, in *dongfeng_protobuf.GetT
 
 func (h *apiHandler) UpdateTeachers(ctx context.Context, in *dongfeng_protobuf.UpdateTeacherRequest, out *dongfeng_protobuf.UpdateTeacherResponse) error {
 	return h.ApiHandler.UpdateTeachers(ctx, in, out)
+}
+
+func (h *apiHandler) GetAttendances(ctx context.Context, in *dongfeng_protobuf.GetAttendanceRequest, out *dongfeng_protobuf.GetAttendanceResponse) error {
+	return h.ApiHandler.GetAttendances(ctx, in, out)
+}
+
+func (h *apiHandler) UpdateAttendances(ctx context.Context, in *dongfeng_protobuf.UpdateAttendanceRequest, out *dongfeng_protobuf.UpdateAttendanceResponse) error {
+	return h.ApiHandler.UpdateAttendances(ctx, in, out)
 }
 
 func (h *apiHandler) SaveNotification(ctx context.Context, in *dongfeng_protobuf.SaveNotificationRequest, out *dongfeng_protobuf.SaveNotificationResponse) error {
