@@ -15,7 +15,7 @@ func NewAttendanceRepository() *AttendanceRepository {
 }
 
 // Select select attendances
-func (r *AttendanceRepository) Select(from, to, class, name string) (attendances []*models.Attendance, err error) {
+func (r *AttendanceRepository) Select(year, from, to, class, name string) (attendances []*models.Attendance, err error) {
 	var query string
 	table := Table("attendances").Alias("a")
 	if from == "" && to == "" && class == "" && name == "" {
@@ -28,6 +28,9 @@ func (r *AttendanceRepository) Select(from, to, class, name string) (attendances
 			return
 		}
 
+		if year != "" {
+			querybuilder.Eq("a.year", year)
+		}
 		if from != "" {
 			querybuilder.Gte("a.date", from)
 		}

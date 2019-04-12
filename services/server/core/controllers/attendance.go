@@ -18,8 +18,8 @@ func NewAttendanceController() *AttendanceController {
 }
 
 // SelectAttendances select attendence
-func (c *AttendanceController) SelectAttendances(from, to, class, name string) (attendances []*models.Attendance, err error) {
-	return c.repository.Select(from, to, class, name)
+func (c *AttendanceController) SelectAttendances(year, from, to, class, name string) (attendances []*models.Attendance, err error) {
+	return c.repository.Select(year, from, to, class, name)
 }
 
 // UpdateAttendances update attendence

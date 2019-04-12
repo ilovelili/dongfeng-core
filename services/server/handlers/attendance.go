@@ -33,14 +33,12 @@ func (f *Facade) GetAttendances(ctx context.Context, req *proto.GetAttendanceReq
 	}
 
 	attendancecontroller := controllers.NewAttendanceController()
-	attendances, err := attendancecontroller.SelectAttendances(req.GetFrom(), req.GetTo(), req.GetClass(), req.GetName())
+	attendances, err := attendancecontroller.SelectAttendances(req.GetYear(), req.GetFrom(), req.GetTo(), req.GetClass(), req.GetName())
 	if err != nil {
 		return utils.NewError(errorcode.CoreFailedToGetAttendances)
 	}
 
-	// _attendances := make([]*proto.Attendance, 0)
 	attendancemap := make(map[string] /*year_class_date*/ []string)
-
 	for _, attendance := range attendances {
 		key := fmt.Sprintf("%s_%s_%s", attendance.Year, attendance.Class, attendance.Date)
 		if v, ok := attendancemap[key]; ok {
