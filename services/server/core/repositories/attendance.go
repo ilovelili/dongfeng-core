@@ -55,34 +55,28 @@ func (r *AttendanceRepository) Select(year, from, to, class, name string) (atten
 	return
 }
 
-// Upsert upsert attendances
-func (r *AttendanceRepository) Upsert(attendances []*models.Attendance) (err error) {
+// DeleteInsert deleteinsert attendances
+func (r *AttendanceRepository) DeleteInsert(attendances []*models.Attendance) (err error) {
 	tx, err := session().Begin()
 	if err != nil {
 		return
 	}
 
 	// upsert by loop
-	for _, attendance := range attendances {
-		query := Table("attendances").Alias("a").Project("a.id").Where().
-			Eq("a.year", attendance.Year).
-			Eq("a.date", attendance.Date).
-			Eq("a.class", attendance.Class).
-			Eq("a.name", attendance.Name).
-			Sql()
-
-		var id int64
-		err := session().Find(query, nil).Scalar(&id)
-		if err != nil || 0 == id {
-			err = session().InsertTx(tx, attendance)
-		} else {
-			attendance.ID = id
-			err = session().UpdateTx(tx, attendance)
+	for idx, attendance := range attendances {
+		year, class, date := attendance.Year, attendance.Class, attendance.Date
+		if idx == 0 {
+			_, err = session().ExecTx(tx, fmt.Sprintf("CALL spDeleteAttendances('%s','%s','%s')", year, class, date))
+			if err != nil {
+				session().Rollback(tx)
+				return
+			}
 		}
 
+		err = session().InsertTx(tx, attendance)
 		if err != nil {
 			session().Rollback(tx)
-			return err
+			return
 		}
 	}
 

@@ -24,5 +24,5 @@ func (c *AttendanceController) SelectAttendances(year, from, to, class, name str
 
 // UpdateAttendances update attendence
 func (c *AttendanceController) UpdateAttendances(attendances []*models.Attendance) error {
-	return c.repository.Upsert(attendances)
+	return c.repository.DeleteInsert(attendances)
 }

@@ -78,7 +78,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE spDeletePupils
 (
-    IN Year VARCHAR(4),
+    IN Year VARCHAR(10),
     IN Class VARCHAR(10)
 )
 BEGIN
@@ -91,7 +91,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE spDeleteTeachers
 (
-    IN Year VARCHAR(4)
+    IN Year VARCHAR(10)
 )
 BEGIN
     DELETE FROM `dongfeng_core`.`teachers` WHERE year = Year;
@@ -107,3 +107,19 @@ BEGIN
 END$$
 DELIMITER ;
 /* -------------------------------------------------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------------------------------------------------- */
+DELIMITER $$
+CREATE PROCEDURE spDeleteAttendances(
+    IN Year VARCHAR(10),
+    IN Class VARCHAR(10),
+    IN Date VARCHAR(10)
+)
+BEGIN
+    DELETE FROM `dongfeng_core`.`attendances` WHERE year = Year AND class = Class AND date = Date;
+END$$
+DELIMITER ;
+/* -------------------------------------------------------------------------------------------------------------------- */
+
+-- show
+SHOW PROCEDURE STATUS WHERE db = 'dongfeng_core';
