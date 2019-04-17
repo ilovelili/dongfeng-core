@@ -6,18 +6,18 @@ import (
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 )
 
-// AttendanceRepository friends repository
-type AttendanceRepository struct{}
+// AbsenceRepository absence repository
+type AbsenceRepository struct{}
 
-// NewAttendanceRepository init UserProfile repository
-func NewAttendanceRepository() *AttendanceRepository {
-	return &AttendanceRepository{}
+// NewAbsenceRepository init absence repository
+func NewAbsenceRepository() *AbsenceRepository {
+	return &AbsenceRepository{}
 }
 
-// Select select attendances
-func (r *AttendanceRepository) Select(year, from, to, class, name string) (attendances []*models.Attendance, err error) {
+// Select select absences
+func (r *AbsenceRepository) Select(year, from, to, class, name string) (absences []*models.Absence, err error) {
 	var query string
-	table := Table("attendances").Alias("a")
+	table := Table("absences").Alias("a")
 	if from == "" && to == "" && class == "" && name == "" {
 		query = table.Sql()
 	} else {
@@ -48,7 +48,7 @@ func (r *AttendanceRepository) Select(year, from, to, class, name string) (atten
 	}
 
 	// no rows is actually not an error
-	if err = session().Find(query, nil).All(&attendances); err != nil && norows(err) {
+	if err = session().Find(query, nil).All(&absences); err != nil && norows(err) {
 		err = nil
 	}
 
@@ -56,24 +56,24 @@ func (r *AttendanceRepository) Select(year, from, to, class, name string) (atten
 }
 
 // DeleteInsert deleteinsert attendances
-func (r *AttendanceRepository) DeleteInsert(attendances []*models.Attendance) (err error) {
+func (r *AbsenceRepository) DeleteInsert(absences []*models.Absence) (err error) {
 	tx, err := session().Begin()
 	if err != nil {
 		return
 	}
 
 	// upsert by loop
-	for idx, attendance := range attendances {
-		year, class, date := attendance.Year, attendance.Class, attendance.Date
+	for idx, absence := range absences {
+		year, class, date := absence.Year, absence.Class, absence.Date
 		if idx == 0 {
-			_, err = session().ExecTx(tx, fmt.Sprintf("CALL spDeleteAttendances('%s','%s','%s')", year, class, date))
+			_, err = session().ExecTx(tx, fmt.Sprintf("CALL spDeleteAbsences('%s','%s','%s')", year, class, date))
 			if err != nil {
 				session().Rollback(tx)
 				return
 			}
 		}
 
-		err = session().InsertTx(tx, attendance)
+		err = session().InsertTx(tx, absence)
 		if err != nil {
 			session().Rollback(tx)
 			return

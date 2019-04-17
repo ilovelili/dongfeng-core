@@ -110,13 +110,13 @@ DELIMITER ;
 
 /* -------------------------------------------------------------------------------------------------------------------- */
 DELIMITER $$
-CREATE PROCEDURE spDeleteAttendances(
+CREATE PROCEDURE spDeleteAbsences(
     IN Year VARCHAR(10),
     IN Class VARCHAR(10),
     IN Date VARCHAR(10)
 )
 BEGIN
-    DELETE FROM `dongfeng_core`.`attendances` WHERE year = Year AND class = Class AND date = Date;
+    DELETE FROM `dongfeng_core`.`absences` WHERE year = Year AND class = Class AND date = Date;
 END$$
 DELIMITER ;
 /* -------------------------------------------------------------------------------------------------------------------- */

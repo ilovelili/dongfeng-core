@@ -8,14 +8,24 @@ INSERT INTO categories(`id`, `description`, `admin_only`) VALUES (5, '营养膳�
 INSERT INTO categories(`id`, `description`, `admin_only`) VALUES (6, '出勤管理', 1);
 INSERT INTO categories(`id`, `description`, `admin_only`) VALUES (7, '系统通知', 0);
 
+insert into holidays (`from`, `to`, `description`) values ('2018-01-01', '2018-01-01', '元旦');
+insert into holidays (`from`, `to`, `description`) values ('2018-01-26', '2018-02-22', '寒假');
+insert into holidays (`from`, `to`, `description`) values ('2018-02-15', '2018-02-21', '春节');
+insert into holidays (`from`, `to`, `description`) values ('2018-04-05', '2018-04-07', '清明节');
+insert into holidays (`from`, `to`, `description`) values ('2018-04-29', '2018-05-01', '劳动节');
+insert into holidays (`from`, `to`, `description`) values ('2018-06-16', '2018-06-18', '端午节');
+insert into holidays (`from`, `to`, `description`) values ('2018-07-01', '2018-08-31', '暑假');
+insert into holidays (`from`, `to`, `description`) values ('2018-09-22', '2018-09-24', '中秋节');
+insert into holidays (`from`, `to`, `description`) values ('2018-10-01', '2018-10-07', '国庆节');
+insert into holidays (`from`, `to`, `description`) values ('2018-12-30', '2018-12-31', '元旦');
 
-INSERT INTO classes(`id`, `name`) VALUES ('01', '小一班');
-INSERT INTO classes(`id`, `name`) VALUES ('02', '小二班');
-INSERT INTO classes(`id`, `name`) VALUES ('03', '小三班');
-INSERT INTO classes(`id`, `name`) VALUES ('04', '小四班');
-INSERT INTO classes(`id`, `name`) VALUES ('11', '中一班');
-INSERT INTO classes(`id`, `name`) VALUES ('12', '中二班');
-INSERT INTO classes(`id`, `name`) VALUES ('13', '中三班');
-INSERT INTO classes(`id`, `name`) VALUES ('21', '大一班');
-INSERT INTO classes(`id`, `name`) VALUES ('22', '大二班');
-INSERT INTO classes(`id`, `name`) VALUES ('23', '大三班');
+insert into holidays (`from`, `to`, `description`) values ('2019-01-01', '2019-01-01', '元旦');
+insert into holidays (`from`, `to`, `description`) values ('2019-01-24', '2019-02-19', '寒假');
+insert into holidays (`from`, `to`, `description`) values ('2019-02-04', '2019-02-10', '春节');
+insert into holidays (`from`, `to`, `description`) values ('2019-04-05', '2019-04-07', '清明节');
+insert into holidays (`from`, `to`, `description`) values ('2019-05-01', '2019-05-04', '劳动节');
+insert into holidays (`from`, `to`, `description`) values ('2019-06-07', '2019-06-09', '端午节');
+insert into holidays (`from`, `to`, `description`) values ('2019-07-01', '2019-08-31', '暑假');
+insert into holidays (`from`, `to`, `description`) values ('2019-09-13', '2019-09-15', '中秋节');
+insert into holidays (`from`, `to`, `description`) values ('2019-10-01', '2019-10-07', '国庆节');
+insert into holidays (`from`, `to`, `description`) values ('2019-12-30', '2019-12-31', '元旦');

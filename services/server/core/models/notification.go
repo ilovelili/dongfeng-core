@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-// Notification notification entry
+// Notification notification entity
 type Notification struct {
 	ID         int64     `dapper:"id,primarykey,autoincrement,table=notifications"`
 	UserID     string    `dapper:"user_id"`

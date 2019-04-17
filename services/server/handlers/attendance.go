@@ -39,7 +39,7 @@ func (f *Facade) GetAttendances(ctx context.Context, req *proto.GetAttendanceReq
 	}
 
 	attendancemap := make(map[string] /*year_class_date*/ []string)
-	for _, attendance := range attendances {
+	for _, attendance := range attendances.Attendances {
 		key := fmt.Sprintf("%s_%s_%s", attendance.Year, attendance.Class, attendance.Date)
 		if v, ok := attendancemap[key]; ok {
 			attendancemap[key] = append(v, attendance.Name)
@@ -48,7 +48,7 @@ func (f *Facade) GetAttendances(ctx context.Context, req *proto.GetAttendanceReq
 		}
 	}
 
-	_attendances := make([]*proto.Attendance, 0)
+	_attendances := []*proto.Attendance{}
 	for k, v := range attendancemap {
 		segments := strings.Split(k, "_")
 		if len(segments) != 3 {
@@ -64,7 +64,16 @@ func (f *Facade) GetAttendances(ctx context.Context, req *proto.GetAttendanceReq
 		})
 	}
 
+	holidays := []*proto.Holiday{}
+	for _, h := range attendances.Holidays {
+		holidays = append(holidays, &proto.Holiday{
+			Date: h.Date,
+			Type: h.Type,
+		})
+	}
+
 	rsp.Attendances = _attendances
+	rsp.Holidays = holidays
 	return nil
 }
 
@@ -96,11 +105,11 @@ func (f *Facade) UpdateAttendances(ctx context.Context, req *proto.UpdateAttenda
 		return utils.NewError(errorcode.CoreNoUser)
 	}
 
-	attendances := []*models.Attendance{}
+	absences := []*models.Absence{}
 	for _, attendance := range req.Attendances {
 		names := attendance.GetNames()
 		for _, name := range names {
-			attendances = append(attendances, &models.Attendance{
+			absences = append(absences, &models.Absence{
 				Year:      attendance.GetYear(),
 				Date:      attendance.GetDate(),
 				Class:     attendance.GetClass(),
@@ -111,7 +120,7 @@ func (f *Facade) UpdateAttendances(ctx context.Context, req *proto.UpdateAttenda
 	}
 
 	attendancecontroller := controllers.NewAttendanceController()
-	if err := attendancecontroller.UpdateAttendances(attendances); err != nil {
+	if err := attendancecontroller.UpdateAbsences(absences); err != nil {
 		err = utils.NewError(errorcode.CoreFailedToUpdateAttendances)
 	}
 

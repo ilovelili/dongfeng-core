@@ -61,7 +61,7 @@ CREATE TABLE `classes` (
   UNIQUE KEY `name_UNIQUE` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `attendances` (
+CREATE TABLE `absences` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `year` varchar(10) NOT NULL,
   `date` varchar(10) NOT NULL,
@@ -101,6 +101,17 @@ CREATE TABLE `teachers` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),  
   UNIQUE KEY `year_class_name_UNIQUE` (`year`,`class`,`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `holidays` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `from` varchar(10) NOT NULL,
+  `to` varchar(10) NOT NULL,
+  `description` varchar(50) NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Updated time',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `from_to_UNIQUE` (`from`, `to`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `ingredients` (
@@ -178,4 +189,3 @@ CREATE TABLE `menus` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
