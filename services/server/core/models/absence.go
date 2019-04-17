@@ -12,10 +12,11 @@ type Absence struct {
 
 // Attendance attendence entity
 type Attendance struct {
-	Year  string
-	Date  string
-	Class string
-	Name  string
+	Year           string
+	Date           string
+	Class          string
+	Name           string
+	AttendanceFlag bool
 }
 
 // Attendances attendances with holiday

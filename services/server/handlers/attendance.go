@@ -38,13 +38,23 @@ func (f *Facade) GetAttendances(ctx context.Context, req *proto.GetAttendanceReq
 		return utils.NewError(errorcode.CoreFailedToGetAttendances)
 	}
 
-	attendancemap := make(map[string] /*year_class_date*/ []string)
+	attendancemap := make(map[string] /*year_class_date*/ [][]string)
 	for _, attendance := range attendances.Attendances {
 		key := fmt.Sprintf("%s_%s_%s", attendance.Year, attendance.Class, attendance.Date)
 		if v, ok := attendancemap[key]; ok {
-			attendancemap[key] = append(v, attendance.Name)
+			if attendance.AttendanceFlag {
+				attendancemap[key][0] = append(v[0], attendance.Name)
+			} else {
+				attendancemap[key][1] = append(v[1], attendance.Name)
+			}
 		} else {
-			attendancemap[key] = []string{attendance.Name}
+			if attendance.AttendanceFlag {
+				attendancesubslice := []string{attendance.Name}
+				attendancemap[key] = [][]string{attendancesubslice, []string{}}
+			} else {
+				absencesubslice := []string{attendance.Name}
+				attendancemap[key] = [][]string{[]string{}, absencesubslice}
+			}
 		}
 	}
 
@@ -57,10 +67,11 @@ func (f *Facade) GetAttendances(ctx context.Context, req *proto.GetAttendanceReq
 
 		year, class, date := segments[0], segments[1], segments[2]
 		_attendances = append(_attendances, &proto.Attendance{
-			Year:  year,
-			Class: class,
-			Date:  date,
-			Names: v,
+			Year:        year,
+			Class:       class,
+			Date:        date,
+			Attendances: v[0],
+			Absences:    v[1],
 		})
 	}
 
@@ -107,7 +118,7 @@ func (f *Facade) UpdateAttendances(ctx context.Context, req *proto.UpdateAttenda
 
 	absences := []*models.Absence{}
 	for _, attendance := range req.Attendances {
-		names := attendance.GetNames()
+		names := attendance.GetAbsences()
 		for _, name := range names {
 			absences = append(absences, &models.Absence{
 				Year:      attendance.GetYear(),

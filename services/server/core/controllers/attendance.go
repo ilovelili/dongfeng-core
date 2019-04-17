@@ -95,14 +95,13 @@ func (c *AttendanceController) SelectAttendances(year, from, to, class, name str
 				}
 			}
 
-			if !pupilinabsence {
-				_attendances = append(_attendances, &models.Attendance{
-					Year:  pupil.Year,
-					Date:  date,
-					Class: pupil.Class,
-					Name:  pupil.Name,
-				})
-			}
+			_attendances = append(_attendances, &models.Attendance{
+				Year:           pupil.Year,
+				Date:           date,
+				Class:          pupil.Class,
+				Name:           pupil.Name,
+				AttendanceFlag: !pupilinabsence,
+			})
 		}
 	}
 
