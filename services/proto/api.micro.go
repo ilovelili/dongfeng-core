@@ -26,7 +26,7 @@ import (
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
-var _ = dongfeng_protobuf.SaveNotificationResponse{}
+var _ = dongfeng_protobuf.UpdateNotificationsResponse{}
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -45,16 +45,20 @@ type ApiService interface {
 	Login(ctx context.Context, in *dongfeng_protobuf.LoginRequest, opts ...client.CallOption) (*dongfeng_protobuf.LoginResponse, error)
 	Dashboard(ctx context.Context, in *dongfeng_protobuf.DashboardRequest, opts ...client.CallOption) (*dongfeng_protobuf.DashboardResponse, error)
 	UpdateUser(ctx context.Context, in *dongfeng_protobuf.UpdateUserRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateUserResponse, error)
-	UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationsRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateNotificationsResponse, error)
 	GetClasses(ctx context.Context, in *dongfeng_protobuf.GetClassRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetClassResponse, error)
+	// rpc UpdateClass(dongfeng.protobuf.UpdateClassRequest) returns(dongfeng.protobuf.UpdateClassResponse) {};
 	UpdateClasses(ctx context.Context, in *dongfeng_protobuf.UpdateClassRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateClassResponse, error)
 	GetPupils(ctx context.Context, in *dongfeng_protobuf.GetPupilRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetPupilResponse, error)
+	// rpc UpdatePupil(dongfeng.protobuf.UpdatePupilRequest) returns(dongfeng.protobuf.UpdatePupilResponse) {};
 	UpdatePupils(ctx context.Context, in *dongfeng_protobuf.UpdatePupilRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdatePupilResponse, error)
 	GetTeachers(ctx context.Context, in *dongfeng_protobuf.GetTeacherRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetTeacherResponse, error)
+	// rpc UpdateTeacher(dongfeng.protobuf.UpdateTeacherRequest) returns(dongfeng.protobuf.UpdateTeacherResponse) {};
 	UpdateTeachers(ctx context.Context, in *dongfeng_protobuf.UpdateTeacherRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateTeacherResponse, error)
 	GetAttendances(ctx context.Context, in *dongfeng_protobuf.GetAttendanceRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetAttendanceResponse, error)
+	UpdateAttendance(ctx context.Context, in *dongfeng_protobuf.UpdateAttendanceRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateAttendanceResponse, error)
 	UpdateAttendances(ctx context.Context, in *dongfeng_protobuf.UpdateAttendanceRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateAttendanceResponse, error)
-	SaveNotification(ctx context.Context, in *dongfeng_protobuf.SaveNotificationRequest, opts ...client.CallOption) (*dongfeng_protobuf.SaveNotificationResponse, error)
+	UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateNotificationResponse, error)
+	UpdateNotifications(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationsRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateNotificationsResponse, error)
 }
 
 type apiService struct {
@@ -98,16 +102,6 @@ func (c *apiService) Dashboard(ctx context.Context, in *dongfeng_protobuf.Dashbo
 func (c *apiService) UpdateUser(ctx context.Context, in *dongfeng_protobuf.UpdateUserRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateUserResponse, error) {
 	req := c.c.NewRequest(c.name, "Api.UpdateUser", in)
 	out := new(dongfeng_protobuf.UpdateUserResponse)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *apiService) UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationsRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateNotificationsResponse, error) {
-	req := c.c.NewRequest(c.name, "Api.UpdateNotification", in)
-	out := new(dongfeng_protobuf.UpdateNotificationsResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -185,6 +179,16 @@ func (c *apiService) GetAttendances(ctx context.Context, in *dongfeng_protobuf.G
 	return out, nil
 }
 
+func (c *apiService) UpdateAttendance(ctx context.Context, in *dongfeng_protobuf.UpdateAttendanceRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateAttendanceResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.UpdateAttendance", in)
+	out := new(dongfeng_protobuf.UpdateAttendanceResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *apiService) UpdateAttendances(ctx context.Context, in *dongfeng_protobuf.UpdateAttendanceRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateAttendanceResponse, error) {
 	req := c.c.NewRequest(c.name, "Api.UpdateAttendances", in)
 	out := new(dongfeng_protobuf.UpdateAttendanceResponse)
@@ -195,9 +199,19 @@ func (c *apiService) UpdateAttendances(ctx context.Context, in *dongfeng_protobu
 	return out, nil
 }
 
-func (c *apiService) SaveNotification(ctx context.Context, in *dongfeng_protobuf.SaveNotificationRequest, opts ...client.CallOption) (*dongfeng_protobuf.SaveNotificationResponse, error) {
-	req := c.c.NewRequest(c.name, "Api.SaveNotification", in)
-	out := new(dongfeng_protobuf.SaveNotificationResponse)
+func (c *apiService) UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateNotificationResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.UpdateNotification", in)
+	out := new(dongfeng_protobuf.UpdateNotificationResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *apiService) UpdateNotifications(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationsRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateNotificationsResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.UpdateNotifications", in)
+	out := new(dongfeng_protobuf.UpdateNotificationsResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -211,16 +225,20 @@ type ApiHandler interface {
 	Login(context.Context, *dongfeng_protobuf.LoginRequest, *dongfeng_protobuf.LoginResponse) error
 	Dashboard(context.Context, *dongfeng_protobuf.DashboardRequest, *dongfeng_protobuf.DashboardResponse) error
 	UpdateUser(context.Context, *dongfeng_protobuf.UpdateUserRequest, *dongfeng_protobuf.UpdateUserResponse) error
-	UpdateNotification(context.Context, *dongfeng_protobuf.UpdateNotificationsRequest, *dongfeng_protobuf.UpdateNotificationsResponse) error
 	GetClasses(context.Context, *dongfeng_protobuf.GetClassRequest, *dongfeng_protobuf.GetClassResponse) error
+	// rpc UpdateClass(dongfeng.protobuf.UpdateClassRequest) returns(dongfeng.protobuf.UpdateClassResponse) {};
 	UpdateClasses(context.Context, *dongfeng_protobuf.UpdateClassRequest, *dongfeng_protobuf.UpdateClassResponse) error
 	GetPupils(context.Context, *dongfeng_protobuf.GetPupilRequest, *dongfeng_protobuf.GetPupilResponse) error
+	// rpc UpdatePupil(dongfeng.protobuf.UpdatePupilRequest) returns(dongfeng.protobuf.UpdatePupilResponse) {};
 	UpdatePupils(context.Context, *dongfeng_protobuf.UpdatePupilRequest, *dongfeng_protobuf.UpdatePupilResponse) error
 	GetTeachers(context.Context, *dongfeng_protobuf.GetTeacherRequest, *dongfeng_protobuf.GetTeacherResponse) error
+	// rpc UpdateTeacher(dongfeng.protobuf.UpdateTeacherRequest) returns(dongfeng.protobuf.UpdateTeacherResponse) {};
 	UpdateTeachers(context.Context, *dongfeng_protobuf.UpdateTeacherRequest, *dongfeng_protobuf.UpdateTeacherResponse) error
 	GetAttendances(context.Context, *dongfeng_protobuf.GetAttendanceRequest, *dongfeng_protobuf.GetAttendanceResponse) error
+	UpdateAttendance(context.Context, *dongfeng_protobuf.UpdateAttendanceRequest, *dongfeng_protobuf.UpdateAttendanceResponse) error
 	UpdateAttendances(context.Context, *dongfeng_protobuf.UpdateAttendanceRequest, *dongfeng_protobuf.UpdateAttendanceResponse) error
-	SaveNotification(context.Context, *dongfeng_protobuf.SaveNotificationRequest, *dongfeng_protobuf.SaveNotificationResponse) error
+	UpdateNotification(context.Context, *dongfeng_protobuf.UpdateNotificationRequest, *dongfeng_protobuf.UpdateNotificationResponse) error
+	UpdateNotifications(context.Context, *dongfeng_protobuf.UpdateNotificationsRequest, *dongfeng_protobuf.UpdateNotificationsResponse) error
 }
 
 func RegisterApiHandler(s server.Server, hdlr ApiHandler, opts ...server.HandlerOption) {
@@ -228,7 +246,6 @@ func RegisterApiHandler(s server.Server, hdlr ApiHandler, opts ...server.Handler
 		Login(ctx context.Context, in *dongfeng_protobuf.LoginRequest, out *dongfeng_protobuf.LoginResponse) error
 		Dashboard(ctx context.Context, in *dongfeng_protobuf.DashboardRequest, out *dongfeng_protobuf.DashboardResponse) error
 		UpdateUser(ctx context.Context, in *dongfeng_protobuf.UpdateUserRequest, out *dongfeng_protobuf.UpdateUserResponse) error
-		UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationsRequest, out *dongfeng_protobuf.UpdateNotificationsResponse) error
 		GetClasses(ctx context.Context, in *dongfeng_protobuf.GetClassRequest, out *dongfeng_protobuf.GetClassResponse) error
 		UpdateClasses(ctx context.Context, in *dongfeng_protobuf.UpdateClassRequest, out *dongfeng_protobuf.UpdateClassResponse) error
 		GetPupils(ctx context.Context, in *dongfeng_protobuf.GetPupilRequest, out *dongfeng_protobuf.GetPupilResponse) error
@@ -236,8 +253,10 @@ func RegisterApiHandler(s server.Server, hdlr ApiHandler, opts ...server.Handler
 		GetTeachers(ctx context.Context, in *dongfeng_protobuf.GetTeacherRequest, out *dongfeng_protobuf.GetTeacherResponse) error
 		UpdateTeachers(ctx context.Context, in *dongfeng_protobuf.UpdateTeacherRequest, out *dongfeng_protobuf.UpdateTeacherResponse) error
 		GetAttendances(ctx context.Context, in *dongfeng_protobuf.GetAttendanceRequest, out *dongfeng_protobuf.GetAttendanceResponse) error
+		UpdateAttendance(ctx context.Context, in *dongfeng_protobuf.UpdateAttendanceRequest, out *dongfeng_protobuf.UpdateAttendanceResponse) error
 		UpdateAttendances(ctx context.Context, in *dongfeng_protobuf.UpdateAttendanceRequest, out *dongfeng_protobuf.UpdateAttendanceResponse) error
-		SaveNotification(ctx context.Context, in *dongfeng_protobuf.SaveNotificationRequest, out *dongfeng_protobuf.SaveNotificationResponse) error
+		UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationRequest, out *dongfeng_protobuf.UpdateNotificationResponse) error
+		UpdateNotifications(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationsRequest, out *dongfeng_protobuf.UpdateNotificationsResponse) error
 	}
 	type Api struct {
 		api
@@ -260,10 +279,6 @@ func (h *apiHandler) Dashboard(ctx context.Context, in *dongfeng_protobuf.Dashbo
 
 func (h *apiHandler) UpdateUser(ctx context.Context, in *dongfeng_protobuf.UpdateUserRequest, out *dongfeng_protobuf.UpdateUserResponse) error {
 	return h.ApiHandler.UpdateUser(ctx, in, out)
-}
-
-func (h *apiHandler) UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationsRequest, out *dongfeng_protobuf.UpdateNotificationsResponse) error {
-	return h.ApiHandler.UpdateNotification(ctx, in, out)
 }
 
 func (h *apiHandler) GetClasses(ctx context.Context, in *dongfeng_protobuf.GetClassRequest, out *dongfeng_protobuf.GetClassResponse) error {
@@ -294,10 +309,18 @@ func (h *apiHandler) GetAttendances(ctx context.Context, in *dongfeng_protobuf.G
 	return h.ApiHandler.GetAttendances(ctx, in, out)
 }
 
+func (h *apiHandler) UpdateAttendance(ctx context.Context, in *dongfeng_protobuf.UpdateAttendanceRequest, out *dongfeng_protobuf.UpdateAttendanceResponse) error {
+	return h.ApiHandler.UpdateAttendance(ctx, in, out)
+}
+
 func (h *apiHandler) UpdateAttendances(ctx context.Context, in *dongfeng_protobuf.UpdateAttendanceRequest, out *dongfeng_protobuf.UpdateAttendanceResponse) error {
 	return h.ApiHandler.UpdateAttendances(ctx, in, out)
 }
 
-func (h *apiHandler) SaveNotification(ctx context.Context, in *dongfeng_protobuf.SaveNotificationRequest, out *dongfeng_protobuf.SaveNotificationResponse) error {
-	return h.ApiHandler.SaveNotification(ctx, in, out)
+func (h *apiHandler) UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationRequest, out *dongfeng_protobuf.UpdateNotificationResponse) error {
+	return h.ApiHandler.UpdateNotification(ctx, in, out)
+}
+
+func (h *apiHandler) UpdateNotifications(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationsRequest, out *dongfeng_protobuf.UpdateNotificationsResponse) error {
+	return h.ApiHandler.UpdateNotifications(ctx, in, out)
 }

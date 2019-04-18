@@ -6,16 +6,27 @@ import "github.com/ilovelili/dongfeng-protobuf/dongfeng.proto";
 // api
 service api { 
     rpc Login(dongfeng.protobuf.LoginRequest) returns(dongfeng.protobuf.LoginResponse) {};
+
     rpc Dashboard(dongfeng.protobuf.DashboardRequest) returns(dongfeng.protobuf.DashboardResponse) {};
+    
     rpc UpdateUser(dongfeng.protobuf.UpdateUserRequest) returns(dongfeng.protobuf.UpdateUserResponse) {};
-    rpc UpdateNotification(dongfeng.protobuf.UpdateNotificationsRequest) returns(dongfeng.protobuf.UpdateNotificationsResponse) {};
+        
     rpc GetClasses(dongfeng.protobuf.GetClassRequest) returns(dongfeng.protobuf.GetClassResponse) {};
+    // rpc UpdateClass(dongfeng.protobuf.UpdateClassRequest) returns(dongfeng.protobuf.UpdateClassResponse) {};
     rpc UpdateClasses(dongfeng.protobuf.UpdateClassRequest) returns(dongfeng.protobuf.UpdateClassResponse) {};
+    
     rpc GetPupils(dongfeng.protobuf.GetPupilRequest) returns(dongfeng.protobuf.GetPupilResponse) {};
+    // rpc UpdatePupil(dongfeng.protobuf.UpdatePupilRequest) returns(dongfeng.protobuf.UpdatePupilResponse) {};
     rpc UpdatePupils(dongfeng.protobuf.UpdatePupilRequest) returns(dongfeng.protobuf.UpdatePupilResponse) {};
+    
     rpc GetTeachers(dongfeng.protobuf.GetTeacherRequest) returns(dongfeng.protobuf.GetTeacherResponse) {};
+    // rpc UpdateTeacher(dongfeng.protobuf.UpdateTeacherRequest) returns(dongfeng.protobuf.UpdateTeacherResponse) {};
     rpc UpdateTeachers(dongfeng.protobuf.UpdateTeacherRequest) returns(dongfeng.protobuf.UpdateTeacherResponse) {};
-    rpc GetAttendances(dongfeng.protobuf.GetAttendanceRequest) returns(dongfeng.protobuf.GetAttendanceResponse) {};    
+
+    rpc GetAttendances(dongfeng.protobuf.GetAttendanceRequest) returns(dongfeng.protobuf.GetAttendanceResponse) {};
+    rpc UpdateAttendance(dongfeng.protobuf.UpdateAttendanceRequest) returns(dongfeng.protobuf.UpdateAttendanceResponse) {};
     rpc UpdateAttendances(dongfeng.protobuf.UpdateAttendanceRequest) returns(dongfeng.protobuf.UpdateAttendanceResponse) {};
-    rpc SaveNotification(dongfeng.protobuf.SaveNotificationRequest) returns(dongfeng.protobuf.SaveNotificationResponse) {};
+
+    rpc UpdateNotification(dongfeng.protobuf.UpdateNotificationRequest) returns(dongfeng.protobuf.UpdateNotificationResponse) {};
+    rpc UpdateNotifications(dongfeng.protobuf.UpdateNotificationsRequest) returns(dongfeng.protobuf.UpdateNotificationsResponse) {};
 }

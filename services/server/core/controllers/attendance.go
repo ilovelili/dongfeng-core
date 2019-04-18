@@ -48,7 +48,7 @@ func (c *AttendanceController) SelectAttendances(year, from, to, class, name str
 	_attendances := []*models.Attendance{}
 	holidaytypes := []*models.HolidayType{}
 
-	absences, err := c.repository.Select(year, from, to, class, name)
+	absences, err := c.repository.Select(year, from, to, class)
 	if err != nil {
 		return
 	}
@@ -95,13 +95,15 @@ func (c *AttendanceController) SelectAttendances(year, from, to, class, name str
 				}
 			}
 
-			_attendances = append(_attendances, &models.Attendance{
-				Year:           pupil.Year,
-				Date:           date,
-				Class:          pupil.Class,
-				Name:           pupil.Name,
-				AttendanceFlag: !pupilinabsence,
-			})
+			if name == "" || name == pupil.Name {
+				_attendances = append(_attendances, &models.Attendance{
+					Year:           pupil.Year,
+					Date:           date,
+					Class:          pupil.Class,
+					Name:           pupil.Name,
+					AttendanceFlag: !pupilinabsence,
+				})
+			}
 		}
 	}
 
@@ -111,6 +113,11 @@ func (c *AttendanceController) SelectAttendances(year, from, to, class, name str
 	}
 
 	return attendances, nil
+}
+
+// UpdateAbsence update single absence
+func (c *AttendanceController) UpdateAbsence(absences []*models.Absence, attendances []*models.Absence) error {
+	return c.repository.Update(absences, attendances)
 }
 
 // UpdateAbsences update absences

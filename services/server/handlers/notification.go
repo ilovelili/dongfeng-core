@@ -13,8 +13,8 @@ import (
 	"github.com/micro/go-micro/metadata"
 )
 
-// SaveNotification save notification
-func (f *Facade) SaveNotification(ctx context.Context, req *proto.SaveNotificationRequest, rsp *proto.SaveNotificationResponse) error {
+// UpdateNotification update notification
+func (f *Facade) UpdateNotification(ctx context.Context, req *proto.UpdateNotificationRequest, rsp *proto.UpdateNotificationResponse) error {
 	notification := req.GetNotification()
 	notificationcontroller := controllers.NewNotificationController()
 
@@ -30,8 +30,8 @@ func (f *Facade) SaveNotification(ctx context.Context, req *proto.SaveNotificati
 	})
 }
 
-// UpdateNotification update notification
-func (f *Facade) UpdateNotification(ctx context.Context, req *proto.UpdateNotificationsRequest, rsp *proto.UpdateNotificationsResponse) error {
+// UpdateNotifications update notification
+func (f *Facade) UpdateNotifications(ctx context.Context, req *proto.UpdateNotificationsRequest, rsp *proto.UpdateNotificationsResponse) error {
 	md, ok := metadata.FromContext(ctx)
 	if !ok {
 		return utils.NewError(errorcode.GenericInvalidMetaData)

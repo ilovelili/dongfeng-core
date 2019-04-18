@@ -88,6 +88,71 @@ func (f *Facade) GetAttendances(ctx context.Context, req *proto.GetAttendanceReq
 	return nil
 }
 
+// UpdateAttendance update single attendance
+func (f *Facade) UpdateAttendance(ctx context.Context, req *proto.UpdateAttendanceRequest, rsp *proto.UpdateAttendanceResponse) error {
+	md, ok := metadata.FromContext(ctx)
+	if !ok {
+		return utils.NewError(errorcode.GenericInvalidMetaData)
+	}
+
+	idtoken := req.GetToken()
+	jwks := md[sharedlib.MetaDataJwks]
+	claims, token, err := sharedlib.ParseJWT(idtoken, jwks)
+
+	// vaidate the token
+	if err != nil || !token.Valid {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
+
+	// Unmarshal user info
+	userinfo, _ := json.Marshal(claims)
+	var user *models.User
+	err = json.Unmarshal(userinfo, &user)
+
+	// check if user exists or not
+	usercontroller := controllers.NewUserController()
+	user, err = usercontroller.GetUserByEmail(user.Email)
+	if err != nil {
+		return utils.NewError(errorcode.CoreNoUser)
+	}
+
+	absences := []*models.Absence{}
+	for _, attendance := range req.Attendances {
+		names := attendance.GetAbsences()
+		for _, name := range names {
+			absences = append(absences, &models.Absence{
+				Year:      attendance.GetYear(),
+				Date:      attendance.GetDate(),
+				Class:     attendance.GetClass(),
+				Name:      name,
+				CreatedBy: user.Email,
+			})
+		}
+	}
+
+	attendances := []*models.Absence{}
+	for _, attendance := range req.Attendances {
+		names := attendance.GetAttendances()
+		for _, name := range names {
+			attendances = append(attendances, &models.Absence{
+				Year:      attendance.GetYear(),
+				Date:      attendance.GetDate(),
+				Class:     attendance.GetClass(),
+				Name:      name,
+				CreatedBy: user.Email,
+			})
+		}
+	}
+
+	attendancecontroller := controllers.NewAttendanceController()
+	if err := attendancecontroller.UpdateAbsence(absences, attendances); err != nil {
+		err = utils.NewError(errorcode.CoreFailedToUpdateAttendances)
+	}
+
+	f.syslog(notification.AttendanceUpdated(user.ID))
+	return nil
+}
+
 // UpdateAttendances update attendances
 func (f *Facade) UpdateAttendances(ctx context.Context, req *proto.UpdateAttendanceRequest, rsp *proto.UpdateAttendanceResponse) error {
 	md, ok := metadata.FromContext(ctx)
