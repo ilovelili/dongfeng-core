@@ -55,6 +55,52 @@ func (f *Facade) GetTeachers(ctx context.Context, req *proto.GetTeacherRequest, 
 
 // UpdateTeacher update teacher
 func (f *Facade) UpdateTeacher(ctx context.Context, req *proto.UpdateTeacherRequest, rsp *proto.UpdateTeacherResponse) error {
+	md, ok := metadata.FromContext(ctx)
+	if !ok {
+		return utils.NewError(errorcode.GenericInvalidMetaData)
+	}
+
+	idtoken := req.GetToken()
+	jwks := md[sharedlib.MetaDataJwks]
+	claims, token, err := sharedlib.ParseJWT(idtoken, jwks)
+
+	// vaidate the token
+	if err != nil || !token.Valid {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
+
+	// Unmarshal user info
+	userinfo, _ := json.Marshal(claims)
+	var user *models.User
+	err = json.Unmarshal(userinfo, &user)
+
+	// check if user exists or not
+	usercontroller := controllers.NewUserController()
+	exsitinguser, err := usercontroller.GetUserByEmail(user.Email)
+	if err != nil {
+		return utils.NewError(errorcode.CoreNoUser)
+	}
+
+	teachers := req.GetTeachers()
+	if len(teachers) != 1 {
+		return utils.NewError(errorcode.CoreFailedToUpdateTeachers)
+	}
+
+	teacher := teachers[0]
+	teacher.CreatedBy = exsitinguser.Email
+	teachercontroller := controllers.NewTeacherController()
+	err = teachercontroller.UpdateTeacher(&models.Teacher{
+		ID:    teacher.GetId(),
+		Name:  teacher.GetName(),
+		Class: teacher.GetClass(),
+		Role:  teacher.GetRole(),
+		Email: teacher.GetEmail(),
+	})
+	if err != nil {
+		return utils.NewError(errorcode.CoreFailedToUpdateTeachers)
+	}
+
+	f.syslog(notification.NamelistUpdated(exsitinguser.ID))
 	return nil
 }
 

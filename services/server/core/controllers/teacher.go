@@ -23,7 +23,12 @@ func (c *TeacherController) GetTeachers(class, year string) ([]*models.Teacher, 
 	return c.repository.Select(class, year)
 }
 
-// UpdateTeachers update teacherlists
+// UpdateTeacher update teacher
+func (c *TeacherController) UpdateTeacher(teacher *models.Teacher) error {
+	return c.repository.Update(teacher)
+}
+
+// UpdateTeachers update teachers
 func (c *TeacherController) UpdateTeachers(teachers []*proto.Teacher) error {
 	return c.repository.DeleteInsert(teachers)
 }

@@ -37,6 +37,11 @@ func (r *TeacherRepository) Select(class, year string) (teachers []*models.Teach
 	return
 }
 
+// Update update teacher
+func (r *TeacherRepository) Update(teacher *models.Teacher) (err error) {
+	return session().Update(teacher)
+}
+
 // DeleteInsert delete insert teachers
 func (r *TeacherRepository) DeleteInsert(teachers []*proto.Teacher) (err error) {
 	tx, err := session().Begin()
