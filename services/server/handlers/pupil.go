@@ -52,6 +52,56 @@ func (f *Facade) GetPupils(ctx context.Context, req *proto.GetPupilRequest, rsp 
 }
 
 // UpdatePupils update pupils
+func (f *Facade) UpdatePupil(ctx context.Context, req *proto.UpdatePupilRequest, rsp *proto.UpdatePupilResponse) error {
+	md, ok := metadata.FromContext(ctx)
+	if !ok {
+		return utils.NewError(errorcode.GenericInvalidMetaData)
+	}
+
+	idtoken := req.GetToken()
+	jwks := md[sharedlib.MetaDataJwks]
+	claims, token, err := sharedlib.ParseJWT(idtoken, jwks)
+
+	// vaidate the token
+	if err != nil || !token.Valid {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
+
+	// Unmarshal user info
+	userinfo, _ := json.Marshal(claims)
+	var user *models.User
+	err = json.Unmarshal(userinfo, &user)
+
+	// check if user exists or not
+	usercontroller := controllers.NewUserController()
+	exsitinguser, err := usercontroller.GetUserByEmail(user.Email)
+	if err != nil {
+		return utils.NewError(errorcode.CoreNoUser)
+	}
+
+	pupils := req.GetPupils()
+	if len(pupils) != 1 {
+		return utils.NewError(errorcode.CoreFailedToUpdatePupils)
+	}
+
+	pupil := pupils[0]
+	pupil.CreatedBy = exsitinguser.Email
+
+	pupilcontroller := controllers.NewPupilController()
+	err = pupilcontroller.UpdatePupil(&models.Pupil{
+		ID:    pupil.GetId(),
+		Name:  pupil.GetName(),
+		Class: pupil.GetClass(),
+	})
+	if err != nil {
+		return utils.NewError(errorcode.CoreFailedToUpdatePupils)
+	}
+
+	f.syslog(notification.NamelistUpdated(exsitinguser.ID))
+	return nil
+}
+
+// UpdatePupils update pupils
 func (f *Facade) UpdatePupils(ctx context.Context, req *proto.UpdatePupilRequest, rsp *proto.UpdatePupilResponse) error {
 	md, ok := metadata.FromContext(ctx)
 	if !ok {

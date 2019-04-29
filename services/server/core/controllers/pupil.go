@@ -23,7 +23,12 @@ func (c *PupilController) GetPupils(class, year string) ([]*models.Pupil, error)
 	return c.repository.Select(class, year)
 }
 
-// UpdatePupils update pupils
+// UpdatePupil update pupil
+func (c *PupilController) UpdatePupil(pupil *models.Pupil) error {
+	return c.repository.Update(pupil)
+}
+
+// UpdatePupils delete insert pupils
 func (c *PupilController) UpdatePupils(pupils []*proto.Pupil) error {
 	return c.repository.DeleteInsert(pupils)
 }

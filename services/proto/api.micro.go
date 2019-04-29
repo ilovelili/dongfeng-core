@@ -49,10 +49,10 @@ type ApiService interface {
 	// rpc UpdateClass(dongfeng.protobuf.UpdateClassRequest) returns(dongfeng.protobuf.UpdateClassResponse) {};
 	UpdateClasses(ctx context.Context, in *dongfeng_protobuf.UpdateClassRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateClassResponse, error)
 	GetPupils(ctx context.Context, in *dongfeng_protobuf.GetPupilRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetPupilResponse, error)
-	// rpc UpdatePupil(dongfeng.protobuf.UpdatePupilRequest) returns(dongfeng.protobuf.UpdatePupilResponse) {};
+	UpdatePupil(ctx context.Context, in *dongfeng_protobuf.UpdatePupilRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdatePupilResponse, error)
 	UpdatePupils(ctx context.Context, in *dongfeng_protobuf.UpdatePupilRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdatePupilResponse, error)
 	GetTeachers(ctx context.Context, in *dongfeng_protobuf.GetTeacherRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetTeacherResponse, error)
-	// rpc UpdateTeacher(dongfeng.protobuf.UpdateTeacherRequest) returns(dongfeng.protobuf.UpdateTeacherResponse) {};
+	UpdateTeacher(ctx context.Context, in *dongfeng_protobuf.UpdateTeacherRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateTeacherResponse, error)
 	UpdateTeachers(ctx context.Context, in *dongfeng_protobuf.UpdateTeacherRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateTeacherResponse, error)
 	GetAttendances(ctx context.Context, in *dongfeng_protobuf.GetAttendanceRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetAttendanceResponse, error)
 	UpdateAttendance(ctx context.Context, in *dongfeng_protobuf.UpdateAttendanceRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateAttendanceResponse, error)
@@ -139,6 +139,16 @@ func (c *apiService) GetPupils(ctx context.Context, in *dongfeng_protobuf.GetPup
 	return out, nil
 }
 
+func (c *apiService) UpdatePupil(ctx context.Context, in *dongfeng_protobuf.UpdatePupilRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdatePupilResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.UpdatePupil", in)
+	out := new(dongfeng_protobuf.UpdatePupilResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *apiService) UpdatePupils(ctx context.Context, in *dongfeng_protobuf.UpdatePupilRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdatePupilResponse, error) {
 	req := c.c.NewRequest(c.name, "Api.UpdatePupils", in)
 	out := new(dongfeng_protobuf.UpdatePupilResponse)
@@ -152,6 +162,16 @@ func (c *apiService) UpdatePupils(ctx context.Context, in *dongfeng_protobuf.Upd
 func (c *apiService) GetTeachers(ctx context.Context, in *dongfeng_protobuf.GetTeacherRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetTeacherResponse, error) {
 	req := c.c.NewRequest(c.name, "Api.GetTeachers", in)
 	out := new(dongfeng_protobuf.GetTeacherResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *apiService) UpdateTeacher(ctx context.Context, in *dongfeng_protobuf.UpdateTeacherRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateTeacherResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.UpdateTeacher", in)
+	out := new(dongfeng_protobuf.UpdateTeacherResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -229,10 +249,10 @@ type ApiHandler interface {
 	// rpc UpdateClass(dongfeng.protobuf.UpdateClassRequest) returns(dongfeng.protobuf.UpdateClassResponse) {};
 	UpdateClasses(context.Context, *dongfeng_protobuf.UpdateClassRequest, *dongfeng_protobuf.UpdateClassResponse) error
 	GetPupils(context.Context, *dongfeng_protobuf.GetPupilRequest, *dongfeng_protobuf.GetPupilResponse) error
-	// rpc UpdatePupil(dongfeng.protobuf.UpdatePupilRequest) returns(dongfeng.protobuf.UpdatePupilResponse) {};
+	UpdatePupil(context.Context, *dongfeng_protobuf.UpdatePupilRequest, *dongfeng_protobuf.UpdatePupilResponse) error
 	UpdatePupils(context.Context, *dongfeng_protobuf.UpdatePupilRequest, *dongfeng_protobuf.UpdatePupilResponse) error
 	GetTeachers(context.Context, *dongfeng_protobuf.GetTeacherRequest, *dongfeng_protobuf.GetTeacherResponse) error
-	// rpc UpdateTeacher(dongfeng.protobuf.UpdateTeacherRequest) returns(dongfeng.protobuf.UpdateTeacherResponse) {};
+	UpdateTeacher(context.Context, *dongfeng_protobuf.UpdateTeacherRequest, *dongfeng_protobuf.UpdateTeacherResponse) error
 	UpdateTeachers(context.Context, *dongfeng_protobuf.UpdateTeacherRequest, *dongfeng_protobuf.UpdateTeacherResponse) error
 	GetAttendances(context.Context, *dongfeng_protobuf.GetAttendanceRequest, *dongfeng_protobuf.GetAttendanceResponse) error
 	UpdateAttendance(context.Context, *dongfeng_protobuf.UpdateAttendanceRequest, *dongfeng_protobuf.UpdateAttendanceResponse) error
@@ -249,8 +269,10 @@ func RegisterApiHandler(s server.Server, hdlr ApiHandler, opts ...server.Handler
 		GetClasses(ctx context.Context, in *dongfeng_protobuf.GetClassRequest, out *dongfeng_protobuf.GetClassResponse) error
 		UpdateClasses(ctx context.Context, in *dongfeng_protobuf.UpdateClassRequest, out *dongfeng_protobuf.UpdateClassResponse) error
 		GetPupils(ctx context.Context, in *dongfeng_protobuf.GetPupilRequest, out *dongfeng_protobuf.GetPupilResponse) error
+		UpdatePupil(ctx context.Context, in *dongfeng_protobuf.UpdatePupilRequest, out *dongfeng_protobuf.UpdatePupilResponse) error
 		UpdatePupils(ctx context.Context, in *dongfeng_protobuf.UpdatePupilRequest, out *dongfeng_protobuf.UpdatePupilResponse) error
 		GetTeachers(ctx context.Context, in *dongfeng_protobuf.GetTeacherRequest, out *dongfeng_protobuf.GetTeacherResponse) error
+		UpdateTeacher(ctx context.Context, in *dongfeng_protobuf.UpdateTeacherRequest, out *dongfeng_protobuf.UpdateTeacherResponse) error
 		UpdateTeachers(ctx context.Context, in *dongfeng_protobuf.UpdateTeacherRequest, out *dongfeng_protobuf.UpdateTeacherResponse) error
 		GetAttendances(ctx context.Context, in *dongfeng_protobuf.GetAttendanceRequest, out *dongfeng_protobuf.GetAttendanceResponse) error
 		UpdateAttendance(ctx context.Context, in *dongfeng_protobuf.UpdateAttendanceRequest, out *dongfeng_protobuf.UpdateAttendanceResponse) error
@@ -293,12 +315,20 @@ func (h *apiHandler) GetPupils(ctx context.Context, in *dongfeng_protobuf.GetPup
 	return h.ApiHandler.GetPupils(ctx, in, out)
 }
 
+func (h *apiHandler) UpdatePupil(ctx context.Context, in *dongfeng_protobuf.UpdatePupilRequest, out *dongfeng_protobuf.UpdatePupilResponse) error {
+	return h.ApiHandler.UpdatePupil(ctx, in, out)
+}
+
 func (h *apiHandler) UpdatePupils(ctx context.Context, in *dongfeng_protobuf.UpdatePupilRequest, out *dongfeng_protobuf.UpdatePupilResponse) error {
 	return h.ApiHandler.UpdatePupils(ctx, in, out)
 }
 
 func (h *apiHandler) GetTeachers(ctx context.Context, in *dongfeng_protobuf.GetTeacherRequest, out *dongfeng_protobuf.GetTeacherResponse) error {
 	return h.ApiHandler.GetTeachers(ctx, in, out)
+}
+
+func (h *apiHandler) UpdateTeacher(ctx context.Context, in *dongfeng_protobuf.UpdateTeacherRequest, out *dongfeng_protobuf.UpdateTeacherResponse) error {
+	return h.ApiHandler.UpdateTeacher(ctx, in, out)
 }
 
 func (h *apiHandler) UpdateTeachers(ctx context.Context, in *dongfeng_protobuf.UpdateTeacherRequest, out *dongfeng_protobuf.UpdateTeacherResponse) error {

@@ -37,6 +37,11 @@ func (r *PupilRepository) Select(class, year string) (pupils []*models.Pupil, er
 	return
 }
 
+// Update update pupil
+func (r *PupilRepository) Update(pupil *models.Pupil) (err error) {
+	return session().Update(pupil)
+}
+
 // DeleteInsert delete insert pupils
 func (r *PupilRepository) DeleteInsert(pupils []*proto.Pupil) (err error) {
 	tx, err := session().Begin()

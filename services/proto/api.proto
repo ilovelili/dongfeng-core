@@ -16,11 +16,11 @@ service api {
     rpc UpdateClasses(dongfeng.protobuf.UpdateClassRequest) returns(dongfeng.protobuf.UpdateClassResponse) {};
     
     rpc GetPupils(dongfeng.protobuf.GetPupilRequest) returns(dongfeng.protobuf.GetPupilResponse) {};
-    // rpc UpdatePupil(dongfeng.protobuf.UpdatePupilRequest) returns(dongfeng.protobuf.UpdatePupilResponse) {};
+    rpc UpdatePupil(dongfeng.protobuf.UpdatePupilRequest) returns(dongfeng.protobuf.UpdatePupilResponse) {};
     rpc UpdatePupils(dongfeng.protobuf.UpdatePupilRequest) returns(dongfeng.protobuf.UpdatePupilResponse) {};
     
     rpc GetTeachers(dongfeng.protobuf.GetTeacherRequest) returns(dongfeng.protobuf.GetTeacherResponse) {};
-    // rpc UpdateTeacher(dongfeng.protobuf.UpdateTeacherRequest) returns(dongfeng.protobuf.UpdateTeacherResponse) {};
+    rpc UpdateTeacher(dongfeng.protobuf.UpdateTeacherRequest) returns(dongfeng.protobuf.UpdateTeacherResponse) {};
     rpc UpdateTeachers(dongfeng.protobuf.UpdateTeacherRequest) returns(dongfeng.protobuf.UpdateTeacherResponse) {};
 
     rpc GetAttendances(dongfeng.protobuf.GetAttendanceRequest) returns(dongfeng.protobuf.GetAttendanceResponse) {};

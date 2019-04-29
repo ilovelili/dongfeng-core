@@ -53,6 +53,11 @@ func (f *Facade) GetTeachers(ctx context.Context, req *proto.GetTeacherRequest, 
 	return nil
 }
 
+// UpdateTeacher update teacher
+func (f *Facade) UpdateTeacher(ctx context.Context, req *proto.UpdateTeacherRequest, rsp *proto.UpdateTeacherResponse) error {
+	return nil
+}
+
 // UpdateTeachers update teachers
 func (f *Facade) UpdateTeachers(ctx context.Context, req *proto.UpdateTeacherRequest, rsp *proto.UpdateTeacherResponse) error {
 	md, ok := metadata.FromContext(ctx)
