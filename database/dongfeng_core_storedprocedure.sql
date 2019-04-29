@@ -79,10 +79,10 @@ DELIMITER $$
 CREATE PROCEDURE spDeletePupils
 (
     IN Year VARCHAR(10),
-    IN Class VARCHAR(10)
+    IN Cls VARCHAR(10)
 )
 BEGIN
-    DELETE FROM `dongfeng_core`.`pupils` WHERE year = Year AND class = Class;
+    DELETE FROM `dongfeng_core`.`pupils` WHERE year = Year AND class = Cls;
 END$$
 DELIMITER ;
 /* -------------------------------------------------------------------------------------------------------------------- */
@@ -112,12 +112,12 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE spDeleteAbsence(
     IN Year VARCHAR(10),
-    IN Class VARCHAR(10),
-    IN Date VARCHAR(10),
+    IN Cls VARCHAR(10),
+    IN AbsenceDate VARCHAR(10),
     IN Name VARCHAR(10)
 )
 BEGIN
-    DELETE FROM `dongfeng_core`.`absences` WHERE year = Year AND class = Class AND date = Date AND name = Name;
+    DELETE FROM `dongfeng_core`.`absences` WHERE year = Year AND class = Cls AND date = AbsenceDate AND name = Name;
 END$$
 DELIMITER ;
 /* -------------------------------------------------------------------------------------------------------------------- */
@@ -126,11 +126,11 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE spDeleteAbsences(
     IN Year VARCHAR(10),
-    IN Class VARCHAR(10),
-    IN Date VARCHAR(10)
+    IN Cls VARCHAR(10),
+    IN AbsenceDate VARCHAR(10)
 )
 BEGIN
-    DELETE FROM `dongfeng_core`.`absences` WHERE year = Year AND class = Class AND date = Date;
+    DELETE FROM `dongfeng_core`.`absences` WHERE year = Year AND class = Cls AND date = AbsenceDate;
 END$$
 DELIMITER ;
 /* -------------------------------------------------------------------------------------------------------------------- */
