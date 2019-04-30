@@ -20,9 +20,9 @@ type Notification struct {
 func (n *Notification) Category() string {
 	switch n.CategoryID {
 	case 1:
-		return `幼儿成长档案`
+		return `成长档案`
 	case 2:
-		return `幼儿体格检查表`
+		return `体格检查表`
 	case 3:
 		return `仓库管理`
 	case 4:

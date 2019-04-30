@@ -93,12 +93,9 @@ func (f *Facade) UpdatePupil(ctx context.Context, req *proto.UpdatePupilRequest,
 		Name:  pupil.GetName(),
 		Class: pupil.GetClass(),
 	})
-	if err != nil {
-		return utils.NewError(errorcode.CoreFailedToUpdatePupils)
-	}
 
 	f.syslog(notification.NamelistUpdated(exsitinguser.ID))
-	return nil
+	return err
 }
 
 // UpdatePupils update pupils

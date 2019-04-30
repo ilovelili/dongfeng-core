@@ -96,12 +96,9 @@ func (f *Facade) UpdateTeacher(ctx context.Context, req *proto.UpdateTeacherRequ
 		Role:  teacher.GetRole(),
 		Email: teacher.GetEmail(),
 	})
-	if err != nil {
-		return utils.NewError(errorcode.CoreFailedToUpdateTeachers)
-	}
 
 	f.syslog(notification.NamelistUpdated(exsitinguser.ID))
-	return nil
+	return err
 }
 
 // UpdateTeachers update teachers
