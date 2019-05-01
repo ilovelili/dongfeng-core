@@ -57,6 +57,9 @@ type ApiService interface {
 	GetAttendances(ctx context.Context, in *dongfeng_protobuf.GetAttendanceRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetAttendanceResponse, error)
 	UpdateAttendance(ctx context.Context, in *dongfeng_protobuf.UpdateAttendanceRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateAttendanceResponse, error)
 	UpdateAttendances(ctx context.Context, in *dongfeng_protobuf.UpdateAttendanceRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateAttendanceResponse, error)
+	GetPhysique(ctx context.Context, in *dongfeng_protobuf.GetPhysiqueRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetPhysiqueResponse, error)
+	UpdatePhysique(ctx context.Context, in *dongfeng_protobuf.UpdatePhysiqueRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdatePhysiqueResponse, error)
+	UpdatePhysiques(ctx context.Context, in *dongfeng_protobuf.UpdatePhysiqueRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdatePhysiqueResponse, error)
 	UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateNotificationResponse, error)
 	UpdateNotifications(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationsRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateNotificationsResponse, error)
 }
@@ -219,6 +222,36 @@ func (c *apiService) UpdateAttendances(ctx context.Context, in *dongfeng_protobu
 	return out, nil
 }
 
+func (c *apiService) GetPhysique(ctx context.Context, in *dongfeng_protobuf.GetPhysiqueRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetPhysiqueResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.GetPhysique", in)
+	out := new(dongfeng_protobuf.GetPhysiqueResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *apiService) UpdatePhysique(ctx context.Context, in *dongfeng_protobuf.UpdatePhysiqueRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdatePhysiqueResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.UpdatePhysique", in)
+	out := new(dongfeng_protobuf.UpdatePhysiqueResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *apiService) UpdatePhysiques(ctx context.Context, in *dongfeng_protobuf.UpdatePhysiqueRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdatePhysiqueResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.UpdatePhysiques", in)
+	out := new(dongfeng_protobuf.UpdatePhysiqueResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *apiService) UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateNotificationResponse, error) {
 	req := c.c.NewRequest(c.name, "Api.UpdateNotification", in)
 	out := new(dongfeng_protobuf.UpdateNotificationResponse)
@@ -257,6 +290,9 @@ type ApiHandler interface {
 	GetAttendances(context.Context, *dongfeng_protobuf.GetAttendanceRequest, *dongfeng_protobuf.GetAttendanceResponse) error
 	UpdateAttendance(context.Context, *dongfeng_protobuf.UpdateAttendanceRequest, *dongfeng_protobuf.UpdateAttendanceResponse) error
 	UpdateAttendances(context.Context, *dongfeng_protobuf.UpdateAttendanceRequest, *dongfeng_protobuf.UpdateAttendanceResponse) error
+	GetPhysique(context.Context, *dongfeng_protobuf.GetPhysiqueRequest, *dongfeng_protobuf.GetPhysiqueResponse) error
+	UpdatePhysique(context.Context, *dongfeng_protobuf.UpdatePhysiqueRequest, *dongfeng_protobuf.UpdatePhysiqueResponse) error
+	UpdatePhysiques(context.Context, *dongfeng_protobuf.UpdatePhysiqueRequest, *dongfeng_protobuf.UpdatePhysiqueResponse) error
 	UpdateNotification(context.Context, *dongfeng_protobuf.UpdateNotificationRequest, *dongfeng_protobuf.UpdateNotificationResponse) error
 	UpdateNotifications(context.Context, *dongfeng_protobuf.UpdateNotificationsRequest, *dongfeng_protobuf.UpdateNotificationsResponse) error
 }
@@ -277,6 +313,9 @@ func RegisterApiHandler(s server.Server, hdlr ApiHandler, opts ...server.Handler
 		GetAttendances(ctx context.Context, in *dongfeng_protobuf.GetAttendanceRequest, out *dongfeng_protobuf.GetAttendanceResponse) error
 		UpdateAttendance(ctx context.Context, in *dongfeng_protobuf.UpdateAttendanceRequest, out *dongfeng_protobuf.UpdateAttendanceResponse) error
 		UpdateAttendances(ctx context.Context, in *dongfeng_protobuf.UpdateAttendanceRequest, out *dongfeng_protobuf.UpdateAttendanceResponse) error
+		GetPhysique(ctx context.Context, in *dongfeng_protobuf.GetPhysiqueRequest, out *dongfeng_protobuf.GetPhysiqueResponse) error
+		UpdatePhysique(ctx context.Context, in *dongfeng_protobuf.UpdatePhysiqueRequest, out *dongfeng_protobuf.UpdatePhysiqueResponse) error
+		UpdatePhysiques(ctx context.Context, in *dongfeng_protobuf.UpdatePhysiqueRequest, out *dongfeng_protobuf.UpdatePhysiqueResponse) error
 		UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationRequest, out *dongfeng_protobuf.UpdateNotificationResponse) error
 		UpdateNotifications(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationsRequest, out *dongfeng_protobuf.UpdateNotificationsResponse) error
 	}
@@ -345,6 +384,18 @@ func (h *apiHandler) UpdateAttendance(ctx context.Context, in *dongfeng_protobuf
 
 func (h *apiHandler) UpdateAttendances(ctx context.Context, in *dongfeng_protobuf.UpdateAttendanceRequest, out *dongfeng_protobuf.UpdateAttendanceResponse) error {
 	return h.ApiHandler.UpdateAttendances(ctx, in, out)
+}
+
+func (h *apiHandler) GetPhysique(ctx context.Context, in *dongfeng_protobuf.GetPhysiqueRequest, out *dongfeng_protobuf.GetPhysiqueResponse) error {
+	return h.ApiHandler.GetPhysique(ctx, in, out)
+}
+
+func (h *apiHandler) UpdatePhysique(ctx context.Context, in *dongfeng_protobuf.UpdatePhysiqueRequest, out *dongfeng_protobuf.UpdatePhysiqueResponse) error {
+	return h.ApiHandler.UpdatePhysique(ctx, in, out)
+}
+
+func (h *apiHandler) UpdatePhysiques(ctx context.Context, in *dongfeng_protobuf.UpdatePhysiqueRequest, out *dongfeng_protobuf.UpdatePhysiqueResponse) error {
+	return h.ApiHandler.UpdatePhysiques(ctx, in, out)
 }
 
 func (h *apiHandler) UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationRequest, out *dongfeng_protobuf.UpdateNotificationResponse) error {

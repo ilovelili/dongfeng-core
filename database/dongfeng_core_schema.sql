@@ -114,6 +114,20 @@ CREATE TABLE `holidays` (
   UNIQUE KEY `from_to_UNIQUE` (`from`, `to`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `physique_p_master` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `h_w` varchar(4) NOT NULL,
+  `gender` tinyint(1) NOT NULL,
+  `age_min` double NOT NULL,
+  `age_max` double NOT NULL,
+  `p3` double NOT NULL,
+  `p10` double NOT NULL,
+  `p20` double NOT NULL,
+  `p50` double NOT NULL,
+  `p97` double NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `ingredients` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,

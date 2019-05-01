@@ -31,6 +31,14 @@ func (c *TeacherController) GetTeachers(class, year string) ([]*models.Teacher, 
 
 // UpdateTeacher update teacher
 func (c *TeacherController) UpdateTeacher(teacher *models.Teacher) error {
+	// empty class is allowed
+	if teacher.Class == "" {
+		if err := c.repository.Update(teacher); err != nil {
+			return utils.NewError(errorcode.CoreFailedToUpdateTeachers)
+		}
+		return nil
+	}
+
 	classsegments := strings.Split(teacher.Class, "|")
 	if len(classsegments) == 0 {
 		return utils.NewError(errorcode.CoreInvalidClass)
