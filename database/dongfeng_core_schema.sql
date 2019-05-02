@@ -114,7 +114,7 @@ CREATE TABLE `holidays` (
   UNIQUE KEY `from_to_UNIQUE` (`from`, `to`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `physique_p_master` (
+CREATE TABLE `physique_height_to_weight_p_master` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `h_w` varchar(4) NOT NULL,
   `gender` tinyint(1) NOT NULL,
@@ -125,6 +125,71 @@ CREATE TABLE `physique_p_master` (
   `p20` double NOT NULL,
   `p50` double NOT NULL,
   `p97` double NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `physique_age_height_weight_sd_master` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `h_w` varchar(4) NOT NULL,
+  `gender` tinyint(1) NOT NULL,
+  `age` varchar(10) NOT NULL,
+  `-2sd` double NOT NULL,
+  `-1sd` double NOT NULL,
+  `avg` double NOT NULL,
+  `1sd` double NOT NULL,
+  `2sd` double NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `physique_height_to_weight_p_master` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `gender` tinyint(1) NOT NULL,
+  `height` double NOT NULL,
+  `p3` double NOT NULL,
+  `p10` double NOT NULL,
+  `p20` double NOT NULL,
+  `p50` double NOT NULL,
+  `p80` double NOT NULL,
+  `p97` double NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `physique_bmi_master` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `gender` tinyint(4) NOT NULL,
+  `age` varchar(10) NOT NULL,
+  `avg` double NOT NULL,
+  `1sd` double NOT NULL,
+  `2sd` double NOT NULL,
+  `3sd` double NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `physiques` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `year` varchar(10) NOT NULL,
+  `class` varchar(10) NOT NULL,
+  `name` varchar(10) NOT NULL,
+  `gender` tinyint(1) NOT NULL,
+  `birth_date` varchar(10) NOT NULL,
+  `exam_date` varchar(10) NOT NULL,
+  `age` varchar(10) NOT NULL,
+  `age_cmp` double NOT NULL,
+  `height` double NOT NULL,
+  `height_p` varchar(10) NOT NULL,
+  `height_sd` varchar(10) NOT NULL,
+  `weight` double NOT NULL,
+  `weight_p` varchar(10) NOT NULL,
+  `weight_sd` varchar(10) NOT NULL,
+  `height_weight_p` varchar(10) NOT NULL,
+  `height_weight_sd` varchar(10) NOT NULL,
+  `bmi` double NOT NULL,
+  `bmi_sd` varchar(10) NOT NULL,
+  `fat_cofficient` double NOT NULL,
+  `conclusion` varchar(45) DEFAULT NULL,
+  `created_by` varchar(100) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

@@ -135,5 +135,18 @@ END$$
 DELIMITER ;
 /* -------------------------------------------------------------------------------------------------------------------- */
 
+/* -------------------------------------------------------------------------------------------------------------------- */
+DELIMITER $$
+CREATE PROCEDURE spDeletePhysiques
+(
+    IN Year VARCHAR(10),
+    IN Cls VARCHAR(10)
+)
+BEGIN
+    DELETE FROM `dongfeng_core`.`physiques` WHERE year = Year AND class = Cls;
+END$$
+DELIMITER ;
+/* -------------------------------------------------------------------------------------------------------------------- */
+
 -- show
 SHOW PROCEDURE STATUS WHERE db = 'dongfeng_core';

@@ -44,28 +44,37 @@ func (r *TeacherRepository) Update(teacher *models.Teacher) (err error) {
 
 // DeleteInsert delete insert teachers
 func (r *TeacherRepository) DeleteInsert(teachers []*proto.Teacher) (err error) {
+	teachersmap := make(map[string][]*proto.Teacher)
+	for _, teacher := range teachers {
+		key := teacher.Year
+		if v, ok := teachersmap[key]; !ok {
+			teachersmap[key] = []*proto.Teacher{teacher}
+		} else {
+			teachersmap[key] = append(v, teacher)
+		}
+	}
+
 	tx, err := session().Begin()
 	if err != nil {
 		return
 	}
 
-	for idx, teacher := range teachers {
-		year, class, name, email, role, createdBy := teacher.GetYear(), teacher.GetClass(), teacher.GetName(), teacher.GetEmail(), teacher.GetRole(), teacher.GetCreatedBy()
-		if idx == 0 {
-			_, err = session().ExecTx(tx, fmt.Sprintf("CALL spDeleteTeachers('%s')", year))
-			if err != nil {
-				session().Rollback(tx)
-				return
-			}
+	for year := range teachersmap {
+		_, err = session().ExecTx(tx, fmt.Sprintf("CALL spDeleteTeachers('%s')", year))
+		if err != nil {
+			session().Rollback(tx)
+			return
 		}
+	}
 
+	for _, teacher := range teachers {
 		err = session().InsertTx(tx, &models.Teacher{
-			Year:      year,
-			Class:     class,
-			Name:      name,
-			Email:     email,
-			Role:      role,
-			CreatedBy: createdBy,
+			Year:      teacher.GetYear(),
+			Class:     teacher.GetClass(),
+			Name:      teacher.GetName(),
+			Email:     teacher.GetEmail(),
+			Role:      teacher.GetRole(),
+			CreatedBy: teacher.GetCreatedBy(),
 		})
 
 		if err != nil {
