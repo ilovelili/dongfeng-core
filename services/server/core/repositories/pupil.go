@@ -67,7 +67,8 @@ func (r *PupilRepository) DeleteInsert(pupils []*proto.Pupil) (err error) {
 			return
 		}
 
-		_, err = session().ExecTx(tx, fmt.Sprintf("CALL spDeletePupils('%s','%s')", segments[0], segments[1]))
+		year, class := segments[0], segments[1]
+		_, err = session().ExecTx(tx, fmt.Sprintf("CALL spDeletePupils('%s','%s')", year, class))
 		if err != nil {
 			session().Rollback(tx)
 			return

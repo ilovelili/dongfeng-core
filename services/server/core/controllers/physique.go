@@ -108,6 +108,11 @@ func (c *PhysiqueController) ResolvePhysique(physique *models.Physique) (err err
 	return nil
 }
 
+// GetPhysiques get physiques
+func (c *PhysiqueController) GetPhysiques(class, year, name string) ([]*models.Physique, error) {
+	return c.repository.Select(class, year, name)
+}
+
 // UpdatePhysique update physique
 func (c *PhysiqueController) UpdatePhysique(physique *models.Physique) (err error) {
 	pupils, err := c.pupilcontroller.GetPupils(physique.Class, physique.Year)
@@ -154,6 +159,12 @@ func (c *PhysiqueController) UpdatePhysiques(physiques []*models.Physique) (err 
 	// all the pupils must be in pupils table
 	if foundcount != len(physiques) {
 		return utils.NewError(errorcode.CoreInvalidPupil)
+	}
+
+	for _, physique := range physiques {
+		if err = c.ResolvePhysique(physique); err != nil {
+			return utils.NewError(errorcode.CoreInvalidPhysique)
+		}
 	}
 
 	return c.repository.DeleteInsert(physiques)

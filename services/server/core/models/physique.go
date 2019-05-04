@@ -430,6 +430,8 @@ func (p *Physique) ResolveFatCofficient(hwsdmasters []*HeightToWeightSDMaster) (
 
 // ResolveConclusion resolve conclusion
 func (p *Physique) ResolveConclusion() {
+	p.Conclusion = "正常"
+
 	// 身高小于P3,疑似是生长迟缓，根据性别及年龄比对《5岁以下儿童低体重/生长迟缓标准表》。身高小于-2SD，为生长迟缓。
 	if p.HeightP == "<P3" {
 		if p.HeightSD == "<-2SD" {

@@ -50,6 +50,32 @@ func (r *PhysiqueRepository) SelectBMIMasters() (bmimasters []*models.BMIMaster,
 	return
 }
 
+// Select physiques
+func (r *PhysiqueRepository) Select(year, class, name string) (physiques []*models.Physique, err error) {
+	querybuilder := Table("physiques").Alias("p").Where()
+	var query string
+
+	if class == "" && year == "" && name == "" {
+		querybuilder = querybuilder.Eq("1", "1")
+	} else {
+		if class != "" {
+			querybuilder = querybuilder.Eq("p.class", class)
+		}
+
+		if year != "" {
+			querybuilder = querybuilder.Eq("p.year", year)
+		}
+
+		if name != "" {
+			querybuilder = querybuilder.Eq("p.name", name)
+		}
+	}
+
+	query = querybuilder.Sql()
+	err = session().Find(query, nil).All(&physiques)
+	return
+}
+
 // Update update physique
 func (r *PhysiqueRepository) Update(physique *models.Physique) (err error) {
 	return session().Update(physique)
@@ -79,7 +105,8 @@ func (r *PhysiqueRepository) DeleteInsert(physiques []*models.Physique) (err err
 			return
 		}
 
-		_, err = session().ExecTx(tx, fmt.Sprintf("CALL spDeletePhysiques('%s','%s')", segments[0], segments[1]))
+		year, class := segments[0], segments[1]
+		_, err = session().ExecTx(tx, fmt.Sprintf("CALL spDeletePhysiques('%s','%s')", year, class))
 		if err != nil {
 			session().Rollback(tx)
 			return

@@ -14,7 +14,7 @@ import (
 	"github.com/micro/go-micro/metadata"
 )
 
-// GetPhysiques get pupils
+// GetPhysiques get physiques
 func (f *Facade) GetPhysiques(ctx context.Context, req *proto.GetPhysiqueRequest, rsp *proto.GetPhysiqueResponse) error {
 	md, ok := metadata.FromContext(ctx)
 	if !ok {
@@ -30,6 +30,37 @@ func (f *Facade) GetPhysiques(ctx context.Context, req *proto.GetPhysiqueRequest
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
 
+	physiquecontroller := controllers.NewPhysiqueController()
+	physiques, err := physiquecontroller.GetPhysiques(req.GetClass(), req.GetYear(), req.GetName())
+	if err != nil {
+		return utils.NewError(errorcode.CoreFailedToGetPhysiques)
+	}
+
+	items := []*proto.Physique{}
+	for _, physique := range physiques {
+		items = append(items, &proto.Physique{
+			Id:            physique.ID,
+			Year:          physique.Year,
+			Class:         physique.Class,
+			Name:          physique.Name,
+			Gender:        proto.Physique_Gender(physique.Gender),
+			BirthDate:     physique.BirthDate,
+			ExamDate:      physique.ExamDate,
+			Height:        physique.Height,
+			Weight:        physique.Weight,
+			Age:           physique.Age,
+			AgeCmp:        physique.AgeComparison,
+			HeightP:       physique.HeightP,
+			WeightP:       physique.WeightP,
+			HeightWeightP: physique.HeightToWeightP,
+			Bmi:           physique.BMI,
+			FatCofficient: physique.FatCofficient,
+			Conclusion:    physique.Conclusion,
+			CreatedBy:     physique.CreatedBy,
+		})
+	}
+
+	rsp.Physiques = items
 	return nil
 }
 
@@ -69,18 +100,25 @@ func (f *Facade) UpdatePhysique(ctx context.Context, req *proto.UpdatePhysiqueRe
 	physique := physiques[0]
 	physique.CreatedBy = exsitinguser.Email
 
-	// physiquescontroller := controllers.NewPhysiqueController()
-	// err = pupilcontroller.UpdatePhysique(&models.Physique{
-	// 	ID:    pupil.GetId(),
-	// 	Name:  pupil.GetName(),
-	// 	Class: pupil.GetClass(),
-	// })
+	physiquecontroller := controllers.NewPhysiqueController()
+	err = physiquecontroller.UpdatePhysique(&models.Physique{
+		ID:        physique.GetId(),
+		Year:      physique.GetYear(),
+		Name:      physique.GetName(),
+		Class:     physique.GetClass(),
+		Gender:    int64(physique.GetGender()),
+		BirthDate: physique.GetBirthDate(),
+		ExamDate:  physique.GetExamDate(),
+		Height:    physique.GetHeight(),
+		Weight:    physique.GetWeight(),
+		CreatedBy: physique.GetCreatedBy(),
+	})
 
 	f.syslog(notification.PhysiqueUpdated(exsitinguser.ID))
 	return err
 }
 
-// UpdatePhysiques update pupils
+// UpdatePhysiques update physiques
 func (f *Facade) UpdatePhysiques(ctx context.Context, req *proto.UpdatePhysiqueRequest, rsp *proto.UpdatePhysiqueResponse) error {
 	md, ok := metadata.FromContext(ctx)
 	if !ok {
@@ -108,17 +146,25 @@ func (f *Facade) UpdatePhysiques(ctx context.Context, req *proto.UpdatePhysiqueR
 		return utils.NewError(errorcode.CoreNoUser)
 	}
 
-	physiques := req.GetPhysiques()
-	for _, physique := range physiques {
-		physique.CreatedBy = exsitinguser.Email
+	physiques := []*models.Physique{}
+	for _, physique := range req.GetPhysiques() {
+		physiques = append(physiques, &models.Physique{
+			ID:        physique.GetId(),
+			Year:      physique.GetYear(),
+			Name:      physique.GetName(),
+			Class:     physique.GetClass(),
+			Gender:    int64(physique.GetGender()),
+			BirthDate: physique.GetBirthDate(),
+			ExamDate:  physique.GetExamDate(),
+			Height:    physique.GetHeight(),
+			Weight:    physique.GetWeight(),
+			CreatedBy: exsitinguser.Email,
+		})
 	}
 
-	// pupilcontroller := controllers.NewPhysiqueController()
-	// err = pupilcontroller.UpdatePhysiques(pupils)
-	// if err != nil {
-	// 	return utils.NewError(errorcode.CoreFailedToUpdatePhysiques)
-	// }
+	physiquecontroller := controllers.NewPhysiqueController()
+	err = physiquecontroller.UpdatePhysiques(physiques)
 
-	f.syslog(notification.NamelistUpdated(exsitinguser.ID))
-	return nil
+	f.syslog(notification.PhysiqueUpdated(exsitinguser.ID))
+	return err
 }
