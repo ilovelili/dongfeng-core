@@ -122,6 +122,10 @@ func (c *PhysiqueController) UpdatePhysique(physique *models.Physique) (err erro
 
 	for _, pupil := range pupils {
 		if pupil.Year == physique.Year && pupil.Class == physique.Class && pupil.Name == physique.Name {
+			if err = c.ResolvePhysique(physique); err != nil {
+				return utils.NewError(errorcode.CoreInvalidPhysique)
+			}
+
 			if err = c.repository.Update(physique); err != nil {
 				return utils.NewError(errorcode.CoreFailedToUpdatePhysiques)
 			}
@@ -142,7 +146,7 @@ func (c *PhysiqueController) UpdatePhysiques(physiques []*models.Physique) (err 
 		key := fmt.Sprintf("%s_%s", physique.Class, physique.Year)
 		pupils, ok := pupilsmap[key]
 		if !ok {
-			pupils, err := c.pupilcontroller.GetPupils(physique.Class, physique.Year)
+			pupils, err = c.pupilcontroller.GetPupils(physique.Class, physique.Year)
 			if err != nil {
 				return utils.NewError(errorcode.CoreFailedToGetPupils)
 			}

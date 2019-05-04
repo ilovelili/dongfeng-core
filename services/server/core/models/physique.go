@@ -14,7 +14,7 @@ type Physique struct {
 	Year             string  `dapper:"year"`
 	Class            string  `dapper:"class"`
 	Name             string  `dapper:"name"`
-	Gender           int64   `dapper:"gender"`
+	Gender           string  `dapper:"gender"`
 	BirthDate        string  `dapper:"birth_date"`
 	ExamDate         string  `dapper:"exam_date"`
 	Age              string  `dapper:"age"`
@@ -36,9 +36,9 @@ type Physique struct {
 
 // AgeHeightWeightPMaster age height / weight p standard master
 type AgeHeightWeightPMaster struct {
-	ID             int64   `dapper:"id,primarykey,autoincrement,table=physique_height_to_weight_p_master"`
+	ID             int64   `dapper:"id,primarykey,autoincrement,table=physique_age_height_weight_p_master"`
 	HeightOrWeight string  `dapper:"h_w"`
-	Gender         int64   `dapper:"gender"`
+	Gender         string  `dapper:"gender"`
 	AgeMin         float64 `dapper:"age_min"`
 	AgeMax         float64 `dapper:"age_max"`
 	P3             float64 `dapper:"p3"`
@@ -53,19 +53,19 @@ type AgeHeightWeightPMaster struct {
 type AgeHeightWeightSDMaster struct {
 	ID             int64   `dapper:"id,primarykey,autoincrement,table=physique_age_height_weight_sd_master"`
 	HeightOrWeight string  `dapper:"h_w"`
-	Gender         int64   `dapper:"gender"`
+	Gender         string  `dapper:"gender"`
 	Age            string  `dapper:"age"` // x年x月
-	M_2SD          float64 `dapper:"-2sd"`
-	M_1SD          float64 `dapper:"-1sd"`
+	SDM2           float64 `dapper:"sdm2"`
+	SDM1           float64 `dapper:"sdm1"`
 	Average        float64 `dapper:"avg"`
-	_1SD           float64 `dapper:"1sd"`
-	_2SD           float64 `dapper:"2sd"`
+	SD1            float64 `dapper:"sd1"`
+	SD2            float64 `dapper:"sd2"`
 }
 
 // HeightToWeightPMaster height to weight p master
 type HeightToWeightPMaster struct {
 	ID     int64   `dapper:"id,primarykey,autoincrement,table=physique_height_to_weight_p_master"`
-	Gender int64   `dapper:"gender"`
+	Gender string  `dapper:"gender"`
 	Height float64 `dapper:"height"`
 	P3     float64 `dapper:"p3"`
 	P10    float64 `dapper:"p10"`
@@ -78,26 +78,26 @@ type HeightToWeightPMaster struct {
 // HeightToWeightSDMaster height to weight sd master
 type HeightToWeightSDMaster struct {
 	ID     int64   `dapper:"id,primarykey,autoincrement,table=physique_height_to_weight_sd_master"`
-	Gender int64   `dapper:"gender"`
+	Gender string  `dapper:"gender"`
 	Height float64 `dapper:"height"`
-	M_3SD  float64 `dapper:"-3sd"`
-	M_2SD  float64 `dapper:"-2sd"`
-	M_1SD  float64 `dapper:"-1sd"`
-	_0SD   float64 `dapper:"0sd"`
-	_1SD   float64 `dapper:"1sd"`
-	_2SD   float64 `dapper:"2sd"`
-	_3SD   float64 `dapper:"3sd"`
+	SD3M   float64 `dapper:"sdm3"`
+	SD2M   float64 `dapper:"sdm2"`
+	SD1M   float64 `dapper:"sdm1"`
+	SD0    float64 `dapper:"sd0"`
+	SD1    float64 `dapper:"sd1"`
+	SD2    float64 `dapper:"sd2"`
+	SD3    float64 `dapper:"sd3"`
 }
 
 // BMIMaster bmi standard master
 type BMIMaster struct {
-	ID      int64   `dapper:"id,primarykey,autoincrement,table=physique_age_height_weight_sd_master"`
-	Gender  int64   `dapper:"gender"`
+	ID      int64   `dapper:"id,primarykey,autoincrement,table=physique_bmi_master"`
+	Gender  string  `dapper:"gender"`
 	Age     string  `dapper:"age"` // x年x月
 	Average float64 `dapper:"avg"`
-	_1SD    float64 `dapper:"1sd"`
-	_2SD    float64 `dapper:"2sd"`
-	_3SD    float64 `dapper:"3sd"`
+	SD1     float64 `dapper:"sd1"`
+	SD2     float64 `dapper:"sd2"`
+	SD3     float64 `dapper:"sd3"`
 }
 
 // ResolveAge diff by birth date and exam date
@@ -106,16 +106,15 @@ func (p *Physique) ResolveAge() {
 	examdate, _ := time.Parse("2006-01-02", p.ExamDate)
 
 	year, month, _, _, _, _ := sharedlib.Diff(birthdate, examdate)
-	p.Age = fmt.Sprintf("%d年%d月", year, month)
+	p.Age = fmt.Sprintf("%d岁%d月", year, month)
 	cmp := float64(year) + float64(month)/12.0
 	p.AgeComparison = math.Round(cmp*100) / 100
 }
 
 // ResolveBMI kg/m^2
 func (p *Physique) ResolveBMI() {
-	bmi := p.Weight / (p.Height * p.Height)
+	bmi := p.Weight / (p.Height / 100 * p.Height / 100)
 	p.BMI = math.Round(bmi*100) / 100
-
 }
 
 // ResolveAgeHeightP get the corresponding p zone
@@ -212,12 +211,12 @@ func (p *Physique) ResolveAgeHeightSD(sdmasters []*AgeHeightWeightSDMaster) (fou
 	found = true
 	for _, sd := range sdmasters {
 		if sd.Age == p.Age && sd.HeightOrWeight == "h" && sd.Gender == p.Gender {
-			if p.Height >= sd._2SD {
+			if p.Height >= sd.SD2 {
 				p.HeightSD = ">2SD"
 				return
 			}
 
-			if p.Height >= sd._1SD {
+			if p.Height >= sd.SD1 {
 				p.HeightSD = "1SD~2SD"
 				return
 			}
@@ -227,12 +226,12 @@ func (p *Physique) ResolveAgeHeightSD(sdmasters []*AgeHeightWeightSDMaster) (fou
 				return
 			}
 
-			if p.Height >= sd.M_1SD {
+			if p.Height >= sd.SDM1 {
 				p.HeightSD = "-1SD~AVG"
 				return
 			}
 
-			if p.Height >= sd.M_2SD {
+			if p.Height >= sd.SDM2 {
 				p.HeightSD = "-2SD~-1SD"
 				return
 			}
@@ -251,12 +250,12 @@ func (p *Physique) ResolveAgeWeightSD(sdmasters []*AgeHeightWeightSDMaster) (fou
 	found = true
 	for _, sd := range sdmasters {
 		if sd.Age == p.Age && sd.HeightOrWeight == "w" && sd.Gender == p.Gender {
-			if p.Weight >= sd.M_2SD {
+			if p.Weight >= sd.SD2 {
 				p.WeightSD = ">2SD"
 				return
 			}
 
-			if p.Weight >= sd._1SD {
+			if p.Weight >= sd.SD1 {
 				p.WeightSD = "1SD~2SD"
 				return
 			}
@@ -266,12 +265,12 @@ func (p *Physique) ResolveAgeWeightSD(sdmasters []*AgeHeightWeightSDMaster) (fou
 				return
 			}
 
-			if p.Weight >= sd.M_1SD {
+			if p.Weight >= sd.SDM1 {
 				p.WeightSD = "-1SD~AVG"
 				return
 			}
 
-			if p.Weight >= sd.M_2SD {
+			if p.Weight >= sd.SDM2 {
 				p.WeightSD = "-2SD~-1SD"
 				return
 			}
@@ -290,17 +289,17 @@ func (p *Physique) ResolveBMISD(bmimasters []*BMIMaster) (found bool) {
 	found = true
 	for _, bmi := range bmimasters {
 		if bmi.Age == p.Age && bmi.Gender == p.Gender {
-			if p.BMI >= bmi._3SD {
+			if p.BMI >= bmi.SD3 {
 				p.BMISD = ">3SD"
 				return
 			}
 
-			if p.BMI >= bmi._2SD {
+			if p.BMI >= bmi.SD2 {
 				p.BMISD = "2SD~3SD"
 				return
 			}
 
-			if p.BMI >= bmi._1SD {
+			if p.BMI >= bmi.SD1 {
 				p.BMISD = "1SD~2SD"
 				return
 			}
@@ -323,7 +322,7 @@ func (p *Physique) ResolveBMISD(bmimasters []*BMIMaster) (found bool) {
 func (p *Physique) ResolveHeightToWeightP(hwpmasters []*HeightToWeightPMaster) (found bool) {
 	found = true
 	for _, hwp := range hwpmasters {
-		if hwp.Gender == p.Gender && hwp.Height == p.Height {
+		if hwp.Gender == p.Gender && math.Abs(hwp.Height-p.Height) <= 0.5 /* 1 一个区间,选择最近点 */ {
 			if p.Weight >= hwp.P97 {
 				p.HeightToWeightP = ">P97"
 				return
@@ -367,38 +366,38 @@ func (p *Physique) ResolveHeightToWeightP(hwpmasters []*HeightToWeightPMaster) (
 func (p *Physique) ResolveHeightToWeightSD(hwsdmasters []*HeightToWeightSDMaster) (found bool) {
 	found = true
 	for _, hwsd := range hwsdmasters {
-		if hwsd.Gender == p.Gender && hwsd.Height == p.Height {
-			if p.Weight >= hwsd._3SD {
+		if hwsd.Gender == p.Gender && math.Abs(hwsd.Height-p.Height) <= 0.25 /* 0.5 一个区间,选择最近点 */ {
+			if p.Weight >= hwsd.SD3 {
 				p.HeightToWeightSD = ">3SD"
 				return
 			}
 
-			if p.Weight >= hwsd._2SD {
+			if p.Weight >= hwsd.SD2 {
 				p.HeightToWeightSD = "2SD~3SD"
 				return
 			}
 
-			if p.Weight >= hwsd._1SD {
+			if p.Weight >= hwsd.SD1 {
 				p.HeightToWeightSD = "1SD~2SD"
 				return
 			}
 
-			if p.Weight >= hwsd._0SD {
+			if p.Weight >= hwsd.SD0 {
 				p.HeightToWeightSD = "0SD~1SD"
 				return
 			}
 
-			if p.Weight >= hwsd.M_1SD {
+			if p.Weight >= hwsd.SD1M {
 				p.HeightToWeightSD = "-1SD~0SD"
 				return
 			}
 
-			if p.Weight >= hwsd.M_2SD {
+			if p.Weight >= hwsd.SD2M {
 				p.HeightToWeightSD = "-2SD~-1SD"
 				return
 			}
 
-			if p.Weight >= hwsd.M_3SD {
+			if p.Weight >= hwsd.SD3M {
 				p.HeightToWeightSD = "-3SD~-2SD"
 				return
 			}
@@ -416,9 +415,9 @@ func (p *Physique) ResolveHeightToWeightSD(hwsdmasters []*HeightToWeightSDMaster
 func (p *Physique) ResolveFatCofficient(hwsdmasters []*HeightToWeightSDMaster) (found bool) {
 	found = true
 	for _, hwsd := range hwsdmasters {
-		if hwsd.Gender == p.Gender && hwsd.Height == p.Height {
-			median := hwsd._0SD
-			fatcoff := (p.Weight - median) / median
+		if hwsd.Gender == p.Gender && math.Abs(hwsd.Height-p.Height) <= 0.25 /* 0.5 一个区间,选择最近点 */ {
+			median := hwsd.SD0
+			fatcoff := 100 * (p.Weight - median) / median
 			p.FatCofficient = math.Round(fatcoff*100) / 100
 			return
 		}
@@ -436,7 +435,7 @@ func (p *Physique) ResolveConclusion() {
 	if p.HeightP == "<P3" {
 		if p.HeightSD == "<-2SD" {
 			p.Conclusion = "生长迟缓"
-			// do not return since conslusion can be overwritten
+			// do not return since conclusion can be overwritten
 			// return
 		} else if p.HeightSD == "Unknown" {
 			p.Conclusion = "疑似生长迟缓(数据不足)"

@@ -117,7 +117,7 @@ CREATE TABLE `holidays` (
 CREATE TABLE `physique_height_to_weight_p_master` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `h_w` varchar(4) NOT NULL,
-  `gender` tinyint(1) NOT NULL,
+  `gender` varchar(4) NOT NULL,
   `age_min` double NOT NULL,
   `age_max` double NOT NULL,
   `p3` double NOT NULL,
@@ -131,19 +131,19 @@ CREATE TABLE `physique_height_to_weight_p_master` (
 CREATE TABLE `physique_age_height_weight_sd_master` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `h_w` varchar(4) NOT NULL,
-  `gender` tinyint(1) NOT NULL,
+  `gender` varchar(4) NOT NULL,
   `age` varchar(10) NOT NULL,
-  `-2sd` double NOT NULL,
-  `-1sd` double NOT NULL,
+  `sdm2` double NOT NULL,
+  `sdm1` double NOT NULL,
   `avg` double NOT NULL,
-  `1sd` double NOT NULL,
-  `2sd` double NOT NULL,
+  `sd1` double NOT NULL,
+  `sd2` double NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `physique_height_to_weight_p_master` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `gender` tinyint(1) NOT NULL,
+  `gender` varchar(4) NOT NULL,
   `height` double NOT NULL,
   `p3` double NOT NULL,
   `p10` double NOT NULL,
@@ -154,9 +154,23 @@ CREATE TABLE `physique_height_to_weight_p_master` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `physique_height_to_weight_sd_master` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `gender` varchar(4) NOT NULL,
+  `height` double NOT NULL,
+  `sdm3` double NOT NULL,
+  `sdm2` double NOT NULL,
+  `sdm1` double NOT NULL,
+  `sd0` double NOT NULL,
+  `sd1` double NOT NULL,
+  `sd2` double NOT NULL,
+  `sd3` double NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=223 DEFAULT CHARSET=utf8;
+
 CREATE TABLE `physique_bmi_master` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `gender` tinyint(4) NOT NULL,
+  `gender` varchar(4) NOT NULL,
   `age` varchar(10) NOT NULL,
   `avg` double NOT NULL,
   `1sd` double NOT NULL,
@@ -170,7 +184,7 @@ CREATE TABLE `physiques` (
   `year` varchar(10) NOT NULL,
   `class` varchar(10) NOT NULL,
   `name` varchar(10) NOT NULL,
-  `gender` tinyint(1) NOT NULL,
+  `gender` varchar(4) NOT NULL,
   `birth_date` varchar(10) NOT NULL,
   `exam_date` varchar(10) NOT NULL,
   `age` varchar(10) NOT NULL,

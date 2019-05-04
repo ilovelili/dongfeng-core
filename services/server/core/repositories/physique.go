@@ -17,7 +17,7 @@ func NewPhysiqueRepository() *PhysiqueRepository {
 
 // SelectAgeHeightWeightPMasters select age weight / height p master
 func (r *PhysiqueRepository) SelectAgeHeightWeightPMasters() (pmasters []*models.AgeHeightWeightPMaster, err error) {
-	query := Table("physique_height_to_weight_p_master").Sql()
+	query := Table("physique_age_height_weight_p_master").Sql()
 	err = session().Find(query, nil).All(&pmasters)
 	return
 }
@@ -51,7 +51,7 @@ func (r *PhysiqueRepository) SelectBMIMasters() (bmimasters []*models.BMIMaster,
 }
 
 // Select physiques
-func (r *PhysiqueRepository) Select(year, class, name string) (physiques []*models.Physique, err error) {
+func (r *PhysiqueRepository) Select(class, year, name string) (physiques []*models.Physique, err error) {
 	querybuilder := Table("physiques").Alias("p").Where()
 	var query string
 
