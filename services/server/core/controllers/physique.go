@@ -173,3 +173,28 @@ func (c *PhysiqueController) UpdatePhysiques(physiques []*models.Physique) (err 
 
 	return c.repository.DeleteInsert(physiques)
 }
+
+// GetAgeHeightWeightPMasters get age height weight p masters
+func (c *PhysiqueController) GetAgeHeightWeightPMasters() ([]*models.AgeHeightWeightPMaster, error) {
+	return c.repository.SelectAgeHeightWeightPMasters()
+}
+
+// GetAgeHeightWeightSDMasters get age height weight sd masters
+func (c *PhysiqueController) GetAgeHeightWeightSDMasters() ([]*models.AgeHeightWeightSDMaster, error) {
+	return c.repository.SelectAgeHeightWeightSDMasters()
+}
+
+// GetBMIMasters get bmi masters
+func (c *PhysiqueController) GetBMIMasters() ([]*models.BMIMaster, error) {
+	return c.repository.SelectBMIMasters()
+}
+
+// GetHeightToWeightPMasters get height to weight p masters
+func (c *PhysiqueController) GetHeightToWeightPMasters() ([]*models.HeightToWeightPMaster, error) {
+	return c.repository.SelectHeightToWeightPMasters()
+}
+
+// GetHeightToWeightSDMasters get height to weight sd masters
+func (c *PhysiqueController) GetHeightToWeightSDMasters() ([]*models.HeightToWeightSDMaster, error) {
+	return c.repository.SelectHeightToWeightSDMasters()
+}

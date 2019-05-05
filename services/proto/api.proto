@@ -31,6 +31,12 @@ service api {
     rpc UpdatePhysique(dongfeng.protobuf.UpdatePhysiqueRequest) returns(dongfeng.protobuf.UpdatePhysiqueResponse) {};
     rpc UpdatePhysiques(dongfeng.protobuf.UpdatePhysiqueRequest) returns(dongfeng.protobuf.UpdatePhysiqueResponse) {};
 
+    rpc GetAgeHeightWeightPMasters(dongfeng.protobuf.GetAgeHeightWeightPMasterRequest) returns(dongfeng.protobuf.GetAgeHeightWeightPMasterResponse) {};
+    rpc GetAgeHeightWeightSDMasters(dongfeng.protobuf.GetAgeHeightWeightSDMasterRequest) returns(dongfeng.protobuf.GetAgeHeightWeightSDMasterResponse) {};
+    rpc GetBMIMasters(dongfeng.protobuf.GetBMIMasterRequest) returns(dongfeng.protobuf.GetBMIMasterResponse) {};
+    rpc GetHeightToWeightPMasters(dongfeng.protobuf.GetHeightToWeightPMasterRequest) returns(dongfeng.protobuf.GetHeightToWeightPMasterResponse) {};
+    rpc GetHeightToWeightSDMasters(dongfeng.protobuf.GetHeightToWeightSDMasterRequest) returns(dongfeng.protobuf.GetHeightToWeightSDMasterResponse) {};
+
     rpc UpdateNotification(dongfeng.protobuf.UpdateNotificationRequest) returns(dongfeng.protobuf.UpdateNotificationResponse) {};
     rpc UpdateNotifications(dongfeng.protobuf.UpdateNotificationsRequest) returns(dongfeng.protobuf.UpdateNotificationsResponse) {};
 }

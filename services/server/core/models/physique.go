@@ -80,9 +80,9 @@ type HeightToWeightSDMaster struct {
 	ID     int64   `dapper:"id,primarykey,autoincrement,table=physique_height_to_weight_sd_master"`
 	Gender string  `dapper:"gender"`
 	Height float64 `dapper:"height"`
-	SD3M   float64 `dapper:"sdm3"`
-	SD2M   float64 `dapper:"sdm2"`
-	SD1M   float64 `dapper:"sdm1"`
+	SDM3   float64 `dapper:"sdm3"`
+	SDM2   float64 `dapper:"sdm2"`
+	SDM1   float64 `dapper:"sdm1"`
 	SD0    float64 `dapper:"sd0"`
 	SD1    float64 `dapper:"sd1"`
 	SD2    float64 `dapper:"sd2"`
@@ -387,17 +387,17 @@ func (p *Physique) ResolveHeightToWeightSD(hwsdmasters []*HeightToWeightSDMaster
 				return
 			}
 
-			if p.Weight >= hwsd.SD1M {
+			if p.Weight >= hwsd.SDM1 {
 				p.HeightToWeightSD = "-1SD~0SD"
 				return
 			}
 
-			if p.Weight >= hwsd.SD2M {
+			if p.Weight >= hwsd.SDM2 {
 				p.HeightToWeightSD = "-2SD~-1SD"
 				return
 			}
 
-			if p.Weight >= hwsd.SD3M {
+			if p.Weight >= hwsd.SDM3 {
 				p.HeightToWeightSD = "-3SD~-2SD"
 				return
 			}

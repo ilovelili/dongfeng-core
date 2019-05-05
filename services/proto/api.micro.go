@@ -60,6 +60,11 @@ type ApiService interface {
 	GetPhysiques(ctx context.Context, in *dongfeng_protobuf.GetPhysiqueRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetPhysiqueResponse, error)
 	UpdatePhysique(ctx context.Context, in *dongfeng_protobuf.UpdatePhysiqueRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdatePhysiqueResponse, error)
 	UpdatePhysiques(ctx context.Context, in *dongfeng_protobuf.UpdatePhysiqueRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdatePhysiqueResponse, error)
+	GetAgeHeightWeightPMasters(ctx context.Context, in *dongfeng_protobuf.GetAgeHeightWeightPMasterRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetAgeHeightWeightPMasterResponse, error)
+	GetAgeHeightWeightSDMasters(ctx context.Context, in *dongfeng_protobuf.GetAgeHeightWeightSDMasterRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetAgeHeightWeightSDMasterResponse, error)
+	GetBMIMasters(ctx context.Context, in *dongfeng_protobuf.GetBMIMasterRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetBMIMasterResponse, error)
+	GetHeightToWeightPMasters(ctx context.Context, in *dongfeng_protobuf.GetHeightToWeightPMasterRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetHeightToWeightPMasterResponse, error)
+	GetHeightToWeightSDMasters(ctx context.Context, in *dongfeng_protobuf.GetHeightToWeightSDMasterRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetHeightToWeightSDMasterResponse, error)
 	UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateNotificationResponse, error)
 	UpdateNotifications(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationsRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateNotificationsResponse, error)
 }
@@ -252,6 +257,56 @@ func (c *apiService) UpdatePhysiques(ctx context.Context, in *dongfeng_protobuf.
 	return out, nil
 }
 
+func (c *apiService) GetAgeHeightWeightPMasters(ctx context.Context, in *dongfeng_protobuf.GetAgeHeightWeightPMasterRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetAgeHeightWeightPMasterResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.GetAgeHeightWeightPMasters", in)
+	out := new(dongfeng_protobuf.GetAgeHeightWeightPMasterResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *apiService) GetAgeHeightWeightSDMasters(ctx context.Context, in *dongfeng_protobuf.GetAgeHeightWeightSDMasterRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetAgeHeightWeightSDMasterResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.GetAgeHeightWeightSDMasters", in)
+	out := new(dongfeng_protobuf.GetAgeHeightWeightSDMasterResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *apiService) GetBMIMasters(ctx context.Context, in *dongfeng_protobuf.GetBMIMasterRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetBMIMasterResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.GetBMIMasters", in)
+	out := new(dongfeng_protobuf.GetBMIMasterResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *apiService) GetHeightToWeightPMasters(ctx context.Context, in *dongfeng_protobuf.GetHeightToWeightPMasterRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetHeightToWeightPMasterResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.GetHeightToWeightPMasters", in)
+	out := new(dongfeng_protobuf.GetHeightToWeightPMasterResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *apiService) GetHeightToWeightSDMasters(ctx context.Context, in *dongfeng_protobuf.GetHeightToWeightSDMasterRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetHeightToWeightSDMasterResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.GetHeightToWeightSDMasters", in)
+	out := new(dongfeng_protobuf.GetHeightToWeightSDMasterResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *apiService) UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateNotificationResponse, error) {
 	req := c.c.NewRequest(c.name, "Api.UpdateNotification", in)
 	out := new(dongfeng_protobuf.UpdateNotificationResponse)
@@ -293,6 +348,11 @@ type ApiHandler interface {
 	GetPhysiques(context.Context, *dongfeng_protobuf.GetPhysiqueRequest, *dongfeng_protobuf.GetPhysiqueResponse) error
 	UpdatePhysique(context.Context, *dongfeng_protobuf.UpdatePhysiqueRequest, *dongfeng_protobuf.UpdatePhysiqueResponse) error
 	UpdatePhysiques(context.Context, *dongfeng_protobuf.UpdatePhysiqueRequest, *dongfeng_protobuf.UpdatePhysiqueResponse) error
+	GetAgeHeightWeightPMasters(context.Context, *dongfeng_protobuf.GetAgeHeightWeightPMasterRequest, *dongfeng_protobuf.GetAgeHeightWeightPMasterResponse) error
+	GetAgeHeightWeightSDMasters(context.Context, *dongfeng_protobuf.GetAgeHeightWeightSDMasterRequest, *dongfeng_protobuf.GetAgeHeightWeightSDMasterResponse) error
+	GetBMIMasters(context.Context, *dongfeng_protobuf.GetBMIMasterRequest, *dongfeng_protobuf.GetBMIMasterResponse) error
+	GetHeightToWeightPMasters(context.Context, *dongfeng_protobuf.GetHeightToWeightPMasterRequest, *dongfeng_protobuf.GetHeightToWeightPMasterResponse) error
+	GetHeightToWeightSDMasters(context.Context, *dongfeng_protobuf.GetHeightToWeightSDMasterRequest, *dongfeng_protobuf.GetHeightToWeightSDMasterResponse) error
 	UpdateNotification(context.Context, *dongfeng_protobuf.UpdateNotificationRequest, *dongfeng_protobuf.UpdateNotificationResponse) error
 	UpdateNotifications(context.Context, *dongfeng_protobuf.UpdateNotificationsRequest, *dongfeng_protobuf.UpdateNotificationsResponse) error
 }
@@ -316,6 +376,11 @@ func RegisterApiHandler(s server.Server, hdlr ApiHandler, opts ...server.Handler
 		GetPhysiques(ctx context.Context, in *dongfeng_protobuf.GetPhysiqueRequest, out *dongfeng_protobuf.GetPhysiqueResponse) error
 		UpdatePhysique(ctx context.Context, in *dongfeng_protobuf.UpdatePhysiqueRequest, out *dongfeng_protobuf.UpdatePhysiqueResponse) error
 		UpdatePhysiques(ctx context.Context, in *dongfeng_protobuf.UpdatePhysiqueRequest, out *dongfeng_protobuf.UpdatePhysiqueResponse) error
+		GetAgeHeightWeightPMasters(ctx context.Context, in *dongfeng_protobuf.GetAgeHeightWeightPMasterRequest, out *dongfeng_protobuf.GetAgeHeightWeightPMasterResponse) error
+		GetAgeHeightWeightSDMasters(ctx context.Context, in *dongfeng_protobuf.GetAgeHeightWeightSDMasterRequest, out *dongfeng_protobuf.GetAgeHeightWeightSDMasterResponse) error
+		GetBMIMasters(ctx context.Context, in *dongfeng_protobuf.GetBMIMasterRequest, out *dongfeng_protobuf.GetBMIMasterResponse) error
+		GetHeightToWeightPMasters(ctx context.Context, in *dongfeng_protobuf.GetHeightToWeightPMasterRequest, out *dongfeng_protobuf.GetHeightToWeightPMasterResponse) error
+		GetHeightToWeightSDMasters(ctx context.Context, in *dongfeng_protobuf.GetHeightToWeightSDMasterRequest, out *dongfeng_protobuf.GetHeightToWeightSDMasterResponse) error
 		UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationRequest, out *dongfeng_protobuf.UpdateNotificationResponse) error
 		UpdateNotifications(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationsRequest, out *dongfeng_protobuf.UpdateNotificationsResponse) error
 	}
@@ -396,6 +461,26 @@ func (h *apiHandler) UpdatePhysique(ctx context.Context, in *dongfeng_protobuf.U
 
 func (h *apiHandler) UpdatePhysiques(ctx context.Context, in *dongfeng_protobuf.UpdatePhysiqueRequest, out *dongfeng_protobuf.UpdatePhysiqueResponse) error {
 	return h.ApiHandler.UpdatePhysiques(ctx, in, out)
+}
+
+func (h *apiHandler) GetAgeHeightWeightPMasters(ctx context.Context, in *dongfeng_protobuf.GetAgeHeightWeightPMasterRequest, out *dongfeng_protobuf.GetAgeHeightWeightPMasterResponse) error {
+	return h.ApiHandler.GetAgeHeightWeightPMasters(ctx, in, out)
+}
+
+func (h *apiHandler) GetAgeHeightWeightSDMasters(ctx context.Context, in *dongfeng_protobuf.GetAgeHeightWeightSDMasterRequest, out *dongfeng_protobuf.GetAgeHeightWeightSDMasterResponse) error {
+	return h.ApiHandler.GetAgeHeightWeightSDMasters(ctx, in, out)
+}
+
+func (h *apiHandler) GetBMIMasters(ctx context.Context, in *dongfeng_protobuf.GetBMIMasterRequest, out *dongfeng_protobuf.GetBMIMasterResponse) error {
+	return h.ApiHandler.GetBMIMasters(ctx, in, out)
+}
+
+func (h *apiHandler) GetHeightToWeightPMasters(ctx context.Context, in *dongfeng_protobuf.GetHeightToWeightPMasterRequest, out *dongfeng_protobuf.GetHeightToWeightPMasterResponse) error {
+	return h.ApiHandler.GetHeightToWeightPMasters(ctx, in, out)
+}
+
+func (h *apiHandler) GetHeightToWeightSDMasters(ctx context.Context, in *dongfeng_protobuf.GetHeightToWeightSDMasterRequest, out *dongfeng_protobuf.GetHeightToWeightSDMasterResponse) error {
+	return h.ApiHandler.GetHeightToWeightSDMasters(ctx, in, out)
 }
 
 func (h *apiHandler) UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationRequest, out *dongfeng_protobuf.UpdateNotificationResponse) error {

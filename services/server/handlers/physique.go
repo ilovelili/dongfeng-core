@@ -168,3 +168,209 @@ func (f *Facade) UpdatePhysiques(ctx context.Context, req *proto.UpdatePhysiqueR
 	f.syslog(notification.PhysiqueUpdated(exsitinguser.ID))
 	return err
 }
+
+// GetAgeHeightWeightPMasters get age height weight p masters
+func (f *Facade) GetAgeHeightWeightPMasters(ctx context.Context, req *proto.GetAgeHeightWeightPMasterRequest, rsp *proto.GetAgeHeightWeightPMasterResponse) error {
+	md, ok := metadata.FromContext(ctx)
+	if !ok {
+		return utils.NewError(errorcode.GenericInvalidMetaData)
+	}
+
+	idtoken := req.GetToken()
+	jwks := md[sharedlib.MetaDataJwks]
+	_, token, err := sharedlib.ParseJWT(idtoken, jwks)
+
+	// vaidate the token
+	if err != nil || !token.Valid {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
+
+	physiquecontroller := controllers.NewPhysiqueController()
+	masters, err := physiquecontroller.GetAgeHeightWeightPMasters()
+	if err != nil {
+		return utils.NewError(errorcode.CoreFailedToGetPhysiqueMasters)
+	}
+
+	items := []*proto.AgeHeightWeightPMaster{}
+	for _, master := range masters {
+		items = append(items, &proto.AgeHeightWeightPMaster{
+			Id:             master.ID,
+			HeightOrWeight: master.HeightOrWeight,
+			Gender:         master.Gender,
+			AgeMin:         master.AgeMin,
+			AgeMax:         master.AgeMax,
+			P3:             master.P3,
+			P10:            master.P10,
+			P20:            master.P20,
+			P50:            master.P50,
+			P80:            master.P80,
+			P97:            master.P97,
+		})
+	}
+
+	rsp.Masters = items
+	return nil
+}
+
+// GetAgeHeightWeightSDMasters get age height weight sd masters
+func (f *Facade) GetAgeHeightWeightSDMasters(ctx context.Context, req *proto.GetAgeHeightWeightSDMasterRequest, rsp *proto.GetAgeHeightWeightSDMasterResponse) error {
+	md, ok := metadata.FromContext(ctx)
+	if !ok {
+		return utils.NewError(errorcode.GenericInvalidMetaData)
+	}
+
+	idtoken := req.GetToken()
+	jwks := md[sharedlib.MetaDataJwks]
+	_, token, err := sharedlib.ParseJWT(idtoken, jwks)
+
+	// vaidate the token
+	if err != nil || !token.Valid {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
+
+	physiquecontroller := controllers.NewPhysiqueController()
+	masters, err := physiquecontroller.GetAgeHeightWeightSDMasters()
+	if err != nil {
+		return utils.NewError(errorcode.CoreFailedToGetPhysiqueMasters)
+	}
+
+	items := []*proto.AgeHeightWeightSDMaster{}
+	for _, master := range masters {
+		items = append(items, &proto.AgeHeightWeightSDMaster{
+			Id:             master.ID,
+			HeightOrWeight: master.HeightOrWeight,
+			Gender:         master.Gender,
+			Age:            master.Age,
+			Sdm2:           master.SDM2,
+			Sdm1:           master.SDM1,
+			Avg:            master.Average,
+			Sd1:            master.SD1,
+			Sd2:            master.SD2,
+		})
+	}
+
+	rsp.Masters = items
+	return nil
+}
+
+// GetBMIMasters get bmi masters
+func (f *Facade) GetBMIMasters(ctx context.Context, req *proto.GetBMIMasterRequest, rsp *proto.GetBMIMasterResponse) error {
+	md, ok := metadata.FromContext(ctx)
+	if !ok {
+		return utils.NewError(errorcode.GenericInvalidMetaData)
+	}
+
+	idtoken := req.GetToken()
+	jwks := md[sharedlib.MetaDataJwks]
+	_, token, err := sharedlib.ParseJWT(idtoken, jwks)
+
+	// vaidate the token
+	if err != nil || !token.Valid {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
+
+	physiquecontroller := controllers.NewPhysiqueController()
+	masters, err := physiquecontroller.GetBMIMasters()
+	if err != nil {
+		return utils.NewError(errorcode.CoreFailedToGetPhysiqueMasters)
+	}
+
+	items := []*proto.BMIMaster{}
+	for _, master := range masters {
+		items = append(items, &proto.BMIMaster{
+			Id:     master.ID,
+			Gender: master.Gender,
+			Age:    master.Age,
+			Avg:    master.Average,
+			Sd1:    master.SD1,
+			Sd2:    master.SD2,
+			Sd3:    master.SD3,
+		})
+	}
+
+	rsp.Masters = items
+	return nil
+}
+
+// GetHeightToWeightPMasters get height to weight p masters
+func (f *Facade) GetHeightToWeightPMasters(ctx context.Context, req *proto.GetHeightToWeightPMasterRequest, rsp *proto.GetHeightToWeightPMasterResponse) error {
+	md, ok := metadata.FromContext(ctx)
+	if !ok {
+		return utils.NewError(errorcode.GenericInvalidMetaData)
+	}
+
+	idtoken := req.GetToken()
+	jwks := md[sharedlib.MetaDataJwks]
+	_, token, err := sharedlib.ParseJWT(idtoken, jwks)
+
+	// vaidate the token
+	if err != nil || !token.Valid {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
+
+	physiquecontroller := controllers.NewPhysiqueController()
+	masters, err := physiquecontroller.GetHeightToWeightPMasters()
+	if err != nil {
+		return utils.NewError(errorcode.CoreFailedToGetPhysiqueMasters)
+	}
+
+	items := []*proto.HeightToWeightPMaster{}
+	for _, master := range masters {
+		items = append(items, &proto.HeightToWeightPMaster{
+			Id:     master.ID,
+			Gender: master.Gender,
+			Height: master.Height,
+			P3:     master.P3,
+			P10:    master.P10,
+			P20:    master.P20,
+			P50:    master.P50,
+			P80:    master.P80,
+			P97:    master.P97,
+		})
+	}
+
+	rsp.Masters = items
+	return nil
+}
+
+// GetHeightToWeightSDMasters get height to weight sd masters
+func (f *Facade) GetHeightToWeightSDMasters(ctx context.Context, req *proto.GetHeightToWeightSDMasterRequest, rsp *proto.GetHeightToWeightSDMasterResponse) error {
+	md, ok := metadata.FromContext(ctx)
+	if !ok {
+		return utils.NewError(errorcode.GenericInvalidMetaData)
+	}
+
+	idtoken := req.GetToken()
+	jwks := md[sharedlib.MetaDataJwks]
+	_, token, err := sharedlib.ParseJWT(idtoken, jwks)
+
+	// vaidate the token
+	if err != nil || !token.Valid {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
+
+	physiquecontroller := controllers.NewPhysiqueController()
+	masters, err := physiquecontroller.GetHeightToWeightSDMasters()
+	if err != nil {
+		return utils.NewError(errorcode.CoreFailedToGetPhysiqueMasters)
+	}
+
+	items := []*proto.HeightToWeightSDMaster{}
+	for _, master := range masters {
+		items = append(items, &proto.HeightToWeightSDMaster{
+			Id:     master.ID,
+			Gender: master.Gender,
+			Height: master.Height,
+			Sdm3:   master.SDM3,
+			Sdm2:   master.SDM2,
+			Sdm1:   master.SDM1,
+			Sd0:    master.SD0,
+			Sd1:    master.SD1,
+			Sd2:    master.SD2,
+			Sd3:    master.SD3,
+		})
+	}
+
+	rsp.Masters = items
+	return nil
+}
