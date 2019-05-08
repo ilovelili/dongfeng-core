@@ -10,7 +10,7 @@ service api {
     rpc Dashboard(dongfeng.protobuf.DashboardRequest) returns(dongfeng.protobuf.DashboardResponse) {};
     
     rpc UpdateUser(dongfeng.protobuf.UpdateUserRequest) returns(dongfeng.protobuf.UpdateUserResponse) {};
-        
+    
     rpc GetClasses(dongfeng.protobuf.GetClassRequest) returns(dongfeng.protobuf.GetClassResponse) {};
     // rpc UpdateClass(dongfeng.protobuf.UpdateClassRequest) returns(dongfeng.protobuf.UpdateClassResponse) {};
     rpc UpdateClasses(dongfeng.protobuf.UpdateClassRequest) returns(dongfeng.protobuf.UpdateClassResponse) {};
@@ -36,6 +36,8 @@ service api {
     rpc GetBMIMasters(dongfeng.protobuf.GetBMIMasterRequest) returns(dongfeng.protobuf.GetBMIMasterResponse) {};
     rpc GetHeightToWeightPMasters(dongfeng.protobuf.GetHeightToWeightPMasterRequest) returns(dongfeng.protobuf.GetHeightToWeightPMasterResponse) {};
     rpc GetHeightToWeightSDMasters(dongfeng.protobuf.GetHeightToWeightSDMasterRequest) returns(dongfeng.protobuf.GetHeightToWeightSDMasterResponse) {};
+
+    rpc GetMenus(dongfeng.protobuf.GetMenuRequest) returns(dongfeng.protobuf.GetMenuResponse) {};
 
     rpc UpdateNotification(dongfeng.protobuf.UpdateNotificationRequest) returns(dongfeng.protobuf.UpdateNotificationResponse) {};
     rpc UpdateNotifications(dongfeng.protobuf.UpdateNotificationsRequest) returns(dongfeng.protobuf.UpdateNotificationsResponse) {};
