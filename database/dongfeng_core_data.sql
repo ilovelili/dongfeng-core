@@ -31,6 +31,17 @@ insert into holidays (`from`, `to`, `description`) values ('2019-10-01', '2019-1
 insert into holidays (`from`, `to`, `description`) values ('2019-12-30', '2019-12-31', '元旦');
 
 
+insert into `nutrition_allocations`(`junior_or_senior`,`breakfast_or_lunch`,`allocation`) values (0,0,0.2);
+insert into `nutrition_allocations`(`junior_or_senior`,`breakfast_or_lunch`,`allocation`) values (0,1,0.35);
+insert into `nutrition_allocations`(`junior_or_senior`,`breakfast_or_lunch`,`allocation`) values (0,2,0.15);
+insert into `nutrition_allocations`(`junior_or_senior`,`breakfast_or_lunch`,`allocation`) values (0,3,0.3);
+
+insert into `nutrition_allocations`(`junior_or_senior`,`breakfast_or_lunch`,`allocation`) values (1,0,0.2);
+insert into `nutrition_allocations`(`junior_or_senior`,`breakfast_or_lunch`,`allocation`) values (1,1,0.35);
+insert into `nutrition_allocations`(`junior_or_senior`,`breakfast_or_lunch`,`allocation`) values (1,2,0.15);
+insert into `nutrition_allocations`(`junior_or_senior`,`breakfast_or_lunch`,`allocation`) values (1,3,0.3);
+
+
 insert into `physique_age_height_weight_p_master` (`h_w`,`gender`,`age_min`,`age_max`,`p3`,`p10`,`p20`,`p50`,`p80`,`p97`) values ('w','男',2,2.5,10.97,11.72,12.30,13.41,14.95,16.19);
 insert into `physique_age_height_weight_p_master` (`h_w`,`gender`,`age_min`,`age_max`,`p3`,`p10`,`p20`,`p50`,`p80`,`p97`) values ('w','男',2.5,3,12.01,12.74,13.20,14.24,15.82,17.91);
 insert into `physique_age_height_weight_p_master` (`h_w`,`gender`,`age_min`,`age_max`,`p3`,`p10`,`p20`,`p50`,`p80`,`p97`) values ('w','男',3,3.5,12.75,13.40,14.05,15.31,16.65,19.05);

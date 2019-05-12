@@ -1,10 +1,15 @@
 package controllers
 
 import (
+	"fmt"
+	"strings"
 	"time"
 
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 	"github.com/ilovelili/dongfeng-core/services/server/core/repositories"
+	"github.com/ilovelili/dongfeng-core/services/utils"
+	errorcode "github.com/ilovelili/dongfeng-error-code"
+	proto "github.com/ilovelili/dongfeng-protobuf"
 	sharedlib "github.com/ilovelili/dongfeng-shared-lib"
 )
 
@@ -123,4 +128,79 @@ func (c *AttendanceController) UpdateAbsence(absences []*models.Absence, attenda
 // UpdateAbsences update absences
 func (c *AttendanceController) UpdateAbsences(absences []*models.Absence) error {
 	return c.repository.DeleteInsert(absences)
+}
+
+// CountAttendance count attendance
+func (c *AttendanceController) CountAttendance(req *proto.CountAttendanceRequest) (rsp *proto.CountAttendanceResponse, err error) {
+	from, to, class := req.GetFrom(), req.GetTo(), req.GetClass()
+	if from != "" && to != "" && to < from {
+		err = utils.NewError(errorcode.CoreInvalidAttendanceCountRequest)
+		return
+	}
+
+	attendances, err := c.SelectAttendances("", from, to, class, "")
+	if err != nil {
+		err = utils.NewError(errorcode.CoreFailedToGetAttendances)
+		return
+	}
+
+	attendancemap := make(map[string] /*date_class*/ int64 /*count*/)
+	for _, attendance := range attendances.Attendances {
+		// attended
+		if attendance.AttendanceFlag {
+			key := fmt.Sprintf("%s_%s", attendance.Date, attendance.Class)
+			if v, ok := attendancemap[key]; ok {
+				attendancemap[key] = v + 1
+			} else {
+				attendancemap[key] = 1
+			}
+		}
+	}
+
+	var sum, juniorsum, middlesum, seniorsum int64
+	counts := []*proto.AttendanceCount{}
+
+	for k, v := range attendancemap {
+		segments := strings.Split(k, "_")
+		if len(segments) != 2 {
+			err = utils.NewError(errorcode.CoreFailedToGetAttendanceCount)
+			return
+		}
+		date, class := segments[0], segments[1]
+		counts = append(counts, &proto.AttendanceCount{
+			Date:  date,
+			Class: class,
+			Count: v,
+		})
+
+		if c.isJuniorClass(class) {
+			juniorsum += v
+		} else if c.isMiddleClass(class) {
+			middlesum += v
+		} else if c.isSeniorClass(class) {
+			seniorsum += v
+		}
+
+		sum += v
+	}
+
+	rsp.AttendanceCounts = counts
+	rsp.SeniorSum = seniorsum
+	rsp.MiddleSum = middlesum
+	rsp.JuniorSum = juniorsum
+	rsp.Sum = sum
+
+	return
+}
+
+func (c *AttendanceController) isJuniorClass(classname string) bool {
+	return strings.Index(classname, "小") == 0 // must start with "小"
+}
+
+func (c *AttendanceController) isMiddleClass(classname string) bool {
+	return strings.Index(classname, "中") == 0 // must start with "中"
+}
+
+func (c *AttendanceController) isSeniorClass(classname string) bool {
+	return strings.Index(classname, "大") == 0 // must start with "大"
 }

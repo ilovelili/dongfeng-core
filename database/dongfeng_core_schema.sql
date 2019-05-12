@@ -283,3 +283,11 @@ CREATE TABLE `menus` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `nutrition_allocations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `junior_or_senior` int(1) NOT NULL COMMENT '0: junior\n1: senior',
+  `breakfast_or_lunch` int(1) NOT NULL COMMENT '0: breakfast\n1: lunch\n2: snack\n3: dinner',
+  `allocation` double NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
