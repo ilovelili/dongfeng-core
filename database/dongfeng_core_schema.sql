@@ -231,33 +231,25 @@ CREATE TABLE `recipes` (
 CREATE TABLE `ingredient_nutritions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ingredient` varchar(50) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `alias` varchar(45) DEFAULT NULL COMMENT 'sunshine ingredient alias',
   `protein_100g` decimal(10,4) NOT NULL DEFAULT '0.0000',
-  `protein_daily` decimal(10,4) NOT NULL DEFAULT '0.0000',
   `fat_100g` decimal(10,4) NOT NULL DEFAULT '0.0000',
-  `fat_daily` decimal(10,4) NOT NULL DEFAULT '0.0000',
   `carbohydrate_100g` decimal(10,4) NOT NULL DEFAULT '0.0000',
-  `carbohydrate_daily` decimal(10,4) NOT NULL DEFAULT '0.0000',
   `heat_100g` decimal(10,4) NOT NULL DEFAULT '0.0000',
-  `heat_daily` decimal(10,4) NOT NULL DEFAULT '0.0000',
   `calcium_100g` decimal(10,4) NOT NULL DEFAULT '0.0000',
-  `calcium_daily` decimal(10,4) NOT NULL DEFAULT '0.0000',
   `iron_100g` decimal(10,4) NOT NULL DEFAULT '0.0000',
-  `iron_daily` decimal(10,4) NOT NULL DEFAULT '0.0000',
   `zinc_100g` decimal(10,4) NOT NULL DEFAULT '0.0000',
-  `zinc_daily` decimal(10,4) NOT NULL DEFAULT '0.0000',
   `va_100g` decimal(10,4) NOT NULL DEFAULT '0.0000',
-  `va_daily` decimal(10,4) NOT NULL DEFAULT '0.0000',
   `vb1_100g` decimal(10,4) NOT NULL DEFAULT '0.0000',
-  `vb1_daily` decimal(10,4) NOT NULL DEFAULT '0.0000',
   `vb2_100g` decimal(10,4) NOT NULL DEFAULT '0.0000',
-  `vb2_daily` decimal(10,4) NOT NULL DEFAULT '0.0000',
   `vc_100g` decimal(10,4) NOT NULL DEFAULT '0.0000',
-  `vc_daily` decimal(10,4) NOT NULL DEFAULT '0.0000',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `ingredient_UNIQUE` (`ingredient`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE `recipe_nutritions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
