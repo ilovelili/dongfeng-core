@@ -42,6 +42,36 @@ insert into `nutrition_allocations`(`junior_or_senior`,`breakfast_or_lunch`,`all
 insert into `nutrition_allocations`(`junior_or_senior`,`breakfast_or_lunch`,`allocation`) values (1,3,0.3);
 
 
+insert into `ingredient_categories` (`category`) values ('大米');
+insert into `ingredient_categories` (`category`) values ('面粉');
+insert into `ingredient_categories` (`category`) values ('糕点');
+insert into `ingredient_categories` (`category`) values ('粗粮');
+insert into `ingredient_categories` (`category`) values ('薯类');
+insert into `ingredient_categories` (`category`) values ('牛奶');
+insert into `ingredient_categories` (`category`) values ('奶粉');
+insert into `ingredient_categories` (`category`) values ('奶制品');
+insert into `ingredient_categories` (`category`) values ('豆制品');
+insert into `ingredient_categories` (`category`) values ('绿橙蔬菜');
+insert into `ingredient_categories` (`category`) values ('浅色蔬菜');
+insert into `ingredient_categories` (`category`) values ('干菜');
+insert into `ingredient_categories` (`category`) values ('菌藻类');
+insert into `ingredient_categories` (`category`) values ('水果');
+insert into `ingredient_categories` (`category`) values ('坚果类');
+insert into `ingredient_categories` (`category`) values ('蛋类');
+insert into `ingredient_categories` (`category`) values ('畜禽肉类');
+insert into `ingredient_categories` (`category`) values ('鱼虾');
+insert into `ingredient_categories` (`category`) values ('淀粉类');
+insert into `ingredient_categories` (`category`) values ('糖');
+insert into `ingredient_categories` (`category`) values ('食油');
+insert into `ingredient_categories` (`category`) values ('酱油');
+insert into `ingredient_categories` (`category`) values ('食盐');
+insert into `ingredient_categories` (`category`) values ('味精');
+insert into `ingredient_categories` (`category`) values ('黄酒');
+insert into `ingredient_categories` (`category`) values ('其它');
+insert into `ingredient_categories` (`category`) values ('杂豆');
+insert into `ingredient_categories` (`category`) values ('面类');
+
+
 insert into `physique_age_height_weight_p_master` (`h_w`,`gender`,`age_min`,`age_max`,`p3`,`p10`,`p20`,`p50`,`p80`,`p97`) values ('w','男',2,2.5,10.97,11.72,12.30,13.41,14.95,16.19);
 insert into `physique_age_height_weight_p_master` (`h_w`,`gender`,`age_min`,`age_max`,`p3`,`p10`,`p20`,`p50`,`p80`,`p97`) values ('w','男',2.5,3,12.01,12.74,13.20,14.24,15.82,17.91);
 insert into `physique_age_height_weight_p_master` (`h_w`,`gender`,`age_min`,`age_max`,`p3`,`p10`,`p20`,`p50`,`p80`,`p97`) values ('w','男',3,3.5,12.75,13.40,14.05,15.31,16.65,19.05);
