@@ -23,8 +23,8 @@ type recipemapvalue struct {
 	Heat         float64
 }
 
-// GetRecipe get recipe
-func (f *Facade) GetRecipe(ctx context.Context, req *proto.GetRecipeRequest, rsp *proto.GetRecipeResponse) error {
+// GetRecipes get recipes
+func (f *Facade) GetRecipes(ctx context.Context, req *proto.GetRecipeRequest, rsp *proto.GetRecipeResponse) error {
 	md, ok := metadata.FromContext(ctx)
 	if !ok {
 		return utils.NewError(errorcode.GenericInvalidMetaData)
