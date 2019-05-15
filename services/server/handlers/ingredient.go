@@ -3,7 +3,6 @@ package handlers
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 
 	"github.com/ilovelili/dongfeng-core/services/server/core/controllers"
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
@@ -84,8 +83,8 @@ func (f *Facade) GetIngredients(ctx context.Context, req *proto.GetIngredientReq
 	return nil
 }
 
-// UpdateIngredient update ingredient
-func (f *Facade) UpdateIngredient(ctx context.Context, req *proto.UpdateIngredientRequest, rsp *proto.UpdateIngredientResponse) error {
+// UpdateIngredients update ingredient
+func (f *Facade) UpdateIngredients(ctx context.Context, req *proto.UpdateIngredientRequest, rsp *proto.UpdateIngredientResponse) error {
 	md, ok := metadata.FromContext(ctx)
 	if !ok {
 		return utils.NewError(errorcode.GenericInvalidMetaData)
@@ -144,15 +143,8 @@ func (f *Facade) UpdateIngredient(ctx context.Context, req *proto.UpdateIngredie
 		})
 	}
 
-	if err = ingredientcontroller.SaveIngredientNutritions(ingredients); err != nil {
-		return utils.NewError(errorcode.CoreFailedToSaveIngredient)
-	}
+	err = ingredientcontroller.SaveIngredientNutritions(ingredients)
 
 	f.syslog(notification.IngredientUpdated(user.ID))
-	return nil
-}
-
-// UpdateIngredients update ingredients
-func (f *Facade) UpdateIngredients(ctx context.Context, req *proto.UpdateIngredientRequest, rsp *proto.UpdateIngredientResponse) error {
-	return fmt.Errorf("not implemented")
+	return err
 }

@@ -3,6 +3,8 @@ package controllers
 import (
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 	"github.com/ilovelili/dongfeng-core/services/server/core/repositories"
+	"github.com/ilovelili/dongfeng-core/services/utils"
+	errorcode "github.com/ilovelili/dongfeng-error-code"
 )
 
 // IngredientController ingredient controller
@@ -48,10 +50,16 @@ func (c *IngredientController) SaveIngredientNutritions(ingredients []*models.In
 	for _, ingredient := range ingredients {
 		id, err := c.repository.SelectIngredientCategory(ingredient.Category)
 		if err != nil {
-			return err
+			return utils.NewError(errorcode.CoreInvalidIngredientCategory)
 		}
 
 		ingredient.CategoryID = id
 	}
-	return c.repository.UpsertIngredientNutritions(ingredients)
+
+	err := c.repository.UpsertIngredientNutritions(ingredients)
+	if err != nil {
+		return utils.NewError(errorcode.CoreFailedToSaveIngredient)
+	}
+
+	return nil
 }
