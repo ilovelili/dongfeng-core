@@ -83,6 +83,18 @@ func (f *Facade) GetIngredients(ctx context.Context, req *proto.GetIngredientReq
 	return nil
 }
 
+// GetIngredientNames get ingredient names
+func (f *Facade) GetIngredientNames(ctx context.Context, req *proto.GetIngredientNameRequest, rsp *proto.GetIngredientNameResponse) error {
+	ingredientcontroller := controllers.NewIngredientController()
+	names, err := ingredientcontroller.SelectIngredientNames(req.GetPattern())
+	if err != nil {
+		return utils.NewError(errorcode.CoreFailedToGetIngredient)
+	}
+
+	rsp.Names = names
+	return nil
+}
+
 // UpdateIngredients update ingredient
 func (f *Facade) UpdateIngredients(ctx context.Context, req *proto.UpdateIngredientRequest, rsp *proto.UpdateIngredientResponse) error {
 	md, ok := metadata.FromContext(ctx)

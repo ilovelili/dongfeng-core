@@ -18,14 +18,14 @@ func (r *RecipeRepository) Select(names []string) (recipes []*models.RecipeCombi
 	querybuilder := Table("recipes").Alias("r").
 		Join("ingredients").Alias("i").On("r.ingredient_id", "i.id").Query().
 		LeftOuterJoin("recipe_nutritions").Alias("rn").On("r.name", "rn.recipe").Query().
-		LeftOuterJoin("ingredient_nutritions").Alias("inu").On("i.material", "inu.ingredient").Query().
+		LeftOuterJoin("ingredient_nutritions").Alias("inu").On("i.material", "inu.alias").Query().
 		LeftOuterJoin("ingredient_categories").Alias("ic").On("inu.ingredient_category_id", "ic.id").
 		Project(
 			"r.id as id",
 			"r.name as name",
 			"r.created_by as created_by",
 			"i.id as ingredient_id",
-			"i.name as ingredient_name",
+			"i.material as ingredient_name",
 			`IFNULL(rn.carbohydrate, 0) as carbohydrate`,
 			`IFNULL(rn.dietaryfiber, 0) as dietaryfiber`,
 			`IFNULL(rn.protein, 0) as protein`,

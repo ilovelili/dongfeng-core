@@ -48,12 +48,13 @@ func (c *IngredientController) SelectIngredientNutritions(names []string) (ingre
 // SaveIngredientNutritions save ingredient nutritions
 func (c *IngredientController) SaveIngredientNutritions(ingredients []*models.IngredientNutrition) error {
 	for _, ingredient := range ingredients {
-		id, err := c.repository.SelectIngredientCategory(ingredient.Category)
-		if err != nil {
-			return utils.NewError(errorcode.CoreInvalidIngredientCategory)
+		if ingredient.Category != "" {
+			id, err := c.repository.SelectIngredientCategory(ingredient.Category)
+			if err != nil {
+				return utils.NewError(errorcode.CoreInvalidIngredientCategory)
+			}
+			ingredient.CategoryID = id
 		}
-
-		ingredient.CategoryID = id
 	}
 
 	err := c.repository.UpsertIngredientNutritions(ingredients)
@@ -62,4 +63,18 @@ func (c *IngredientController) SaveIngredientNutritions(ingredients []*models.In
 	}
 
 	return nil
+}
+
+// SelectIngredientNames select ingredient names
+func (c *IngredientController) SelectIngredientNames(pattern string) (names []string, err error) {
+	ingredients, err := c.repository.SelectIngredientNames(pattern)
+	if err != nil {
+		return
+	}
+
+	for _, ingredient := range ingredients {
+		names = append(names, ingredient.Ingredient)
+	}
+
+	return
 }
