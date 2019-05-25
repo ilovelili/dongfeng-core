@@ -45,6 +45,9 @@ service api {
     rpc GetIngredientNames(dongfeng.protobuf.GetIngredientNameRequest) returns(dongfeng.protobuf.GetIngredientNameResponse) {};    
     rpc UpdateIngredients(dongfeng.protobuf.UpdateIngredientRequest) returns(dongfeng.protobuf.UpdateIngredientResponse) {};
     
+    rpc GetProfile(dongfeng.protobuf.GetProfileRequest) returns(dongfeng.protobuf.GetProfileResponse) {};
+    rpc UpdateProfile(dongfeng.protobuf.UpdateProfileRequest) returns(dongfeng.protobuf.UpdateProfileResponse) {};
+
     rpc UpdateNotification(dongfeng.protobuf.UpdateNotificationRequest) returns(dongfeng.protobuf.UpdateNotificationResponse) {};
     rpc UpdateNotifications(dongfeng.protobuf.UpdateNotificationsRequest) returns(dongfeng.protobuf.UpdateNotificationsResponse) {};
 }

@@ -300,3 +300,15 @@ CREATE TABLE `nutrition_allocations` (
   `allocation` double NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `profiles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `year` varchar(10) NOT NULL,
+  `class` varchar(10) NOT NULL,
+  `name` varchar(10) NOT NULL,
+  `profile` longtext NOT NULL,
+  `created_by` varchar(100) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
