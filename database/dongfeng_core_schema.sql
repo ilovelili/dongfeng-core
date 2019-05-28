@@ -305,6 +305,7 @@ CREATE TABLE `profiles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `year` varchar(10) NOT NULL,
   `class` varchar(10) NOT NULL,
+  `date` varchar(10) NOT NULL,
   `name` varchar(10) NOT NULL,
   `profile` longtext NOT NULL,
   `created_by` varchar(100) NOT NULL,

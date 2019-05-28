@@ -30,12 +30,49 @@ func (f *Facade) GetProfile(ctx context.Context, req *proto.GetProfileRequest, r
 	}
 
 	profilecontroller := controllers.NewProfileController()
-	profile, err := profilecontroller.GetProfile(req.GetYear(), req.GetClass(), req.GetName())
+	profile, err := profilecontroller.GetProfile(req.GetYear(), req.GetClass(), req.GetName(), req.GetDate())
 	if err != nil {
 		return utils.NewError(errorcode.CoreFailedToGetGrowthProfile)
 	}
 
 	rsp.Profile = profile.Profile
+	return nil
+}
+
+// GetProfiles get profile
+func (f *Facade) GetProfiles(ctx context.Context, req *proto.GetProfilesRequest, rsp *proto.GetProfilesResponse) error {
+	md, ok := metadata.FromContext(ctx)
+	if !ok {
+		return utils.NewError(errorcode.GenericInvalidMetaData)
+	}
+
+	idtoken := req.GetToken()
+	jwks := md[sharedlib.MetaDataJwks]
+	_, token, err := sharedlib.ParseJWT(idtoken, jwks)
+
+	// vaidate the token
+	if err != nil || !token.Valid {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
+
+	profilecontroller := controllers.NewProfileController()
+	profiles, err := profilecontroller.GetProfiles(req.GetYear(), req.GetClass(), req.GetName())
+	if err != nil {
+		return utils.NewError(errorcode.CoreFailedToGetGrowthProfile)
+	}
+
+	_profiles := []*proto.Profile{}
+	for _, profile := range profiles {
+		_profiles = append(_profiles, &proto.Profile{
+			Id:    profile.ID,
+			Year:  profile.Year,
+			Class: profile.Class,
+			Name:  profile.Name,
+			Date:  profile.Date,
+		})
+	}
+
+	rsp.Profiles = _profiles
 	return nil
 }
 
@@ -72,6 +109,7 @@ func (f *Facade) UpdateProfile(ctx context.Context, req *proto.UpdateProfileRequ
 		Year:      req.GetYear(),
 		Class:     req.GetClass(),
 		Name:      req.GetName(),
+		Date:      req.GetDate(),
 		Profile:   req.GetProfile(),
 		CreatedBy: exsitinguser.Email,
 	})

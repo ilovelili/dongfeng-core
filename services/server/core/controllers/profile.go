@@ -18,8 +18,13 @@ func NewProfileController() *ProfileController {
 }
 
 // GetProfile get profile
-func (c *ProfileController) GetProfile(year, class, name string) (profile *models.Profile, err error) {
-	return c.repository.Select(year, class, name)
+func (c *ProfileController) GetProfile(year, class, name, date string) (profile *models.Profile, err error) {
+	return c.repository.Select(year, class, name, date)
+}
+
+// GetProfiles get profiles
+func (c *ProfileController) GetProfiles(year, class, name string) (profiles []*models.Profile, err error) {
+	return c.repository.SelectAll(year, class, name)
 }
 
 // SaveProfile save profile

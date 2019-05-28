@@ -6,6 +6,7 @@ type Profile struct {
 	Year      string `dapper:"year"`
 	Class     string `dapper:"class"`
 	Name      string `dapper:"name"`
+	Date      string `dapper:"date"`
 	Profile   string `dapper:"profile"`
 	CreatedBy string `dapper:"created_by"`
 }

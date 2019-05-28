@@ -72,7 +72,9 @@ func (r *PhysiqueRepository) Select(class, year, name string) (physiques []*mode
 	}
 
 	query = querybuilder.Sql()
-	err = session().Find(query, nil).All(&physiques)
+	if err = session().Find(query, nil).All(&physiques); err != nil && norows(err) {
+		err = nil
+	}
 	return
 }
 
