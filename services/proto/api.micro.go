@@ -73,6 +73,8 @@ type ApiService interface {
 	GetProfile(ctx context.Context, in *dongfeng_protobuf.GetProfileRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetProfileResponse, error)
 	GetProfiles(ctx context.Context, in *dongfeng_protobuf.GetProfilesRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetProfilesResponse, error)
 	UpdateProfile(ctx context.Context, in *dongfeng_protobuf.UpdateProfileRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateProfileResponse, error)
+	GetProfileNames(ctx context.Context, in *dongfeng_protobuf.GetProfileNamesRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetProfileNamesResponse, error)
+	GetProfileDates(ctx context.Context, in *dongfeng_protobuf.GetProfileDatesRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetProfileDatesResponse, error)
 	UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateNotificationResponse, error)
 	UpdateNotifications(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationsRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateNotificationsResponse, error)
 }
@@ -395,6 +397,26 @@ func (c *apiService) UpdateProfile(ctx context.Context, in *dongfeng_protobuf.Up
 	return out, nil
 }
 
+func (c *apiService) GetProfileNames(ctx context.Context, in *dongfeng_protobuf.GetProfileNamesRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetProfileNamesResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.GetProfileNames", in)
+	out := new(dongfeng_protobuf.GetProfileNamesResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *apiService) GetProfileDates(ctx context.Context, in *dongfeng_protobuf.GetProfileDatesRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetProfileDatesResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.GetProfileDates", in)
+	out := new(dongfeng_protobuf.GetProfileDatesResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *apiService) UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateNotificationResponse, error) {
 	req := c.c.NewRequest(c.name, "Api.UpdateNotification", in)
 	out := new(dongfeng_protobuf.UpdateNotificationResponse)
@@ -449,6 +471,8 @@ type ApiHandler interface {
 	GetProfile(context.Context, *dongfeng_protobuf.GetProfileRequest, *dongfeng_protobuf.GetProfileResponse) error
 	GetProfiles(context.Context, *dongfeng_protobuf.GetProfilesRequest, *dongfeng_protobuf.GetProfilesResponse) error
 	UpdateProfile(context.Context, *dongfeng_protobuf.UpdateProfileRequest, *dongfeng_protobuf.UpdateProfileResponse) error
+	GetProfileNames(context.Context, *dongfeng_protobuf.GetProfileNamesRequest, *dongfeng_protobuf.GetProfileNamesResponse) error
+	GetProfileDates(context.Context, *dongfeng_protobuf.GetProfileDatesRequest, *dongfeng_protobuf.GetProfileDatesResponse) error
 	UpdateNotification(context.Context, *dongfeng_protobuf.UpdateNotificationRequest, *dongfeng_protobuf.UpdateNotificationResponse) error
 	UpdateNotifications(context.Context, *dongfeng_protobuf.UpdateNotificationsRequest, *dongfeng_protobuf.UpdateNotificationsResponse) error
 }
@@ -485,6 +509,8 @@ func RegisterApiHandler(s server.Server, hdlr ApiHandler, opts ...server.Handler
 		GetProfile(ctx context.Context, in *dongfeng_protobuf.GetProfileRequest, out *dongfeng_protobuf.GetProfileResponse) error
 		GetProfiles(ctx context.Context, in *dongfeng_protobuf.GetProfilesRequest, out *dongfeng_protobuf.GetProfilesResponse) error
 		UpdateProfile(ctx context.Context, in *dongfeng_protobuf.UpdateProfileRequest, out *dongfeng_protobuf.UpdateProfileResponse) error
+		GetProfileNames(ctx context.Context, in *dongfeng_protobuf.GetProfileNamesRequest, out *dongfeng_protobuf.GetProfileNamesResponse) error
+		GetProfileDates(ctx context.Context, in *dongfeng_protobuf.GetProfileDatesRequest, out *dongfeng_protobuf.GetProfileDatesResponse) error
 		UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationRequest, out *dongfeng_protobuf.UpdateNotificationResponse) error
 		UpdateNotifications(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationsRequest, out *dongfeng_protobuf.UpdateNotificationsResponse) error
 	}
@@ -617,6 +643,14 @@ func (h *apiHandler) GetProfiles(ctx context.Context, in *dongfeng_protobuf.GetP
 
 func (h *apiHandler) UpdateProfile(ctx context.Context, in *dongfeng_protobuf.UpdateProfileRequest, out *dongfeng_protobuf.UpdateProfileResponse) error {
 	return h.ApiHandler.UpdateProfile(ctx, in, out)
+}
+
+func (h *apiHandler) GetProfileNames(ctx context.Context, in *dongfeng_protobuf.GetProfileNamesRequest, out *dongfeng_protobuf.GetProfileNamesResponse) error {
+	return h.ApiHandler.GetProfileNames(ctx, in, out)
+}
+
+func (h *apiHandler) GetProfileDates(ctx context.Context, in *dongfeng_protobuf.GetProfileDatesRequest, out *dongfeng_protobuf.GetProfileDatesResponse) error {
+	return h.ApiHandler.GetProfileDates(ctx, in, out)
 }
 
 func (h *apiHandler) UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationRequest, out *dongfeng_protobuf.UpdateNotificationResponse) error {
