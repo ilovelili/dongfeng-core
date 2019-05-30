@@ -309,7 +309,9 @@ CREATE TABLE `profiles` (
   `name` varchar(10) NOT NULL,
   `profile` longtext NOT NULL,
   `created_by` varchar(100) NOT NULL,
+  `enabled` tinyint(4) NOT NULL DEFAULT '1',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+

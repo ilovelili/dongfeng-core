@@ -9,4 +9,5 @@ type Profile struct {
 	Date      string `dapper:"date"`
 	Profile   string `dapper:"profile"`
 	CreatedBy string `dapper:"created_by"`
+	Enabled   bool   `dapper:"enabled"`
 }

@@ -76,30 +76,6 @@ func (f *Facade) GetProfiles(ctx context.Context, req *proto.GetProfilesRequest,
 	return nil
 }
 
-// GetProfileNames get profile names
-func (f *Facade) GetProfileNames(ctx context.Context, req *proto.GetProfileNamesRequest, rsp *proto.GetProfileNamesResponse) error {
-	profilecontroller := controllers.NewProfileController()
-	names, err := profilecontroller.GetProfileNames(req.GetYear(), req.GetClass(), req.GetName(), req.GetDate())
-	if err != nil {
-		return utils.NewError(errorcode.CoreFailedToGetGrowthProfile)
-	}
-
-	rsp.Names = names
-	return nil
-}
-
-// GetProfileDates get profile dates
-func (f *Facade) GetProfileDates(ctx context.Context, req *proto.GetProfileDatesRequest, rsp *proto.GetProfileDatesResponse) error {
-	profilecontroller := controllers.NewProfileController()
-	dates, err := profilecontroller.GetProfileDates(req.GetYear(), req.GetClass(), req.GetName(), req.GetDate())
-	if err != nil {
-		return utils.NewError(errorcode.CoreFailedToGetGrowthProfile)
-	}
-
-	rsp.Dates = dates
-	return nil
-}
-
 // UpdateProfile update profile
 func (f *Facade) UpdateProfile(ctx context.Context, req *proto.UpdateProfileRequest, rsp *proto.UpdateProfileResponse) error {
 	md, ok := metadata.FromContext(ctx)
@@ -135,6 +111,7 @@ func (f *Facade) UpdateProfile(ctx context.Context, req *proto.UpdateProfileRequ
 		Name:      req.GetName(),
 		Date:      req.GetDate(),
 		Profile:   req.GetProfile(),
+		Enabled:   req.GetEnabled(),
 		CreatedBy: exsitinguser.Email,
 	})
 

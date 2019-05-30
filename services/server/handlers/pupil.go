@@ -51,7 +51,7 @@ func (f *Facade) GetPupils(ctx context.Context, req *proto.GetPupilRequest, rsp 
 	return nil
 }
 
-// UpdatePupils update pupils
+// UpdatePupil update pupil
 func (f *Facade) UpdatePupil(ctx context.Context, req *proto.UpdatePupilRequest, rsp *proto.UpdatePupilResponse) error {
 	md, ok := metadata.FromContext(ctx)
 	if !ok {
