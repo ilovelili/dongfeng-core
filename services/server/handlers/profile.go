@@ -117,3 +117,81 @@ func (f *Facade) UpdateProfile(ctx context.Context, req *proto.UpdateProfileRequ
 
 	return err
 }
+
+// CreateProfile create profile
+func (f *Facade) CreateProfile(ctx context.Context, req *proto.UpdateProfileRequest, rsp *proto.UpdateProfileResponse) error {
+	md, ok := metadata.FromContext(ctx)
+	if !ok {
+		return utils.NewError(errorcode.GenericInvalidMetaData)
+	}
+
+	idtoken := req.GetToken()
+	jwks := md[sharedlib.MetaDataJwks]
+	claims, token, err := sharedlib.ParseJWT(idtoken, jwks)
+
+	// vaidate the token
+	if err != nil || !token.Valid {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
+
+	// Unmarshal user info
+	userinfo, _ := json.Marshal(claims)
+	var user *models.User
+	err = json.Unmarshal(userinfo, &user)
+
+	// check if user exists or not
+	usercontroller := controllers.NewUserController()
+	exsitinguser, err := usercontroller.GetUserByEmail(user.Email)
+	if err != nil {
+		return utils.NewError(errorcode.CoreNoUser)
+	}
+
+	profilecontroller := controllers.NewProfileController()
+	err = profilecontroller.InsertProfile(&models.Profile{
+		Year:      req.GetYear(),
+		Class:     req.GetClass(),
+		Name:      req.GetName(),
+		Date:      req.GetDate(),
+		CreatedBy: exsitinguser.Email,
+	})
+	return err
+}
+
+// DeleteProfile delete profile
+func (f *Facade) DeleteProfile(ctx context.Context, req *proto.UpdateProfileRequest, rsp *proto.UpdateProfileResponse) error {
+	md, ok := metadata.FromContext(ctx)
+	if !ok {
+		return utils.NewError(errorcode.GenericInvalidMetaData)
+	}
+
+	idtoken := req.GetToken()
+	jwks := md[sharedlib.MetaDataJwks]
+	claims, token, err := sharedlib.ParseJWT(idtoken, jwks)
+
+	// vaidate the token
+	if err != nil || !token.Valid {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
+
+	// Unmarshal user info
+	userinfo, _ := json.Marshal(claims)
+	var user *models.User
+	err = json.Unmarshal(userinfo, &user)
+
+	// check if user exists or not
+	usercontroller := controllers.NewUserController()
+	exsitinguser, err := usercontroller.GetUserByEmail(user.Email)
+	if err != nil {
+		return utils.NewError(errorcode.CoreNoUser)
+	}
+
+	profilecontroller := controllers.NewProfileController()
+	err = profilecontroller.DeleteProfile(&models.Profile{
+		Year:      req.GetYear(),
+		Class:     req.GetClass(),
+		Name:      req.GetName(),
+		Date:      req.GetDate(),
+		CreatedBy: exsitinguser.Email,
+	})
+	return err
+}

@@ -31,3 +31,13 @@ func (c *ProfileController) GetProfiles(year, class, name string) (profiles []*m
 func (c *ProfileController) SaveProfile(profile *models.Profile) error {
 	return c.repository.Upsert(profile)
 }
+
+// InsertProfile insert profile
+func (c *ProfileController) InsertProfile(profile *models.Profile) error {
+	return c.repository.Insert(profile)
+}
+
+// DeleteProfile delete profile
+func (c *ProfileController) DeleteProfile(profile *models.Profile) error {
+	return c.repository.Delete(profile)
+}

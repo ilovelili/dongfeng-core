@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"fmt"
+
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 )
 
@@ -87,4 +89,61 @@ func (r *ProfileRepository) Upsert(profile *models.Profile) (err error) {
 	}
 
 	return
+}
+
+// Insert insert profile
+func (r *ProfileRepository) Insert(profile *models.Profile) (err error) {
+	var profiles []*models.Profile
+	query := Table("profiles").Alias("p").Where().
+		Eq("p.year", profile.Year).
+		Eq("p.class", profile.Class).
+		Eq("p.name", profile.Name).
+		Eq("p.date", profile.Date).
+		Sql()
+
+	if err = session().Find(query, nil).All(&profiles); err != nil {
+		if norows(err) {
+			// not exist, so insert
+			profile.Enabled = true
+			return session().Insert(profile)
+		}
+		// return error
+		return
+	}
+
+	for _, p := range profiles {
+		// already exists a valid profile, return error
+		if p.Enabled {
+			return fmt.Errorf("already exist")
+		}
+	}
+
+	// get the first disabled profile (there should be only one) and update
+	_profile := profiles[0]
+	profile.ID = _profile.ID
+	profile.Profile = "{}"
+	profile.Enabled = true
+	return session().Update(profile)
+}
+
+// Delete delete profile by set enabled to false
+func (r *ProfileRepository) Delete(profile *models.Profile) (err error) {
+	query := Table("profiles").Alias("p").Where().
+		Eq("p.year", profile.Year).
+		Eq("p.class", profile.Class).
+		Eq("p.name", profile.Name).
+		Eq("p.date", profile.Date).
+		Sql()
+
+	var p models.Profile
+	err = session().Find(query, nil).Single(&p)
+	// not found which is good
+	if err != nil || 0 == p.ID {
+		return nil
+	}
+
+	profile.ID = p.ID
+	profile.Profile = p.Profile
+	profile.Enabled = false
+	return session().Update(profile)
 }
