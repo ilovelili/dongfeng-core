@@ -39,6 +39,58 @@ func (f *Facade) GetProfile(ctx context.Context, req *proto.GetProfileRequest, r
 	return nil
 }
 
+// GetPrevProfile get previous profile
+func (f *Facade) GetPrevProfile(ctx context.Context, req *proto.GetPrevOrNextProfileRequest, rsp *proto.GetPrevOrNextProfileResponse) error {
+	md, ok := metadata.FromContext(ctx)
+	if !ok {
+		return utils.NewError(errorcode.GenericInvalidMetaData)
+	}
+
+	idtoken := req.GetToken()
+	jwks := md[sharedlib.MetaDataJwks]
+	_, token, err := sharedlib.ParseJWT(idtoken, jwks)
+
+	// vaidate the token
+	if err != nil || !token.Valid {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
+
+	profilecontroller := controllers.NewProfileController()
+	profile, err := profilecontroller.GetPrevProfile(req.GetYear(), req.GetClass(), req.GetName(), req.GetDate())
+	if err != nil {
+		return utils.NewError(errorcode.CoreFailedToGetGrowthProfile)
+	}
+
+	rsp.Date = profile.Date
+	return nil
+}
+
+// GetNextProfile get next profile
+func (f *Facade) GetNextProfile(ctx context.Context, req *proto.GetPrevOrNextProfileRequest, rsp *proto.GetPrevOrNextProfileResponse) error {
+	md, ok := metadata.FromContext(ctx)
+	if !ok {
+		return utils.NewError(errorcode.GenericInvalidMetaData)
+	}
+
+	idtoken := req.GetToken()
+	jwks := md[sharedlib.MetaDataJwks]
+	_, token, err := sharedlib.ParseJWT(idtoken, jwks)
+
+	// vaidate the token
+	if err != nil || !token.Valid {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
+
+	profilecontroller := controllers.NewProfileController()
+	profile, err := profilecontroller.GetNextProfile(req.GetYear(), req.GetClass(), req.GetName(), req.GetDate())
+	if err != nil {
+		return utils.NewError(errorcode.CoreFailedToGetGrowthProfile)
+	}
+
+	rsp.Date = profile.Date
+	return nil
+}
+
 // GetProfiles get profile
 func (f *Facade) GetProfiles(ctx context.Context, req *proto.GetProfilesRequest, rsp *proto.GetProfilesResponse) error {
 	md, ok := metadata.FromContext(ctx)

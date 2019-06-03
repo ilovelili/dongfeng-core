@@ -22,6 +22,16 @@ func (c *ProfileController) GetProfile(year, class, name, date string) (profile 
 	return c.repository.Select(year, class, name, date)
 }
 
+// GetPrevProfile get prev profile
+func (c *ProfileController) GetPrevProfile(year, class, name, date string) (profile *models.Profile, err error) {
+	return c.repository.SelectPrev(year, class, name, date)
+}
+
+// GetProfile get next profile
+func (c *ProfileController) GetNextProfile(year, class, name, date string) (profile *models.Profile, err error) {
+	return c.repository.SelectNext(year, class, name, date)
+}
+
 // GetProfiles get profiles
 func (c *ProfileController) GetProfiles(year, class, name string) (profiles []*models.Profile, err error) {
 	return c.repository.SelectAll(year, class, name)

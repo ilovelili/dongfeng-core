@@ -46,6 +46,8 @@ service api {
     rpc UpdateIngredients(dongfeng.protobuf.UpdateIngredientRequest) returns(dongfeng.protobuf.UpdateIngredientResponse) {};
     
     rpc GetProfile(dongfeng.protobuf.GetProfileRequest) returns(dongfeng.protobuf.GetProfileResponse) {};
+    rpc GetPrevProfile(dongfeng.protobuf.GetPrevOrNextProfileRequest) returns(dongfeng.protobuf.GetPrevOrNextProfileResponse) {};
+    rpc GetNextProfile(dongfeng.protobuf.GetPrevOrNextProfileRequest) returns(dongfeng.protobuf.GetPrevOrNextProfileResponse) {};
     rpc GetProfiles(dongfeng.protobuf.GetProfilesRequest) returns(dongfeng.protobuf.GetProfilesResponse) {};    
     rpc CreateProfile(dongfeng.protobuf.UpdateProfileRequest) returns(dongfeng.protobuf.UpdateProfileResponse) {};
     rpc UpdateProfile(dongfeng.protobuf.UpdateProfileRequest) returns(dongfeng.protobuf.UpdateProfileResponse) {};

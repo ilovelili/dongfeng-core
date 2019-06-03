@@ -14,7 +14,7 @@ func NewProfileRepository() *ProfileRepository {
 	return &ProfileRepository{}
 }
 
-// Select select profiles
+// Select select profile
 func (r *ProfileRepository) Select(year, class, name, date string) (profile *models.Profile, err error) {
 	query := Table("profiles").Alias("p").Where().
 		Eq("p.year", year).
@@ -22,6 +22,54 @@ func (r *ProfileRepository) Select(year, class, name, date string) (profile *mod
 		Eq("p.name", name).
 		Eq("p.date", date).
 		Eq("p.enabled", 1).
+		Sql()
+
+	var p models.Profile
+	if err = session().Find(query, nil).Single(&p); err != nil && norows(err) {
+		err = nil
+	}
+
+	if err != nil {
+		return
+	}
+
+	profile = &p
+	return
+}
+
+// SelectPrev select previous profile
+func (r *ProfileRepository) SelectPrev(year, class, name, date string) (profile *models.Profile, err error) {
+	query := Table("profiles").Alias("p").Where().
+		Eq("p.year", year).
+		Eq("p.class", class).
+		Eq("p.name", name).
+		Lt("p.date", date).
+		Eq("p.enabled", 1).
+		Take(1).
+		Sql()
+
+	var p models.Profile
+	if err = session().Find(query, nil).Single(&p); err != nil && norows(err) {
+		err = nil
+	}
+
+	if err != nil {
+		return
+	}
+
+	profile = &p
+	return
+}
+
+// SelectNext select next profile
+func (r *ProfileRepository) SelectNext(year, class, name, date string) (profile *models.Profile, err error) {
+	query := Table("profiles").Alias("p").Where().
+		Eq("p.year", year).
+		Eq("p.class", class).
+		Eq("p.name", name).
+		Gt("p.date", date).
+		Eq("p.enabled", 1).
+		Take(1).
 		Sql()
 
 	var p models.Profile
@@ -109,6 +157,9 @@ func (r *ProfileRepository) Insert(profile *models.Profile) (err error) {
 		}
 		// return error
 		return
+	} else if len(profiles) == 0 {
+		profile.Enabled = true
+		return session().Insert(profile)
 	}
 
 	for _, p := range profiles {
