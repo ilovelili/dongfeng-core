@@ -315,3 +315,16 @@ CREATE TABLE `profiles` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `profile_UNIQUE` (`year`,`class`,`date`,`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ebooks` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `year` varchar(10) NOT NULL,
+  `class` varchar(10) NOT NULL,
+  `date` varchar(10) NOT NULL,
+  `name` varchar(10) NOT NULL,
+  `hash` varchar(32) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `profile_UNIQUE` (`year`,`class`,`date`,`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;

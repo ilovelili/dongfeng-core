@@ -53,6 +53,8 @@ service api {
     rpc UpdateProfile(dongfeng.protobuf.UpdateProfileRequest) returns(dongfeng.protobuf.UpdateProfileResponse) {};
     rpc DeleteProfile(dongfeng.protobuf.UpdateProfileRequest) returns(dongfeng.protobuf.UpdateProfileResponse) {};
     
+    rpc UpdateEbook(dongfeng.protobuf.UpdateEbookRequest) returns(dongfeng.protobuf.UpdateEbookResponse) {};
+
     rpc UpdateNotification(dongfeng.protobuf.UpdateNotificationRequest) returns(dongfeng.protobuf.UpdateNotificationResponse) {};
     rpc UpdateNotifications(dongfeng.protobuf.UpdateNotificationsRequest) returns(dongfeng.protobuf.UpdateNotificationsResponse) {};
 }
