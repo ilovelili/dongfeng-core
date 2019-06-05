@@ -68,18 +68,24 @@ type MySQL struct {
 	AllowDebug bool   `json:"allow_debug"`
 }
 
-// Nats nats config
-type Nats struct {
-	Host   string `json:"host"`
-	Size   int    `json:"maxconnectioncount"`
-	Topics string `json:"topics"`
+// OSS sso sevice config
+type OSS struct {
+	APIKey     string `json:"api_key"`
+	APISecret  string `json:"api_secret"`
+	Endpoint   string `json:"endpoint"`
+	BucketName string `json:"bucket_name"`
+}
+
+// Aliyun aliyun services
+type Aliyun struct {
+	OSS `json:"oss"`
 }
 
 // Services external services like Mysql
 type Services struct {
-	Redis `json:"redis"`
-	MySQL `json:"mysql"`
-	Nats  `json:"nats"`
+	Redis  `json:"redis"`
+	MySQL  `json:"mysql"`
+	Aliyun `json:"aliyun"`
 }
 
 // ServiceNames servicename config
@@ -101,25 +107,12 @@ type Config struct {
 	ServiceMeta  `json:"servicemeta"`
 }
 
-// GetNatsTopics convert config string to topic array
-func GetNatsTopics(topic string) []string {
-	return strings.Split(topic, ",")
-}
-
 // GetMaxConnectionCount get redis max connection count
 func (r *Redis) GetMaxConnectionCount() int {
 	if r.Size == 0 {
 		return 100
 	}
 	return r.Size
-}
-
-// GetMaxConnectionCount get nats max connection count
-func (n *Nats) GetMaxConnectionCount() int {
-	if n.Size == 0 {
-		return 100
-	}
-	return n.Size
 }
 
 // GetRegistryTTL get registry ttl

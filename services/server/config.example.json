@@ -10,7 +10,15 @@
             "user": "user",
             "password": "password",
             "allow_debug": true
-        }   
+        },
+        "aliyun": {
+            "oss": {
+                "api_key": "<<api key>>",
+                "api_secret": "<<api secret>>",
+                "endpoint": "oss-cn-shanghai.aliyuncs.com",
+                "bucket_name": "dong-feng"
+            }            
+        }
     },
     "servicenames": {        
         "core_server": "dongfeng.svc.core.server.api"
