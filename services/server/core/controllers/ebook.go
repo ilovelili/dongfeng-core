@@ -13,17 +13,6 @@ import (
 	errorcode "github.com/ilovelili/dongfeng-error-code"
 )
 
-const (
-	// chromeDevTool chrome headless devtool endpoint
-	chromeDevTool = "http://127.0.0.1:9222"
-
-	// pdf width in inches
-	pdfWidth float64 = 8.27
-
-	// pdf height in inches
-	pdfHeight float64 = 11.64
-)
-
 // EbookController ebook controller
 type EbookController struct {
 	repository *repositories.EbookRepository
