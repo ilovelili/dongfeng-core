@@ -6,4 +6,5 @@ config.dev.json
 config.test.json
 config.prod.json
 
-ebook
+ebook/*
+img/*

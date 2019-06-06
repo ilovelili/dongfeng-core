@@ -72,19 +72,12 @@ func (c *EbookController) uploadToStorage(ebook *models.Ebook) error {
 	htmldirrespchan := c.svc.AsyncUpload(htmldiropts)
 
 	pwd, _ := os.Getwd()
-	csslocaldir := path.Join(pwd, "ebook", ebook.Year, ebook.Class, ebook.Name, ebook.Date, "css")
-	htmllocaldir := path.Join(pwd, "ebook", ebook.Year, ebook.Class, ebook.Name, ebook.Date, "html")
+	htmllocaldir := path.Join(pwd, "ebook", ebook.Year, ebook.Class, ebook.Name, ebook.Date)
+	csslocaldir := path.Join(htmllocaldir, "css")
 
 	_, err := os.Stat(csslocaldir)
 	if err != nil && os.IsNotExist(err) {
 		err = os.MkdirAll(csslocaldir, os.ModePerm)
-		if err != nil {
-			return err
-		}
-	}
-	_, err = os.Stat(htmllocaldir)
-	if err != nil && os.IsNotExist(err) {
-		err = os.MkdirAll(htmllocaldir, os.ModePerm)
 		if err != nil {
 			return err
 		}
