@@ -323,8 +323,9 @@ CREATE TABLE `ebooks` (
   `date` varchar(10) NOT NULL,
   `name` varchar(10) NOT NULL,
   `hash` varchar(32) NOT NULL,
+  `converted` tinyint(4) NOT NULL DEFAULT '0',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `profile_UNIQUE` (`year`,`class`,`date`,`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;

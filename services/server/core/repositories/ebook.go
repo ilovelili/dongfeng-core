@@ -34,6 +34,7 @@ func (r *EbookRepository) Upsert(ebook *models.Ebook) (dirty bool, err error) {
 	} else if _ebook.Hash != ebook.Hash /*if hash same, do not update*/ {
 		dirty = true
 		ebook.ID = _ebook.ID
+		ebook.Converted = false
 		err = session().Update(ebook)
 	} else {
 		dirty = false
