@@ -1,22 +1,16 @@
 package controllers
 
 import (
-	"context"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
-	"time"
 
 	oss "github.com/ilovelili/aliyun-client/oss"
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 	"github.com/ilovelili/dongfeng-core/services/server/core/repositories"
 	"github.com/ilovelili/dongfeng-core/services/utils"
 	errorcode "github.com/ilovelili/dongfeng-error-code"
-	"github.com/mafredri/cdp"
-	"github.com/mafredri/cdp/devtool"
-	"github.com/mafredri/cdp/protocol/page"
-	"github.com/mafredri/cdp/rpcc"
 )
 
 const (
@@ -58,16 +52,11 @@ func (c *EbookController) SaveEbook(ebook *models.Ebook) error {
 		return utils.NewError(errorcode.CoreFailedToSaveEbook)
 	}
 
-	// if dirty, and then
+	// if dirty
 	if dirty {
-		// 1. upload to storage
+		// upload to storage
 		if err = c.uploadToStorage(ebook); err != nil {
 			return utils.NewError(errorcode.CoreFailedToUploadEbookToCloud)
-		}
-
-		// 2. generate pdf / img file thru chrome headless
-		if err = c.convertHTML(ebook); err != nil {
-			return utils.NewError(errorcode.CoreFailedToConvertEbookHTML)
 		}
 	}
 
@@ -157,97 +146,6 @@ func (c *EbookController) uploadToStorage(ebook *models.Ebook) error {
 	if htmlfileresp := <-htmlfilerespchan; htmlfileresp.Error != nil {
 		return htmlfileresp.Error
 	}
-
-	return nil
-}
-
-// convertHTML convert ebook html to pdf and jpg
-func (c *EbookController) convertHTML(ebook *models.Ebook) (err error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	defer cancel()
-
-	// Use the DevTools HTTP/JSON API to manage targets (e.g. pages, webworkers).
-	devt := devtool.New(chromeDevTool)
-	pt, err := devt.Get(ctx, devtool.Page)
-	if err != nil {
-		pt, err = devt.Create(ctx)
-		if err != nil {
-			return
-		}
-	}
-	defer devt.Close(ctx, pt)
-
-	// Initiate a new RPC connection to the Chrome DevTools Protocol target.
-	conn, err := rpcc.DialContext(ctx, pt.WebSocketDebuggerURL)
-	if err != nil {
-		return
-	}
-	defer conn.Close() // Leaving connections open will leak memory.
-
-	cli := cdp.NewClient(conn)
-	// Open a DOMContentEventFired client to buffer this event.
-	domContent, err := cli.Page.DOMContentEventFired(ctx)
-	if err != nil {
-		return
-	}
-	defer domContent.Close()
-
-	// Enable events on the Page domain, it's often preferrable to create
-	// event clients before enabling events so that we don't miss any.
-	if err = cli.Page.Enable(ctx); err != nil {
-		return
-	}
-
-	pwd, _ := os.Getwd()
-	htmllocaldir := path.Join(pwd, "ebook", ebook.Year, ebook.Class, ebook.Name, ebook.Date)
-	// Create the Navigate arguments
-	navArgs := page.NewNavigateArgs(fmt.Sprintf("file://%s", path.Join(htmllocaldir, "index.html")))
-	nav, err := cli.Page.Navigate(ctx, navArgs)
-	if err != nil {
-		return
-	}
-
-	// Wait until we have a DOMContentEventFired event.
-	if _, err = domContent.Recv(); err != nil {
-		return
-	}
-
-	fmt.Printf("Page loaded with frame ID: %s\n", nav.FrameID)
-
-	imgOutput := path.Join(htmllocaldir, "output.jpg")
-	// Capture a screenshot of the current page.
-	screenshotArgs := page.NewCaptureScreenshotArgs().
-		SetFormat("jpeg").
-		SetQuality(100)
-
-	screenshot, err := cli.Page.CaptureScreenshot(ctx, screenshotArgs)
-	if err != nil {
-		return
-	}
-	if err = ioutil.WriteFile(imgOutput, screenshot.Data, 0644); err != nil {
-		return
-	}
-
-	fmt.Printf("Saved screenshot: %s\n", imgOutput)
-
-	// Print to PDF
-	printToPDFArgs := page.NewPrintToPDFArgs().
-		SetLandscape(false).
-		SetPrintBackground(true).
-		SetMarginTop(0).
-		SetMarginBottom(0).
-		SetMarginLeft(0).
-		SetMarginRight(0).
-		SetPaperWidth(pdfWidth).
-		SetPaperHeight(pdfHeight)
-
-	print, _ := cli.Page.PrintToPDF(ctx, printToPDFArgs)
-	pdfOutput := path.Join(htmllocaldir, "output.pdf")
-	if err = ioutil.WriteFile(pdfOutput, print.Data, 0644); err != nil {
-		return
-	}
-
-	fmt.Printf("Saved pdf: %s\n", pdfOutput)
 
 	return nil
 }
