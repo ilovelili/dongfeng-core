@@ -89,9 +89,11 @@ func (f *Facade) UpdatePupil(ctx context.Context, req *proto.UpdatePupilRequest,
 
 	pupilcontroller := controllers.NewPupilController()
 	err = pupilcontroller.UpdatePupil(&models.Pupil{
-		ID:    pupil.GetId(),
-		Name:  pupil.GetName(),
-		Class: pupil.GetClass(),
+		ID:        pupil.GetId(),
+		Year:      pupil.GetYear(),
+		Name:      pupil.GetName(),
+		Class:     pupil.GetClass(),
+		CreatedBy: pupil.CreatedBy,
 	})
 
 	f.syslog(notification.NamelistUpdated(exsitinguser.ID))
