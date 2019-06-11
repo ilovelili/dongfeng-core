@@ -13,6 +13,42 @@ import (
 	"github.com/micro/go-micro/metadata"
 )
 
+// GetEbooks get ebooks
+func (f *Facade) GetEbooks(ctx context.Context, req *proto.GetEbooksRequest, rsp *proto.GetEbooksResponse) error {
+	md, ok := metadata.FromContext(ctx)
+	if !ok {
+		return utils.NewError(errorcode.GenericInvalidMetaData)
+	}
+
+	idtoken := req.GetToken()
+	jwks := md[sharedlib.MetaDataJwks]
+	_, token, err := sharedlib.ParseJWT(idtoken, jwks)
+
+	// vaidate the token
+	if err != nil || !token.Valid {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
+
+	ebookcontroller := controllers.NewEbookController()
+	ebooks, err := ebookcontroller.GetEbooks(req.GetYear(), req.GetClass(), req.GetName(), req.GetFrom(), req.GetTo())
+	if err != nil {
+		return utils.NewError(errorcode.CoreFailedToGetEbook)
+	}
+
+	_ebooks := []*proto.Ebook{}
+	for _, ebook := range ebooks {
+		_ebooks = append(_ebooks, &proto.Ebook{
+			Id:    ebook.ID,
+			Year:  ebook.Year,
+			Class: ebook.Class,
+			Name:  ebook.Name,
+			Date:  ebook.Date,
+		})
+	}
+	rsp.Ebooks = _ebooks
+	return nil
+}
+
 // UpdateEbook update ebook
 func (f *Facade) UpdateEbook(ctx context.Context, req *proto.UpdateEbookRequest, rsp *proto.UpdateEbookResponse) error {
 	md, ok := metadata.FromContext(ctx)

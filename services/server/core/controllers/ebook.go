@@ -33,6 +33,11 @@ func NewEbookController() *EbookController {
 	}
 }
 
+// GetEbooks get ebooks
+func (c *EbookController) GetEbooks(year, class, name, from, to string) ([]*models.Ebook, error) {
+	return c.repository.Select(year, class, name, from, to)
+}
+
 // SaveEbook save ebook
 func (c *EbookController) SaveEbook(ebook *models.Ebook) error {
 	ebook.ResolveHash()
