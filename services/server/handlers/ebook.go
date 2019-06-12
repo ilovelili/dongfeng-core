@@ -41,6 +41,7 @@ func (f *Facade) GetEbooks(ctx context.Context, req *proto.GetEbooksRequest, rsp
 			Year:  ebook.Year,
 			Class: ebook.Class,
 			Name:  ebook.Name,
+			Dates: ebook.Dates,
 		})
 	}
 	rsp.Ebooks = _ebooks

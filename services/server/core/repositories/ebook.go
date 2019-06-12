@@ -14,7 +14,7 @@ func NewEbookRepository() *EbookRepository {
 
 // Select select ebooks
 func (r *EbookRepository) Select(year, class, name string) (ebooks []*models.Ebook, err error) {
-	querybuilder := Table("ebooks").Alias("e").Project("distinct e.year, e.class, e.name").Where()
+	querybuilder := Table("ebooks").Alias("e").Where()
 
 	if year != "" {
 		querybuilder.Eq("e.year", year)

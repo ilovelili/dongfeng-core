@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"strings"
 
 	oss "github.com/ilovelili/aliyun-client/oss"
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
@@ -35,7 +36,44 @@ func NewEbookController() *EbookController {
 
 // GetEbooks get ebooks
 func (c *EbookController) GetEbooks(year, class, name string) ([]*models.Ebook, error) {
-	return c.repository.Select(year, class, name)
+	ebooks, err := c.repository.Select(year, class, name)
+	if err != nil {
+		return nil, err
+	}
+
+	ebookmap := make(map[string][]string)
+	for _, ebook := range ebooks {
+		key := fmt.Sprintf("%s_%s_%s", ebook.Year, ebook.Class, ebook.Name)
+		if dates, ok := ebookmap[key]; ok {
+			ebookmap[key] = append(dates, ebook.Date)
+		} else {
+			ebookmap[key] = []string{ebook.Date}
+		}
+	}
+
+	results := []*models.Ebook{}
+EbookLoop:
+	for _, ebook := range ebooks {
+		for _, result := range results {
+			if result.Year == ebook.Year && result.Class == ebook.Class && result.Name == ebook.Name {
+				continue EbookLoop
+			}
+		}
+
+		for k, v := range ebookmap {
+			segments := strings.Split(k, "_")
+			if len(segments) != 3 {
+				return nil, fmt.Errorf("invalid key")
+			}
+
+			if ebook.Year == segments[0] && ebook.Class == segments[1] && ebook.Name == segments[2] {
+				ebook.Dates = v
+				results = append(results, ebook)
+			}
+		}
+	}
+
+	return results, nil
 }
 
 // SaveEbook save ebook

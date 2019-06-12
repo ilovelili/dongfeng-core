@@ -18,11 +18,18 @@ type Ebook struct {
 	Images    []string `dapper:"-"`
 	HTML      string   `dapper:"-"`
 	CSS       string   `dapper:"-"`
+	Dates     []string `dapper:"-"`
 }
 
 // ResolveHash resolve content md5 hash
 func (e *Ebook) ResolveHash() {
 	var sb strings.Builder
+
+	sb.WriteString(e.Year)
+	sb.WriteString(e.Class)
+	sb.WriteString(e.Name)
+	sb.WriteString(e.Date)
+
 	for _, img := range e.Images {
 		sb.WriteString(img)
 	}
