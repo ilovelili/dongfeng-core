@@ -1,8 +1,6 @@
 package repositories
 
 import (
-	"fmt"
-
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 )
 
@@ -15,13 +13,8 @@ func NewEbookRepository() *EbookRepository {
 }
 
 // Select select ebooks
-func (r *EbookRepository) Select(year, class, name, from, to string) (ebooks []*models.Ebook, err error) {
-	querybuilder := Table("ebooks").Alias("e").Where()
-
-	if from != "" && to != "" && from > to {
-		err = fmt.Errorf("invalid parameter")
-		return
-	}
+func (r *EbookRepository) Select(year, class, name string) (ebooks []*models.Ebook, err error) {
+	querybuilder := Table("ebooks").Alias("e").Project("distinct e.year, e.class, e.name").Where()
 
 	if year != "" {
 		querybuilder.Eq("e.year", year)
@@ -31,12 +24,6 @@ func (r *EbookRepository) Select(year, class, name, from, to string) (ebooks []*
 	}
 	if name != "" {
 		querybuilder.Eq("e.name", name)
-	}
-	if from != "" {
-		querybuilder.Gte("e.date", from)
-	}
-	if to != "" {
-		querybuilder.Lte("e.date", to)
 	}
 
 	query := querybuilder.Eq("e.converted", 1).Sql()

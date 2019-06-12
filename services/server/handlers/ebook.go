@@ -30,7 +30,7 @@ func (f *Facade) GetEbooks(ctx context.Context, req *proto.GetEbooksRequest, rsp
 	}
 
 	ebookcontroller := controllers.NewEbookController()
-	ebooks, err := ebookcontroller.GetEbooks(req.GetYear(), req.GetClass(), req.GetName(), req.GetFrom(), req.GetTo())
+	ebooks, err := ebookcontroller.GetEbooks(req.GetYear(), req.GetClass(), req.GetName())
 	if err != nil {
 		return utils.NewError(errorcode.CoreFailedToGetEbook)
 	}
@@ -38,11 +38,9 @@ func (f *Facade) GetEbooks(ctx context.Context, req *proto.GetEbooksRequest, rsp
 	_ebooks := []*proto.Ebook{}
 	for _, ebook := range ebooks {
 		_ebooks = append(_ebooks, &proto.Ebook{
-			Id:    ebook.ID,
 			Year:  ebook.Year,
 			Class: ebook.Class,
 			Name:  ebook.Name,
-			Date:  ebook.Date,
 		})
 	}
 	rsp.Ebooks = _ebooks

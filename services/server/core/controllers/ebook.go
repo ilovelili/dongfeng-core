@@ -34,8 +34,8 @@ func NewEbookController() *EbookController {
 }
 
 // GetEbooks get ebooks
-func (c *EbookController) GetEbooks(year, class, name, from, to string) ([]*models.Ebook, error) {
-	return c.repository.Select(year, class, name, from, to)
+func (c *EbookController) GetEbooks(year, class, name string) ([]*models.Ebook, error) {
+	return c.repository.Select(year, class, name)
 }
 
 // SaveEbook save ebook
