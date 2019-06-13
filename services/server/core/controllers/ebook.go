@@ -161,7 +161,7 @@ func (c *EbookController) uploadToStorage(ebook *models.Ebook) error {
 
 // convert ebook to pdf and jpg using chrome headless
 func (c *EbookController) convert(ebook *models.Ebook) (err error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
 	defer cancel()
 
 	// Use the DevTools HTTP/JSON API to manage targets (e.g. pages, webworkers).
