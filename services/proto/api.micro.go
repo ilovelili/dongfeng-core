@@ -79,6 +79,7 @@ type ApiService interface {
 	DeleteProfile(ctx context.Context, in *dongfeng_protobuf.UpdateProfileRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateProfileResponse, error)
 	GetEbooks(ctx context.Context, in *dongfeng_protobuf.GetEbooksRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetEbooksResponse, error)
 	UpdateEbook(ctx context.Context, in *dongfeng_protobuf.UpdateEbookRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateEbookResponse, error)
+	CreateEbook(ctx context.Context, in *dongfeng_protobuf.CreateEbookRequest, opts ...client.CallOption) (*dongfeng_protobuf.CreateEbookResponse, error)
 	UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateNotificationResponse, error)
 	UpdateNotifications(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationsRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateNotificationsResponse, error)
 }
@@ -461,6 +462,16 @@ func (c *apiService) UpdateEbook(ctx context.Context, in *dongfeng_protobuf.Upda
 	return out, nil
 }
 
+func (c *apiService) CreateEbook(ctx context.Context, in *dongfeng_protobuf.CreateEbookRequest, opts ...client.CallOption) (*dongfeng_protobuf.CreateEbookResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.CreateEbook", in)
+	out := new(dongfeng_protobuf.CreateEbookResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *apiService) UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateNotificationResponse, error) {
 	req := c.c.NewRequest(c.name, "Api.UpdateNotification", in)
 	out := new(dongfeng_protobuf.UpdateNotificationResponse)
@@ -521,6 +532,7 @@ type ApiHandler interface {
 	DeleteProfile(context.Context, *dongfeng_protobuf.UpdateProfileRequest, *dongfeng_protobuf.UpdateProfileResponse) error
 	GetEbooks(context.Context, *dongfeng_protobuf.GetEbooksRequest, *dongfeng_protobuf.GetEbooksResponse) error
 	UpdateEbook(context.Context, *dongfeng_protobuf.UpdateEbookRequest, *dongfeng_protobuf.UpdateEbookResponse) error
+	CreateEbook(context.Context, *dongfeng_protobuf.CreateEbookRequest, *dongfeng_protobuf.CreateEbookResponse) error
 	UpdateNotification(context.Context, *dongfeng_protobuf.UpdateNotificationRequest, *dongfeng_protobuf.UpdateNotificationResponse) error
 	UpdateNotifications(context.Context, *dongfeng_protobuf.UpdateNotificationsRequest, *dongfeng_protobuf.UpdateNotificationsResponse) error
 }
@@ -563,6 +575,7 @@ func RegisterApiHandler(s server.Server, hdlr ApiHandler, opts ...server.Handler
 		DeleteProfile(ctx context.Context, in *dongfeng_protobuf.UpdateProfileRequest, out *dongfeng_protobuf.UpdateProfileResponse) error
 		GetEbooks(ctx context.Context, in *dongfeng_protobuf.GetEbooksRequest, out *dongfeng_protobuf.GetEbooksResponse) error
 		UpdateEbook(ctx context.Context, in *dongfeng_protobuf.UpdateEbookRequest, out *dongfeng_protobuf.UpdateEbookResponse) error
+		CreateEbook(ctx context.Context, in *dongfeng_protobuf.CreateEbookRequest, out *dongfeng_protobuf.CreateEbookResponse) error
 		UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationRequest, out *dongfeng_protobuf.UpdateNotificationResponse) error
 		UpdateNotifications(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationsRequest, out *dongfeng_protobuf.UpdateNotificationsResponse) error
 	}
@@ -719,6 +732,10 @@ func (h *apiHandler) GetEbooks(ctx context.Context, in *dongfeng_protobuf.GetEbo
 
 func (h *apiHandler) UpdateEbook(ctx context.Context, in *dongfeng_protobuf.UpdateEbookRequest, out *dongfeng_protobuf.UpdateEbookResponse) error {
 	return h.ApiHandler.UpdateEbook(ctx, in, out)
+}
+
+func (h *apiHandler) CreateEbook(ctx context.Context, in *dongfeng_protobuf.CreateEbookRequest, out *dongfeng_protobuf.CreateEbookResponse) error {
+	return h.ApiHandler.CreateEbook(ctx, in, out)
 }
 
 func (h *apiHandler) UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationRequest, out *dongfeng_protobuf.UpdateNotificationResponse) error {

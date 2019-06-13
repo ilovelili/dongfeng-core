@@ -55,6 +55,7 @@ service api {
     
     rpc GetEbooks(dongfeng.protobuf.GetEbooksRequest) returns(dongfeng.protobuf.GetEbooksResponse) {};
     rpc UpdateEbook(dongfeng.protobuf.UpdateEbookRequest) returns(dongfeng.protobuf.UpdateEbookResponse) {};
+    rpc CreateEbook(dongfeng.protobuf.CreateEbookRequest) returns(dongfeng.protobuf.CreateEbookResponse) {};
 
     rpc UpdateNotification(dongfeng.protobuf.UpdateNotificationRequest) returns(dongfeng.protobuf.UpdateNotificationResponse) {};
     rpc UpdateNotifications(dongfeng.protobuf.UpdateNotificationsRequest) returns(dongfeng.protobuf.UpdateNotificationsResponse) {};

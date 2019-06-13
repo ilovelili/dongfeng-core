@@ -1,10 +1,14 @@
 package controllers
 
 import (
+	"bytes"
 	"fmt"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"path"
+	"path/filepath"
+	"sort"
 	"strings"
 
 	oss "github.com/ilovelili/aliyun-client/oss"
@@ -95,6 +99,11 @@ func (c *EbookController) SaveEbook(ebook *models.Ebook) error {
 	return nil
 }
 
+// CreateEbook create ebook by merging pdf files
+func (c *EbookController) CreateEbook(year, class, name string) error {
+	return merge(class, name)
+}
+
 // uploadToCloudStorage upload css folder and index.html to aliyun
 // TODO: clear local file storage when domain gets ready and can be hosted by aliyun oss
 func (c *EbookController) uploadToStorage(ebook *models.Ebook) error {
@@ -180,4 +189,125 @@ func (c *EbookController) uploadToStorage(ebook *models.Ebook) error {
 	}
 
 	return nil
+}
+
+func merge(class, name string) (err error) {
+	// check if pdftk installed or not
+	_, err = exec.LookPath("pdftk")
+	if err != nil {
+		return
+	}
+
+	config := utils.GetConfig()
+	filepathmap := make(map[string][]string)
+	targetdir := config.Ebook.MergeTargetDir
+	destdir := path.Join(config.Ebook.MergeDestDir, class, name)
+
+	err = filepath.Walk(targetdir, func(filepath string, info os.FileInfo, err error) error {
+		// target
+		if !info.IsDir() && path.Ext(info.Name()) == ".pdf" {
+			key := path.Dir(filepath)
+			// select the target file with corresponding class and name
+			if strings.Index(key, fmt.Sprintf("/%s/%s", class, name)) == -1 {
+				return nil
+			}
+
+			// ignore the dest file
+			if strings.Index(key, config.Ebook.MergeDestDir) > -1 {
+				return nil
+			}
+
+			if paths, ok := filepathmap[key]; ok {
+				filepathmap[key] = append(paths, filepath)
+			} else {
+				filepathmap[key] = []string{filepath}
+			}
+		}
+		return nil
+	})
+
+	if err != nil {
+		return
+	}
+
+	// first clear dest dir
+	os.RemoveAll(destdir)
+	_, err = os.Stat(destdir)
+	if err != nil && os.IsNotExist(err) {
+		err = os.MkdirAll(destdir, os.ModePerm)
+		if err != nil {
+			return err
+		}
+	}
+
+	for dir, filepaths := range filepathmap {
+		// sort pdf by date
+		sort.Strings(filepaths)
+		// https://stackoverflow.com/questions/31467153/golang-failed-exec-command-that-works-in-terminal
+		// cmdline := fmt.Sprintf("pdftk %s cat output merge.pdf", path.Join(filepath, "*.pdf"))
+		pdffiles := strings.Join(filepaths, " ")
+		cmdline := fmt.Sprintf("pdftk %s cat output %s", pdffiles, path.Join(dir, "merge.pdf"))
+		args := strings.Split(cmdline, " ")
+		cmd := exec.Command(args[0], args[1:]...)
+
+		var stderr bytes.Buffer
+		cmd.Stderr = &stderr
+
+		err = cmd.Run()
+		if err != nil {
+			fmt.Println(fmt.Sprint(err) + ": " + stderr.String())
+			return
+		}
+
+		// move to dest
+		segments := strings.Split(dir, "/")
+		year := segments[len(segments)-3]
+		// 电子书_${this.currentName}_${this.currentClass}_${this.currentYear}学年.pdf
+		err = os.Rename(path.Join(dir, "merge.pdf"), path.Join(destdir, fmt.Sprintf("电子书_%s_%s_%s学年.pdf", name, class, year)))
+		if err != nil {
+			return
+		}
+	}
+
+	// loop dest dir and merge again to generate the full year ebook
+	destfilepathmap := make(map[string][]string)
+	err = filepath.Walk(config.Ebook.MergeDestDir, func(filepath string, info os.FileInfo, err error) error {
+		if !info.IsDir() && path.Ext(info.Name()) == ".pdf" {
+			key := path.Dir(filepath)
+			if paths, ok := destfilepathmap[key]; ok {
+				destfilepathmap[key] = append(paths, filepath)
+			} else {
+				destfilepathmap[key] = []string{filepath}
+			}
+		}
+		return nil
+	})
+
+	if err != nil {
+		return
+	}
+
+	for dir, filepaths := range destfilepathmap {
+		sort.Strings(filepaths)
+
+		pdffiles := strings.Join(filepaths, " ")
+		// move to dest
+		segments := strings.Split(dir, "/")
+		class, name := segments[len(segments)-2], segments[len(segments)-1]
+		// 电子书_${this.currentName}_${this.currentClass}_全期间.pdf
+		cmdline := fmt.Sprintf("pdftk %s cat output %s", pdffiles, path.Join(dir, fmt.Sprintf("电子书_%s_%s_全期间.pdf", name, class)))
+		args := strings.Split(cmdline, " ")
+		cmd := exec.Command(args[0], args[1:]...)
+
+		var stderr bytes.Buffer
+		cmd.Stderr = &stderr
+
+		err = cmd.Run()
+		if err != nil {
+			fmt.Println(fmt.Sprint(err) + ": " + stderr.String())
+			return
+		}
+	}
+
+	return
 }

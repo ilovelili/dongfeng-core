@@ -88,6 +88,12 @@ type Services struct {
 	Aliyun `json:"aliyun"`
 }
 
+// Ebook ebook related config
+type Ebook struct {
+	MergeTargetDir string `json:"merge_target_dir"`
+	MergeDestDir   string `json:"merge_dest_dir"`
+}
+
 // ServiceNames servicename config
 type ServiceNames struct {
 	CoreServer string `json:"core_server"`
@@ -103,6 +109,7 @@ type ServiceMeta struct {
 // Config config entry
 type Config struct {
 	Services     `json:"services"`
+	Ebook        `json:"ebook"`
 	ServiceNames `json:"servicenames"`
 	ServiceMeta  `json:"servicemeta"`
 }
