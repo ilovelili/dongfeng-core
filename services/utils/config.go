@@ -90,8 +90,14 @@ type Services struct {
 
 // Ebook ebook related config
 type Ebook struct {
-	MergeTargetDir string `json:"merge_target_dir"`
-	MergeDestDir   string `json:"merge_dest_dir"`
+	Width            float64 `json:"width"`
+	Height           float64 `json:"height"`
+	OriginDir        string  `json:"origin_dir"`
+	PDFDestDir       string  `json:"pdf_dest_dir"`
+	ImageDestDir     string  `json:"img_dest_dir"`
+	MergeTargetDir   string  `json:"merge_target_dir"`
+	MergeDestDir     string  `json:"merge_dest_dir"`
+	ImageLoadTimeout int64   `json:"image_load_timeout"`
 }
 
 // ServiceNames servicename config

@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -10,12 +11,26 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+	"time"
 
 	oss "github.com/ilovelili/aliyun-client/oss"
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 	"github.com/ilovelili/dongfeng-core/services/server/core/repositories"
 	"github.com/ilovelili/dongfeng-core/services/utils"
 	errorcode "github.com/ilovelili/dongfeng-error-code"
+	"github.com/mafredri/cdp"
+	"github.com/mafredri/cdp/devtool"
+	"github.com/mafredri/cdp/protocol/network"
+	"github.com/mafredri/cdp/protocol/page"
+	"github.com/mafredri/cdp/rpcc"
+)
+
+var (
+	config = utils.GetConfig()
+)
+
+const (
+	chromeDevTool = "http://127.0.0.1:9222"
 )
 
 // EbookController ebook controller
@@ -26,7 +41,6 @@ type EbookController struct {
 
 // NewEbookController new controller
 func NewEbookController() *EbookController {
-	config := utils.GetConfig()
 	return &EbookController{
 		repository: repositories.NewEbookRepository(),
 		svc: func() *oss.Service {
@@ -94,6 +108,10 @@ func (c *EbookController) SaveEbook(ebook *models.Ebook) error {
 		if err = c.uploadToStorage(ebook); err != nil {
 			return utils.NewError(errorcode.CoreFailedToUploadEbookToCloud)
 		}
+
+		if err = c.convert(ebook); err != nil {
+			return utils.NewError(errorcode.CoreFailedToConvertEbookHTML)
+		}
 	}
 
 	return nil
@@ -101,7 +119,7 @@ func (c *EbookController) SaveEbook(ebook *models.Ebook) error {
 
 // CreateEbook create ebook by merging pdf files
 func (c *EbookController) CreateEbook(year, class, name string) error {
-	return merge(class, name)
+	return c.merge(class, name)
 }
 
 // uploadToCloudStorage upload css folder and index.html to aliyun
@@ -191,14 +209,142 @@ func (c *EbookController) uploadToStorage(ebook *models.Ebook) error {
 	return nil
 }
 
-func merge(class, name string) (err error) {
+// convert ebook to pdf and jpg using chrome headless
+func (c *EbookController) convert(ebook *models.Ebook) (err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	// Use the DevTools HTTP/JSON API to manage targets (e.g. pages, webworkers).
+	devt := devtool.New(chromeDevTool)
+	pt, err := devt.Get(ctx, devtool.Page)
+	if err != nil {
+		pt, err = devt.Create(ctx)
+		if err != nil {
+			return
+		}
+	}
+	defer devt.Close(ctx, pt)
+
+	// Initiate a new RPC connection to the Chrome DevTools Protocol target.
+	conn, err := rpcc.DialContext(ctx, pt.WebSocketDebuggerURL)
+	if err != nil {
+		return
+	}
+	defer conn.Close() // Leaving connections open will leak memory.
+
+	cli := cdp.NewClient(conn)
+	// Open a DOMContentEventFired client to buffer this event.
+	domContent, err := cli.Page.DOMContentEventFired(ctx)
+	if err != nil {
+		return
+	}
+	defer domContent.Close()
+
+	// Enable the runtime
+	if err = cli.Runtime.Enable(ctx); err != nil {
+		return
+	}
+
+	// Enable the network
+	if err = cli.Network.Enable(ctx, network.NewEnableArgs()); err != nil {
+		return
+	}
+
+	// Enable events on the Page domain, it's often preferrable to create
+	// event clients before enabling events so that we don't miss any.
+	if err = cli.Page.Enable(ctx); err != nil {
+		return
+	}
+
+	htmllocaldir := path.Join(config.Ebook.OriginDir, ebook.Year, ebook.Class, ebook.Name, ebook.Date)
+	// Create the Navigate arguments
+	navArgs := page.NewNavigateArgs(fmt.Sprintf("file://%s", path.Join(htmllocaldir, "index.html")))
+	nav, err := cli.Page.Navigate(ctx, navArgs)
+	if err != nil {
+		return
+	}
+
+	// wait till image loaded
+	time.Sleep(time.Duration(config.Ebook.ImageLoadTimeout) * time.Second)
+
+	// Wait until we have a DOMContentEventFired event.
+	if _, err = domContent.Recv(); err != nil {
+		return
+	}
+
+	fmt.Printf("Page loaded with frame ID: %s\n", nav.FrameID)
+
+	imgOutput := path.Join(htmllocaldir, "output.jpg")
+	// Capture a screenshot of the current page.
+	screenshotArgs := page.NewCaptureScreenshotArgs().
+		SetFormat("jpeg").
+		SetQuality(100)
+
+	screenshot, err := cli.Page.CaptureScreenshot(ctx, screenshotArgs)
+	if err != nil {
+		return
+	}
+	if err = ioutil.WriteFile(imgOutput, screenshot.Data, 0644); err != nil {
+		return
+	}
+
+	fmt.Printf("Saved screenshot: %s\n", imgOutput)
+
+	// Print to PDF
+	printToPDFArgs := page.NewPrintToPDFArgs().
+		SetLandscape(false).
+		SetPrintBackground(true).
+		SetMarginTop(0).
+		SetMarginBottom(0).
+		SetMarginLeft(0).
+		SetMarginRight(0).
+		SetPaperWidth(config.Ebook.Width).
+		SetPaperHeight(config.Ebook.Height)
+
+	print, _ := cli.Page.PrintToPDF(ctx, printToPDFArgs)
+	pdfOutput := path.Join(htmllocaldir, "output.pdf")
+	if err = ioutil.WriteFile(pdfOutput, print.Data, 0644); err != nil {
+		return
+	}
+
+	fmt.Printf("Saved pdf: %s\n", pdfOutput)
+
+	// move to dest dir
+	pdfdestdir := path.Join(config.Ebook.PDFDestDir, ebook.Year, ebook.Class, ebook.Name)
+	_, err = os.Stat(pdfdestdir)
+	if err != nil && os.IsNotExist(err) {
+		err = os.MkdirAll(pdfdestdir, os.ModePerm)
+		if err != nil {
+			return err
+		}
+	}
+
+	if err = os.Rename(pdfOutput, path.Join(pdfdestdir, fmt.Sprintf("%s.pdf", ebook.Date))); err != nil {
+		return err
+	}
+
+	imgdestdir := path.Join(config.Ebook.ImageDestDir, ebook.Year, ebook.Class, ebook.Name)
+	_, err = os.Stat(imgdestdir)
+	if err != nil && os.IsNotExist(err) {
+		err = os.MkdirAll(imgdestdir, os.ModePerm)
+		if err != nil {
+			return err
+		}
+	}
+
+	err = os.Rename(imgOutput, path.Join(imgdestdir, fmt.Sprintf("%s.jpg", ebook.Date)))
+	return err
+
+}
+
+// merge merge pdf files into ebook
+func (c *EbookController) merge(class, name string) (err error) {
 	// check if pdftk installed or not
 	_, err = exec.LookPath("pdftk")
 	if err != nil {
 		return
 	}
 
-	config := utils.GetConfig()
 	filepathmap := make(map[string][]string)
 	targetdir := config.Ebook.MergeTargetDir
 	destdir := path.Join(config.Ebook.MergeDestDir, class, name)

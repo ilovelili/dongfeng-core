@@ -21,6 +21,12 @@
         }
     },
     "ebook": {
+        "width": 8.27,
+        "height": 11.64,
+        "image_load_timeout": 10,
+        "origin_dir": "/home/min/Projects/dongfeng/src/github.com/ilovelili/dongfeng-core/services/server/ebook",
+        "pdf_dest_dir": "/home/min/Projects/test",
+        "img_dest_dir": "/home/min/Projects/test",
         "merge_target_dir": "/home/min/Projects/test",
         "merge_dest_dir": "/home/min/Projects/test/merge"
     },
