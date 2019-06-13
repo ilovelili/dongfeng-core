@@ -98,7 +98,7 @@ EbookLoop:
 func (c *EbookController) SaveEbook(ebook *models.Ebook) error {
 	ebook.ResolveHash()
 	ebook.Converted = false
-	dirty, err := c.repository.Upsert(ebook)
+	dirty, err := c.repository.Upsert(ebook, false)
 	if err != nil {
 		return utils.NewError(errorcode.CoreFailedToSaveEbook)
 	}
@@ -122,7 +122,7 @@ func (c *EbookController) SaveEbook(ebook *models.Ebook) error {
 
 		// set converted to true if everything goes smoothly
 		ebook.Converted = true
-		_, err = c.repository.Upsert(ebook)
+		_, err = c.repository.Upsert(ebook, true)
 		if err != nil {
 			return utils.NewError(errorcode.CoreFailedToSaveEbook)
 		}

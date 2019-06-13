@@ -36,7 +36,7 @@ func (r *EbookRepository) Select(year, class, name string) (ebooks []*models.Ebo
 }
 
 // Upsert upsert ebook
-func (r *EbookRepository) Upsert(ebook *models.Ebook) (dirty bool, err error) {
+func (r *EbookRepository) Upsert(ebook *models.Ebook, force bool) (dirty bool, err error) {
 	query := Table("ebooks").Alias("e").
 		Project(
 			"e.id",
@@ -60,6 +60,11 @@ func (r *EbookRepository) Upsert(ebook *models.Ebook) (dirty bool, err error) {
 		err = session().Update(ebook)
 	} else {
 		dirty = false
+		// force update
+		if force {
+			ebook.ID = _ebook.ID
+			err = session().Update(ebook)
+		}
 	}
 
 	return
