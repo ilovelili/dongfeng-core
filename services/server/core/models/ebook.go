@@ -44,12 +44,10 @@ func (e *Ebook) ResolveHash() {
 
 // ResolveCloudCSS replace image link with oss image
 func (e *Ebook) ResolveCloudCSS() string {
-	// return strings.Replace(e.CSS, "../img/", "https://dong-feng.oss-cn-shanghai.aliyuncs.com/ebook/img/", -1)
 	return strings.Replace(e.CSS, "../img/", "../../../../../../img/", -1)
 }
 
 // ResolveCloudHTML replace style link with oss css
 func (e *Ebook) ResolveCloudHTML() string {
-	// return strings.Replace(e.HTML, "./css/", fmt.Sprintf("https://dong-feng.oss-cn-shanghai.aliyuncs.com/ebook/css/%s/%s/%s/%s/", e.Year, e.Class, e.Name, e.Date), -1)
 	return e.HTML
 }

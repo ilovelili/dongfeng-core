@@ -97,6 +97,7 @@ EbookLoop:
 // SaveEbook save ebook
 func (c *EbookController) SaveEbook(ebook *models.Ebook) error {
 	ebook.ResolveHash()
+	ebook.Converted = false
 	dirty, err := c.repository.Upsert(ebook)
 	if err != nil {
 		return utils.NewError(errorcode.CoreFailedToSaveEbook)
@@ -109,41 +110,30 @@ func (c *EbookController) SaveEbook(ebook *models.Ebook) error {
 			return utils.NewError(errorcode.CoreFailedToUploadEbookToCloud)
 		}
 
+		// convert to pdf
 		if err = c.convert(ebook); err != nil {
 			return utils.NewError(errorcode.CoreFailedToConvertEbookHTML)
+		}
+
+		// merge to ebook
+		if err = c.merge(ebook); err != nil {
+			return utils.NewError(errorcode.CoreFailedToMergeEbook)
+		}
+
+		// set converted to true if everything goes smoothly
+		ebook.Converted = true
+		_, err = c.repository.Upsert(ebook)
+		if err != nil {
+			return utils.NewError(errorcode.CoreFailedToSaveEbook)
 		}
 	}
 
 	return nil
 }
 
-// CreateEbook create ebook by merging pdf files
-func (c *EbookController) CreateEbook(year, class, name string) error {
-	return c.merge(class, name)
-}
-
-// uploadToCloudStorage upload css folder and index.html to aliyun
-// TODO: clear local file storage when domain gets ready and can be hosted by aliyun oss
+// uploadToCloudStorage upload css folder and index.html to local (or aliyun oss later)
 func (c *EbookController) uploadToStorage(ebook *models.Ebook) error {
-	// step 1. create corresponding directory (css / html)
-	cssdiropts := &oss.UploadOptions{
-		Public:       true,
-		ObjectName:   ebook.Date,
-		ParentFolder: fmt.Sprintf("ebook/css/%s/%s/%s/", ebook.Year, ebook.Class, ebook.Name),
-		IsFolder:     true,
-	}
-	cssdirrespchan := c.svc.AsyncUpload(cssdiropts)
-
-	htmldiropts := &oss.UploadOptions{
-		Public:       true,
-		ObjectName:   ebook.Date,
-		ParentFolder: fmt.Sprintf("ebook/html/%s/%s/%s/", ebook.Year, ebook.Class, ebook.Name),
-		IsFolder:     true,
-	}
-	htmldirrespchan := c.svc.AsyncUpload(htmldiropts)
-
-	pwd, _ := os.Getwd()
-	htmllocaldir := path.Join(pwd, "ebook", ebook.Year, ebook.Class, ebook.Name, ebook.Date)
+	htmllocaldir := path.Join(config.Ebook.OriginDir, ebook.Year, ebook.Class, ebook.Name, ebook.Date)
 	csslocaldir := path.Join(htmllocaldir, "css")
 
 	_, err := os.Stat(csslocaldir)
@@ -154,56 +144,16 @@ func (c *EbookController) uploadToStorage(ebook *models.Ebook) error {
 		}
 	}
 
-	var (
-		cssfilerespchan  chan *oss.UploadResponse
-		htmlfilerespchan chan *oss.UploadResponse
-	)
-
-	// step 2. upload css file
-	if cssdirresp := <-cssdirrespchan; cssdirresp.Error != nil {
-		return cssdirresp.Error
-	}
-
 	csslocalfile := path.Join(csslocaldir, "style.css")
 	err = ioutil.WriteFile(csslocalfile, []byte(ebook.ResolveCloudCSS()), os.ModePerm)
-	// defer os.Remove(csspath)
 	if err != nil {
 		return err
-	}
-
-	cssfileopts := &oss.UploadOptions{
-		Public:       true,
-		ObjectName:   csslocalfile,
-		ParentFolder: fmt.Sprintf("ebook/css/%s/%s/%s/%s", ebook.Year, ebook.Class, ebook.Name, ebook.Date),
-	}
-	cssfilerespchan = c.svc.AsyncUpload(cssfileopts)
-
-	// step 3. upload html file
-	if htmldirresp := <-htmldirrespchan; htmldirresp.Error != nil {
-		return htmldirresp.Error
 	}
 
 	htmllocalfile := path.Join(htmllocaldir, "index.html")
 	err = ioutil.WriteFile(htmllocalfile, []byte(ebook.ResolveCloudHTML()), os.ModePerm)
-	// defer os.Remove(htmllocalfile)
 	if err != nil {
 		return err
-	}
-
-	htmlfileopts := &oss.UploadOptions{
-		Public:       true,
-		ObjectName:   htmllocalfile,
-		ParentFolder: fmt.Sprintf("ebook/html/%s/%s/%s/%s", ebook.Year, ebook.Class, ebook.Name, ebook.Date),
-	}
-	htmlfilerespchan = c.svc.AsyncUpload(htmlfileopts)
-
-	// wait for upload
-	if cssfileresp := <-cssfilerespchan; cssfileresp.Error != nil {
-		return cssfileresp.Error
-	}
-
-	if htmlfileresp := <-htmlfilerespchan; htmlfileresp.Error != nil {
-		return htmlfileresp.Error
 	}
 
 	return nil
@@ -338,7 +288,7 @@ func (c *EbookController) convert(ebook *models.Ebook) (err error) {
 }
 
 // merge merge pdf files into ebook
-func (c *EbookController) merge(class, name string) (err error) {
+func (c *EbookController) merge(ebook *models.Ebook) (err error) {
 	// check if pdftk installed or not
 	_, err = exec.LookPath("pdftk")
 	if err != nil {
@@ -347,14 +297,14 @@ func (c *EbookController) merge(class, name string) (err error) {
 
 	filepathmap := make(map[string][]string)
 	targetdir := config.Ebook.MergeTargetDir
-	destdir := path.Join(config.Ebook.MergeDestDir, class, name)
+	destdir := path.Join(config.Ebook.MergeDestDir, ebook.Class, ebook.Name)
 
 	err = filepath.Walk(targetdir, func(filepath string, info os.FileInfo, err error) error {
 		// target
 		if !info.IsDir() && path.Ext(info.Name()) == ".pdf" {
 			key := path.Dir(filepath)
 			// select the target file with corresponding class and name
-			if strings.Index(key, fmt.Sprintf("/%s/%s", class, name)) == -1 {
+			if strings.Index(key, fmt.Sprintf("/%s/%s", ebook.Class, ebook.Name)) == -1 {
 				return nil
 			}
 
@@ -406,10 +356,8 @@ func (c *EbookController) merge(class, name string) (err error) {
 		}
 
 		// move to dest
-		segments := strings.Split(dir, "/")
-		year := segments[len(segments)-3]
 		// 电子书_${this.currentName}_${this.currentClass}_${this.currentYear}学年.pdf
-		err = os.Rename(path.Join(dir, "merge.pdf"), path.Join(destdir, fmt.Sprintf("电子书_%s_%s_%s学年.pdf", name, class, year)))
+		err = os.Rename(path.Join(dir, "merge.pdf"), path.Join(destdir, fmt.Sprintf("电子书_%s_%s_%s学年.pdf", ebook.Name, ebook.Class, ebook.Year)))
 		if err != nil {
 			return
 		}
