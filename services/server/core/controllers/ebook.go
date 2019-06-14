@@ -29,10 +29,6 @@ var (
 	config = utils.GetConfig()
 )
 
-const (
-	chromeDevTool = "http://127.0.0.1:9222"
-)
-
 // EbookController ebook controller
 type EbookController struct {
 	repository *repositories.EbookRepository
@@ -163,6 +159,11 @@ func (c *EbookController) uploadToStorage(ebook *models.Ebook) error {
 func (c *EbookController) convert(ebook *models.Ebook) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
 	defer cancel()
+
+	chromeDevTool := os.Getenv("CHROME_DEV_TOOL")
+	if chromeDevTool == "" {
+		chromeDevTool = "http://127.0.0.1:9222"
+	}
 
 	// Use the DevTools HTTP/JSON API to manage targets (e.g. pages, webworkers).
 	devt := devtool.New(chromeDevTool)
