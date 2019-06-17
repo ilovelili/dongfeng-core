@@ -23,6 +23,7 @@ func (r *RecipeRepository) Select(names []string) (recipes []*models.RecipeCombi
 		Project(
 			"r.id as id",
 			"r.name as name",
+			"IFNULL(r.unit_amount, 0) as unit_amount",
 			"r.created_by as created_by",
 			"i.id as ingredient_id",
 			"i.material as ingredient_name",

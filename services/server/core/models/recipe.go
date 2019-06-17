@@ -4,9 +4,9 @@ package models
 type RecipeCombined struct {
 	ID                int64   `dapper:"id"`
 	Name              string  `dapper:"name"`
+	UnitAmount        float64 `dapper:"unit_amount"`
 	Ingredient        int64   `dapper:"ingredient_id"`
 	IngredientName    string  `dapper:"ingredient_name"`
-	UnitAmount        float64 `dapper:"unit_amount"`
 	Carbohydrate      float64 `dapper:"carbohydrate"`
 	Dietaryfiber      float64 `dapper:"dietaryfiber"`
 	Protein           float64 `dapper:"protein"`
@@ -39,10 +39,11 @@ type RecipeCombined struct {
 
 // Recipe recipe
 type Recipe struct {
-	ID         int64  `dapper:"id,primarykey,autoincrement,table=recipes"`
-	Name       string `dapper:"name"`
-	Ingredient int64  `dapper:"ingredient_id"`
-	CreatedBy  string `dapper:"created_by"`
+	ID         int64   `dapper:"id,primarykey,autoincrement,table=recipes"`
+	Name       string  `dapper:"name"`
+	Ingredient int64   `dapper:"ingredient_id"`
+	UnitAmount float64 `dapper:"unit_amount"`
+	CreatedBy  string  `dapper:"created_by"`
 }
 
 // RecipeNutrition recipe nutrition

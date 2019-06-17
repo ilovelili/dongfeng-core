@@ -9,7 +9,6 @@ import (
 	"github.com/ilovelili/dongfeng-core/services/server/core/repositories"
 	"github.com/ilovelili/dongfeng-core/services/utils"
 	errorcode "github.com/ilovelili/dongfeng-error-code"
-	proto "github.com/ilovelili/dongfeng-protobuf"
 	sharedlib "github.com/ilovelili/dongfeng-shared-lib"
 )
 
@@ -131,8 +130,7 @@ func (c *AttendanceController) UpdateAbsences(absences []*models.Absence) error 
 }
 
 // CountAttendance count attendance
-func (c *AttendanceController) CountAttendance(req *proto.CountAttendanceRequest) (rsp *proto.CountAttendanceResponse, err error) {
-	from, to, class := req.GetFrom(), req.GetTo(), req.GetClass()
+func (c *AttendanceController) CountAttendance(from, to, class string) (attendancecount *models.AttendanceCount, err error) {
 	if from != "" && to != "" && to < from {
 		err = utils.NewError(errorcode.CoreInvalidAttendanceCountRequest)
 		return
@@ -158,7 +156,7 @@ func (c *AttendanceController) CountAttendance(req *proto.CountAttendanceRequest
 	}
 
 	var sum, juniorsum, middlesum, seniorsum int64
-	counts := []*proto.AttendanceCount{}
+	counts := []*models.ClassAttendanceCount{}
 
 	for k, v := range attendancemap {
 		segments := strings.Split(k, "_")
@@ -167,7 +165,7 @@ func (c *AttendanceController) CountAttendance(req *proto.CountAttendanceRequest
 			return
 		}
 		date, class := segments[0], segments[1]
-		counts = append(counts, &proto.AttendanceCount{
+		counts = append(counts, &models.ClassAttendanceCount{
 			Date:  date,
 			Class: class,
 			Count: v,
@@ -184,11 +182,13 @@ func (c *AttendanceController) CountAttendance(req *proto.CountAttendanceRequest
 		sum += v
 	}
 
-	rsp.AttendanceCounts = counts
-	rsp.SeniorSum = seniorsum
-	rsp.MiddleSum = middlesum
-	rsp.JuniorSum = juniorsum
-	rsp.Sum = sum
+	attendancecount = &models.AttendanceCount{
+		ClassAttendanceCounts: counts,
+		SeniorSum:             seniorsum,
+		MiddleSum:             middlesum,
+		JuniorSum:             juniorsum,
+		Sum:                   sum,
+	}
 
 	return
 }

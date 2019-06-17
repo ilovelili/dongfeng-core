@@ -25,6 +25,22 @@ type Attendances struct {
 	Holidays    []*HolidayType
 }
 
+// AttendanceCount attendance count entity
+type AttendanceCount struct {
+	Sum                   int64
+	JuniorSum             int64
+	MiddleSum             int64
+	SeniorSum             int64
+	ClassAttendanceCounts []*ClassAttendanceCount
+}
+
+// ClassAttendanceCount attendance count per class
+type ClassAttendanceCount struct {
+	Date  string
+	Class string
+	Count int64
+}
+
 /*
 // Attendances alias of attendance slice for sort implementaion
 type Attendances []*Attendance

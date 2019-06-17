@@ -219,7 +219,8 @@ CREATE TABLE `ingredients` (
 CREATE TABLE `recipes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
-  `ingredient_id` int(11) NOT NULL,  
+  `ingredient_id` int(11) NOT NULL,
+  `unit_amount` float DEFAULT NULL,
   `created_by` varchar(100) NOT NULL DEFAULT 'AgentSmith',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),

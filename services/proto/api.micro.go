@@ -70,6 +70,8 @@ type ApiService interface {
 	GetIngredients(ctx context.Context, in *dongfeng_protobuf.GetIngredientRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetIngredientResponse, error)
 	GetIngredientNames(ctx context.Context, in *dongfeng_protobuf.GetIngredientNameRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetIngredientNameResponse, error)
 	UpdateIngredients(ctx context.Context, in *dongfeng_protobuf.UpdateIngredientRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateIngredientResponse, error)
+	GetProcurements(ctx context.Context, in *dongfeng_protobuf.GetProcurementRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetProcurementResponse, error)
+	UpdateProcurement(ctx context.Context, in *dongfeng_protobuf.UpdateProcurementRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateProcurementResponse, error)
 	GetProfile(ctx context.Context, in *dongfeng_protobuf.GetProfileRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetProfileResponse, error)
 	GetPrevProfile(ctx context.Context, in *dongfeng_protobuf.GetPrevOrNextProfileRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetPrevOrNextProfileResponse, error)
 	GetNextProfile(ctx context.Context, in *dongfeng_protobuf.GetPrevOrNextProfileRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetPrevOrNextProfileResponse, error)
@@ -371,6 +373,26 @@ func (c *apiService) UpdateIngredients(ctx context.Context, in *dongfeng_protobu
 	return out, nil
 }
 
+func (c *apiService) GetProcurements(ctx context.Context, in *dongfeng_protobuf.GetProcurementRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetProcurementResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.GetProcurements", in)
+	out := new(dongfeng_protobuf.GetProcurementResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *apiService) UpdateProcurement(ctx context.Context, in *dongfeng_protobuf.UpdateProcurementRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateProcurementResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.UpdateProcurement", in)
+	out := new(dongfeng_protobuf.UpdateProcurementResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *apiService) GetProfile(ctx context.Context, in *dongfeng_protobuf.GetProfileRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetProfileResponse, error) {
 	req := c.c.NewRequest(c.name, "Api.GetProfile", in)
 	out := new(dongfeng_protobuf.GetProfileResponse)
@@ -512,6 +534,8 @@ type ApiHandler interface {
 	GetIngredients(context.Context, *dongfeng_protobuf.GetIngredientRequest, *dongfeng_protobuf.GetIngredientResponse) error
 	GetIngredientNames(context.Context, *dongfeng_protobuf.GetIngredientNameRequest, *dongfeng_protobuf.GetIngredientNameResponse) error
 	UpdateIngredients(context.Context, *dongfeng_protobuf.UpdateIngredientRequest, *dongfeng_protobuf.UpdateIngredientResponse) error
+	GetProcurements(context.Context, *dongfeng_protobuf.GetProcurementRequest, *dongfeng_protobuf.GetProcurementResponse) error
+	UpdateProcurement(context.Context, *dongfeng_protobuf.UpdateProcurementRequest, *dongfeng_protobuf.UpdateProcurementResponse) error
 	GetProfile(context.Context, *dongfeng_protobuf.GetProfileRequest, *dongfeng_protobuf.GetProfileResponse) error
 	GetPrevProfile(context.Context, *dongfeng_protobuf.GetPrevOrNextProfileRequest, *dongfeng_protobuf.GetPrevOrNextProfileResponse) error
 	GetNextProfile(context.Context, *dongfeng_protobuf.GetPrevOrNextProfileRequest, *dongfeng_protobuf.GetPrevOrNextProfileResponse) error
@@ -554,6 +578,8 @@ func RegisterApiHandler(s server.Server, hdlr ApiHandler, opts ...server.Handler
 		GetIngredients(ctx context.Context, in *dongfeng_protobuf.GetIngredientRequest, out *dongfeng_protobuf.GetIngredientResponse) error
 		GetIngredientNames(ctx context.Context, in *dongfeng_protobuf.GetIngredientNameRequest, out *dongfeng_protobuf.GetIngredientNameResponse) error
 		UpdateIngredients(ctx context.Context, in *dongfeng_protobuf.UpdateIngredientRequest, out *dongfeng_protobuf.UpdateIngredientResponse) error
+		GetProcurements(ctx context.Context, in *dongfeng_protobuf.GetProcurementRequest, out *dongfeng_protobuf.GetProcurementResponse) error
+		UpdateProcurement(ctx context.Context, in *dongfeng_protobuf.UpdateProcurementRequest, out *dongfeng_protobuf.UpdateProcurementResponse) error
 		GetProfile(ctx context.Context, in *dongfeng_protobuf.GetProfileRequest, out *dongfeng_protobuf.GetProfileResponse) error
 		GetPrevProfile(ctx context.Context, in *dongfeng_protobuf.GetPrevOrNextProfileRequest, out *dongfeng_protobuf.GetPrevOrNextProfileResponse) error
 		GetNextProfile(ctx context.Context, in *dongfeng_protobuf.GetPrevOrNextProfileRequest, out *dongfeng_protobuf.GetPrevOrNextProfileResponse) error
@@ -683,6 +709,14 @@ func (h *apiHandler) GetIngredientNames(ctx context.Context, in *dongfeng_protob
 
 func (h *apiHandler) UpdateIngredients(ctx context.Context, in *dongfeng_protobuf.UpdateIngredientRequest, out *dongfeng_protobuf.UpdateIngredientResponse) error {
 	return h.ApiHandler.UpdateIngredients(ctx, in, out)
+}
+
+func (h *apiHandler) GetProcurements(ctx context.Context, in *dongfeng_protobuf.GetProcurementRequest, out *dongfeng_protobuf.GetProcurementResponse) error {
+	return h.ApiHandler.GetProcurements(ctx, in, out)
+}
+
+func (h *apiHandler) UpdateProcurement(ctx context.Context, in *dongfeng_protobuf.UpdateProcurementRequest, out *dongfeng_protobuf.UpdateProcurementResponse) error {
+	return h.ApiHandler.UpdateProcurement(ctx, in, out)
 }
 
 func (h *apiHandler) GetProfile(ctx context.Context, in *dongfeng_protobuf.GetProfileRequest, out *dongfeng_protobuf.GetProfileResponse) error {
