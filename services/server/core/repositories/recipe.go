@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"fmt"
+
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 )
 
@@ -73,4 +75,26 @@ func (r *RecipeRepository) Select(names []string) (recipes []*models.RecipeCombi
 	}
 
 	return
+}
+
+// Update update recipe
+func (r *RecipeRepository) Update(recipe *models.Recipe) (err error) {
+	query := Table("recipes").Alias("r").
+		Project(
+			"r.id as id",
+			"r.name as name",
+			"r.ingredient_id as ingredient_id",
+			"IFNULL(r.unit_amount, 0) as unit_amount",
+			"r.created_by as created_by",
+		).
+		Where().Eq("r.id", recipe.ID).Sql()
+
+	var _recipe models.Recipe
+	err = session().Find(query, nil).Single(&_recipe)
+	if err != nil || _recipe.ID == 0 {
+		return fmt.Errorf("recipe row doesnot exist")
+	}
+
+	_recipe.UnitAmount = recipe.UnitAmount
+	return session().Update(_recipe)
 }

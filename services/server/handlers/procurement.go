@@ -38,7 +38,7 @@ func (f *Facade) GetProcurements(ctx context.Context, req *proto.GetProcurementR
 	usercontroller := controllers.NewUserController()
 	user, err = usercontroller.GetUserByEmail(user.Email)
 	if err != nil {
-		return utils.NewError(errorcode.NutritionNoUser)
+		return utils.NewError(errorcode.CoreNoUser)
 	}
 
 	procurementcontroller := controllers.NewProcurementController()
@@ -46,7 +46,7 @@ func (f *Facade) GetProcurements(ctx context.Context, req *proto.GetProcurementR
 
 	procurements, err := procurementcontroller.GetProcurements(from, to)
 	if err != nil {
-		return utils.NewError(errorcode.NutritionFailedToGetProcurement)
+		return utils.NewError(errorcode.CoreFailedToGetProcurement)
 	}
 
 	rsp.Procurements = procurements
@@ -55,5 +55,42 @@ func (f *Facade) GetProcurements(ctx context.Context, req *proto.GetProcurementR
 
 // UpdateProcurement update procurement
 func (f *Facade) UpdateProcurement(ctx context.Context, req *proto.UpdateProcurementRequest, rsp *proto.UpdateProcurementResponse) error {
-	return nil
+	md, ok := metadata.FromContext(ctx)
+	if !ok {
+		return utils.NewError(errorcode.GenericInvalidMetaData)
+	}
+
+	idtoken := req.GetToken()
+	jwks := md[sharedlib.MetaDataJwks]
+	claims, token, err := sharedlib.ParseJWT(idtoken, jwks)
+
+	// vaidate the token
+	if err != nil || !token.Valid {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
+
+	// Unmarshal user info
+	userinfo, _ := json.Marshal(claims)
+	var user *models.User
+	err = json.Unmarshal(userinfo, &user)
+
+	// check if user exists or not
+	usercontroller := controllers.NewUserController()
+	user, err = usercontroller.GetUserByEmail(user.Email)
+	if err != nil {
+		return utils.NewError(errorcode.CoreNoUser)
+	}
+
+	procurementcontroller := controllers.NewProcurementController()
+	id, amount := req.GetId(), req.GetAmount()
+	err = procurementcontroller.UpdateRecipeUnitAmount(&models.Recipe{
+		ID:         id,
+		UnitAmount: amount,
+	})
+
+	if err != nil {
+		return utils.NewError(errorcode.CoreFailedToUpdateProcurement)
+	}
+
+	return err
 }

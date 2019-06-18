@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"math"
+
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 	proto "github.com/ilovelili/dongfeng-protobuf"
 )
@@ -115,9 +117,10 @@ func (c *ProcurementController) GetProcurements(from, to string) (procurements [
 			ingredientunitamounts := make([]*proto.IngredientAmount, 0)
 			for _, r := range v {
 				ingredientunitamounts = append(ingredientunitamounts, &proto.IngredientAmount{
+					Id:         r.ID,
+					Recipe:     r.Name,
 					Ingredient: r.IngredientName,
-					Amount:     r.UnitAmount * float64(procurement.Attendance),
-					Matched:    r.Category != "",
+					Amount:     math.Round(r.UnitAmount) / 1000, // g to kg
 				})
 			}
 			procurement.Procurements = ingredientunitamounts
@@ -127,4 +130,9 @@ func (c *ProcurementController) GetProcurements(from, to string) (procurements [
 	}
 
 	return
+}
+
+// UpdateRecipeUnitAmount update recipe unitamount
+func (c *ProcurementController) UpdateRecipeUnitAmount(recipe *models.Recipe) error {
+	return c.recipecontroller.repository.Update(recipe)
 }
