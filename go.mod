@@ -60,3 +60,5 @@ replace github.com/ilovelili/dongfeng-error-code => github.com/ilovelili/dongfen
 replace github.com/ilovelili/aliyun-client => github.com/ilovelili/aliyun-client v0.0.0-20190605074008-4fbaa377d984
 
 replace github.com/ilovelili/dongfeng-shared-lib => github.com/ilovelili/dongfeng-shared-lib v0.0.0-20190508095909-3b2fd2edf57b
+
+replace github.com/micro/go-micro v1.0.0 => github.com/micro/go-micro v0.14.1
