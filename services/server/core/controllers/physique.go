@@ -100,8 +100,8 @@ func (c *PhysiqueController) ResolvePhysique(physique *models.Physique) (err err
 	}
 
 	if found := physique.ResolveBMISD(bmimasters); !found {
-		// if hwp not found...
-		physique.HeightToWeightSD = "Unknown"
+		// if bmisd not found...
+		physique.BMISD = "Unknown"
 	}
 
 	physique.ResolveConclusion()
