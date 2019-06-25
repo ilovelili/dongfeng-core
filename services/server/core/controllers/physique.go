@@ -6,7 +6,15 @@ import (
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 	"github.com/ilovelili/dongfeng-core/services/server/core/repositories"
 	"github.com/ilovelili/dongfeng-core/services/utils"
-	"github.com/ilovelili/dongfeng-error-code"
+	errorcode "github.com/ilovelili/dongfeng-error-code"
+)
+
+var (
+	pmasters    []*models.AgeHeightWeightPMaster
+	sdmasters   []*models.AgeHeightWeightSDMaster
+	hwpmasters  []*models.HeightToWeightPMaster
+	hwsdmasters []*models.HeightToWeightSDMaster
+	bmimasters  []*models.BMIMaster
 )
 
 // PhysiqueController physique controller
@@ -17,10 +25,43 @@ type PhysiqueController struct {
 
 // NewPhysiqueController new physique controller
 func NewPhysiqueController() *PhysiqueController {
-	return &PhysiqueController{
+	controller := &PhysiqueController{
 		repository:      repositories.NewPhysiqueRepository(),
 		pupilcontroller: NewPupilController(),
 	}
+
+	controller.resolveMasters()
+	return controller
+}
+
+func (c *PhysiqueController) resolveMasters() (err error) {
+	// step 1. get p zone based on height
+	pmasters, err = c.repository.SelectAgeHeightWeightPMasters()
+	if err != nil {
+		return
+	}
+
+	sdmasters, err = c.repository.SelectAgeHeightWeightSDMasters()
+	if err != nil {
+		return
+	}
+
+	hwpmasters, err = c.repository.SelectHeightToWeightPMasters()
+	if err != nil {
+		return
+	}
+
+	hwsdmasters, err = c.repository.SelectHeightToWeightSDMasters()
+	if err != nil {
+		return
+	}
+
+	bmimasters, err = c.repository.SelectBMIMasters()
+	if err != nil {
+		return
+	}
+
+	return
 }
 
 // ResolvePhysique resolve physique based on the following steps:
@@ -37,32 +78,6 @@ func NewPhysiqueController() *PhysiqueController {
 func (c *PhysiqueController) ResolvePhysique(physique *models.Physique) (err error) {
 	physique.ResolveAge()
 	physique.ResolveBMI()
-
-	// step 1. get p zone based on height
-	pmasters, err := c.repository.SelectAgeHeightWeightPMasters()
-	if err != nil {
-		return
-	}
-
-	sdmasters, err := c.repository.SelectAgeHeightWeightSDMasters()
-	if err != nil {
-		return
-	}
-
-	hwpmasters, err := c.repository.SelectHeightToWeightPMasters()
-	if err != nil {
-		return
-	}
-
-	hwsdmasters, err := c.repository.SelectHeightToWeightSDMasters()
-	if err != nil {
-		return
-	}
-
-	bmimasters, err := c.repository.SelectBMIMasters()
-	if err != nil {
-		return
-	}
 
 	if found := physique.ResolveAgeHeightP(pmasters); !found {
 		err = fmt.Errorf("P height master data not found")
