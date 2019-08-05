@@ -9,24 +9,14 @@ import (
 	"github.com/ilovelili/dongfeng-core/services/utils"
 	"github.com/ilovelili/dongfeng-error-code"
 	notification "github.com/ilovelili/dongfeng-notification"
-	proto "github.com/ilovelili/dongfeng-protobuf"
-	sharedlib "github.com/ilovelili/dongfeng-shared-lib"
-	"github.com/micro/go-micro/metadata"
+	proto "github.com/ilovelili/dongfeng-protobuf"	
 )
 
 // GetClasses get classes
 func (f *Facade) GetClasses(ctx context.Context, req *proto.GetClassRequest, rsp *proto.GetClassResponse) error {
-	md, ok := metadata.FromContext(ctx)
-	if !ok {
-		return utils.NewError(errorcode.GenericInvalidMetaData)
-	}
-
-	idtoken := req.GetToken()
-	jwks := md[sharedlib.MetaDataJwks]
-	_, token, err := sharedlib.ParseJWT(idtoken, jwks)
-
-	// vaidate the token
-	if err != nil || !token.Valid {
+	pid := req.GetPid()
+	_, err := f.AuthClient.ParseUserInfo(pid)	
+	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
 
@@ -51,24 +41,17 @@ func (f *Facade) GetClasses(ctx context.Context, req *proto.GetClassRequest, rsp
 
 // UpdateClasses update classes
 func (f *Facade) UpdateClasses(ctx context.Context, req *proto.UpdateClassRequest, rsp *proto.UpdateClassResponse) error {
-	md, ok := metadata.FromContext(ctx)
-	if !ok {
-		return utils.NewError(errorcode.GenericInvalidMetaData)
-	}
-
-	idtoken := req.GetToken()
-	jwks := md[sharedlib.MetaDataJwks]
-	claims, token, err := sharedlib.ParseJWT(idtoken, jwks)
-
-	// vaidate the token
-	if err != nil || !token.Valid {
+	pid := req.GetPid()
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)	
+	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
 
-	// Unmarshal user info
-	userinfo, _ := json.Marshal(claims)
 	var user *models.User
 	err = json.Unmarshal(userinfo, &user)
+	if err != nil {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
 
 	// check if user exists or not
 	usercontroller := controllers.NewUserController()

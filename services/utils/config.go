@@ -81,6 +81,12 @@ type Aliyun struct {
 	OSS `json:"oss"`
 }
 
+// Auth authing fields
+type Auth struct {
+	ClientID     string `json:"client_id"`
+	ClientSecret string `json:"client_secret"`
+}
+
 // Services external services like Mysql
 type Services struct {
 	Redis  `json:"redis"`
@@ -114,6 +120,7 @@ type ServiceMeta struct {
 
 // Config config entry
 type Config struct {
+	Auth 		`json:"auth"`
 	Services     `json:"services"`
 	Ebook        `json:"ebook"`
 	ServiceNames `json:"servicenames"`

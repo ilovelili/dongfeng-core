@@ -11,24 +11,14 @@ import (
 	"github.com/ilovelili/dongfeng-core/services/utils"
 	errorcode "github.com/ilovelili/dongfeng-error-code"
 	notification "github.com/ilovelili/dongfeng-notification"
-	proto "github.com/ilovelili/dongfeng-protobuf"
-	sharedlib "github.com/ilovelili/dongfeng-shared-lib"
-	"github.com/micro/go-micro/metadata"
+	proto "github.com/ilovelili/dongfeng-protobuf"	
 )
 
 // GetAttendances get attendances
 func (f *Facade) GetAttendances(ctx context.Context, req *proto.GetAttendanceRequest, rsp *proto.GetAttendanceResponse) error {
-	md, ok := metadata.FromContext(ctx)
-	if !ok {
-		return utils.NewError(errorcode.GenericInvalidMetaData)
-	}
-
-	idtoken := req.GetToken()
-	jwks := md[sharedlib.MetaDataJwks]
-	_, token, err := sharedlib.ParseJWT(idtoken, jwks)
-
-	// vaidate the token
-	if err != nil || !token.Valid {
+	pid := req.GetPid()
+	_, err := f.AuthClient.ParseUserInfo(pid)	
+	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
 
@@ -90,24 +80,17 @@ func (f *Facade) GetAttendances(ctx context.Context, req *proto.GetAttendanceReq
 
 // UpdateAttendance update single attendance
 func (f *Facade) UpdateAttendance(ctx context.Context, req *proto.UpdateAttendanceRequest, rsp *proto.UpdateAttendanceResponse) error {
-	md, ok := metadata.FromContext(ctx)
-	if !ok {
-		return utils.NewError(errorcode.GenericInvalidMetaData)
-	}
-
-	idtoken := req.GetToken()
-	jwks := md[sharedlib.MetaDataJwks]
-	claims, token, err := sharedlib.ParseJWT(idtoken, jwks)
-
-	// vaidate the token
-	if err != nil || !token.Valid {
+	pid := req.GetPid()
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)	
+	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
 
-	// Unmarshal user info
-	userinfo, _ := json.Marshal(claims)
 	var user *models.User
 	err = json.Unmarshal(userinfo, &user)
+	if err != nil {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
 
 	// check if user exists or not
 	usercontroller := controllers.NewUserController()
@@ -155,24 +138,17 @@ func (f *Facade) UpdateAttendance(ctx context.Context, req *proto.UpdateAttendan
 
 // UpdateAttendances update attendances
 func (f *Facade) UpdateAttendances(ctx context.Context, req *proto.UpdateAttendanceRequest, rsp *proto.UpdateAttendanceResponse) error {
-	md, ok := metadata.FromContext(ctx)
-	if !ok {
-		return utils.NewError(errorcode.GenericInvalidMetaData)
-	}
-
-	idtoken := req.GetToken()
-	jwks := md[sharedlib.MetaDataJwks]
-	claims, token, err := sharedlib.ParseJWT(idtoken, jwks)
-
-	// vaidate the token
-	if err != nil || !token.Valid {
+	pid := req.GetPid()
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)	
+	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
 
-	// Unmarshal user info
-	userinfo, _ := json.Marshal(claims)
 	var user *models.User
 	err = json.Unmarshal(userinfo, &user)
+	if err != nil {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
 
 	// check if user exists or not
 	usercontroller := controllers.NewUserController()

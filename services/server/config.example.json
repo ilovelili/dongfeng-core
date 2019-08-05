@@ -1,5 +1,9 @@
 {    
-    "services": {  
+    "auth": {
+        "client_id": "xxx",
+        "client_secret": "yyy"
+    },
+    "services": {
         "redis": {            
             "host": "redis:6379",
             "maxconnectioncount": 10

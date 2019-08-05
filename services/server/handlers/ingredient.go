@@ -9,31 +9,23 @@ import (
 	"github.com/ilovelili/dongfeng-core/services/utils"
 	errorcode "github.com/ilovelili/dongfeng-error-code"
 	notification "github.com/ilovelili/dongfeng-notification"
-	proto "github.com/ilovelili/dongfeng-protobuf"
-	sharedlib "github.com/ilovelili/dongfeng-shared-lib"
-	"github.com/micro/go-micro/metadata"
+	proto "github.com/ilovelili/dongfeng-protobuf"	
 )
 
 // GetIngredients get ingredients
 func (f *Facade) GetIngredients(ctx context.Context, req *proto.GetIngredientRequest, rsp *proto.GetIngredientResponse) error {
-	md, ok := metadata.FromContext(ctx)
-	if !ok {
-		return utils.NewError(errorcode.GenericInvalidMetaData)
-	}
 
-	idtoken := req.GetToken()
-	jwks := md[sharedlib.MetaDataJwks]
-	claims, token, err := sharedlib.ParseJWT(idtoken, jwks)
-
-	// vaidate the token
-	if err != nil || !token.Valid {
+	pid := req.GetPid()
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)	
+	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
 
-	// Unmarshal user info
-	userinfo, _ := json.Marshal(claims)
 	var user *models.User
 	err = json.Unmarshal(userinfo, &user)
+	if err != nil {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
 
 	// check if user exists or not
 	usercontroller := controllers.NewUserController()
@@ -97,24 +89,17 @@ func (f *Facade) GetIngredientNames(ctx context.Context, req *proto.GetIngredien
 
 // UpdateIngredients update ingredient
 func (f *Facade) UpdateIngredients(ctx context.Context, req *proto.UpdateIngredientRequest, rsp *proto.UpdateIngredientResponse) error {
-	md, ok := metadata.FromContext(ctx)
-	if !ok {
-		return utils.NewError(errorcode.GenericInvalidMetaData)
-	}
-
-	idtoken := req.GetToken()
-	jwks := md[sharedlib.MetaDataJwks]
-	claims, token, err := sharedlib.ParseJWT(idtoken, jwks)
-
-	// vaidate the token
-	if err != nil || !token.Valid {
+	pid := req.GetPid()
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)	
+	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
 
-	// Unmarshal user info
-	userinfo, _ := json.Marshal(claims)
 	var user *models.User
 	err = json.Unmarshal(userinfo, &user)
+	if err != nil {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
 
 	// check if user exists or not
 	usercontroller := controllers.NewUserController()

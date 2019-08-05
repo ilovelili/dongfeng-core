@@ -4,15 +4,22 @@ package handlers
 import (
 	"github.com/ilovelili/dongfeng-core/services/server/core/controllers"
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
+	"github.com/ilovelili/dongfeng-core/services/utils"
 	notification "github.com/ilovelili/dongfeng-notification"
+	sharedlib "github.com/ilovelili/dongfeng-shared-lib"
 )
 
 // Facade api facade
-type Facade struct{}
+type Facade struct{
+	AuthClient *sharedlib.Client
+}
 
 // NewFacade constructor
 func NewFacade() *Facade {
-	return new(Facade)
+	config := utils.GetConfig()
+	return &Facade{
+		AuthClient: sharedlib.NewAuthClient(config.Auth.ClientID, config.Auth.ClientSecret),
+	}
 }
 
 // syslog save notification

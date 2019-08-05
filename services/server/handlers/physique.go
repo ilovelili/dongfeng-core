@@ -9,24 +9,14 @@ import (
 	"github.com/ilovelili/dongfeng-core/services/utils"
 	"github.com/ilovelili/dongfeng-error-code"
 	notification "github.com/ilovelili/dongfeng-notification"
-	proto "github.com/ilovelili/dongfeng-protobuf"
-	sharedlib "github.com/ilovelili/dongfeng-shared-lib"
-	"github.com/micro/go-micro/metadata"
+	proto "github.com/ilovelili/dongfeng-protobuf"	
 )
 
 // GetPhysiques get physiques
 func (f *Facade) GetPhysiques(ctx context.Context, req *proto.GetPhysiqueRequest, rsp *proto.GetPhysiqueResponse) error {
-	md, ok := metadata.FromContext(ctx)
-	if !ok {
-		return utils.NewError(errorcode.GenericInvalidMetaData)
-	}
-
-	idtoken := req.GetToken()
-	jwks := md[sharedlib.MetaDataJwks]
-	_, token, err := sharedlib.ParseJWT(idtoken, jwks)
-
-	// vaidate the token
-	if err != nil || !token.Valid {
+	pid := req.GetPid()
+	_, err := f.AuthClient.ParseUserInfo(pid)	
+	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
 
@@ -66,24 +56,17 @@ func (f *Facade) GetPhysiques(ctx context.Context, req *proto.GetPhysiqueRequest
 
 // UpdatePhysique update physique
 func (f *Facade) UpdatePhysique(ctx context.Context, req *proto.UpdatePhysiqueRequest, rsp *proto.UpdatePhysiqueResponse) error {
-	md, ok := metadata.FromContext(ctx)
-	if !ok {
-		return utils.NewError(errorcode.GenericInvalidMetaData)
-	}
-
-	idtoken := req.GetToken()
-	jwks := md[sharedlib.MetaDataJwks]
-	claims, token, err := sharedlib.ParseJWT(idtoken, jwks)
-
-	// vaidate the token
-	if err != nil || !token.Valid {
+	pid := req.GetPid()
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)	
+	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
 
-	// Unmarshal user info
-	userinfo, _ := json.Marshal(claims)
 	var user *models.User
 	err = json.Unmarshal(userinfo, &user)
+	if err != nil {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
 
 	// check if user exists or not
 	usercontroller := controllers.NewUserController()
@@ -120,24 +103,17 @@ func (f *Facade) UpdatePhysique(ctx context.Context, req *proto.UpdatePhysiqueRe
 
 // UpdatePhysiques update physiques
 func (f *Facade) UpdatePhysiques(ctx context.Context, req *proto.UpdatePhysiqueRequest, rsp *proto.UpdatePhysiqueResponse) error {
-	md, ok := metadata.FromContext(ctx)
-	if !ok {
-		return utils.NewError(errorcode.GenericInvalidMetaData)
-	}
-
-	idtoken := req.GetToken()
-	jwks := md[sharedlib.MetaDataJwks]
-	claims, token, err := sharedlib.ParseJWT(idtoken, jwks)
-
-	// vaidate the token
-	if err != nil || !token.Valid {
+	pid := req.GetPid()
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)	
+	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
 
-	// Unmarshal user info
-	userinfo, _ := json.Marshal(claims)
 	var user *models.User
 	err = json.Unmarshal(userinfo, &user)
+	if err != nil {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
 
 	// check if user exists or not
 	usercontroller := controllers.NewUserController()
@@ -171,17 +147,9 @@ func (f *Facade) UpdatePhysiques(ctx context.Context, req *proto.UpdatePhysiqueR
 
 // GetAgeHeightWeightPMasters get age height weight p masters
 func (f *Facade) GetAgeHeightWeightPMasters(ctx context.Context, req *proto.GetAgeHeightWeightPMasterRequest, rsp *proto.GetAgeHeightWeightPMasterResponse) error {
-	md, ok := metadata.FromContext(ctx)
-	if !ok {
-		return utils.NewError(errorcode.GenericInvalidMetaData)
-	}
-
-	idtoken := req.GetToken()
-	jwks := md[sharedlib.MetaDataJwks]
-	_, token, err := sharedlib.ParseJWT(idtoken, jwks)
-
-	// vaidate the token
-	if err != nil || !token.Valid {
+	pid := req.GetPid()
+	_, err := f.AuthClient.ParseUserInfo(pid)	
+	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
 
@@ -214,17 +182,9 @@ func (f *Facade) GetAgeHeightWeightPMasters(ctx context.Context, req *proto.GetA
 
 // GetAgeHeightWeightSDMasters get age height weight sd masters
 func (f *Facade) GetAgeHeightWeightSDMasters(ctx context.Context, req *proto.GetAgeHeightWeightSDMasterRequest, rsp *proto.GetAgeHeightWeightSDMasterResponse) error {
-	md, ok := metadata.FromContext(ctx)
-	if !ok {
-		return utils.NewError(errorcode.GenericInvalidMetaData)
-	}
-
-	idtoken := req.GetToken()
-	jwks := md[sharedlib.MetaDataJwks]
-	_, token, err := sharedlib.ParseJWT(idtoken, jwks)
-
-	// vaidate the token
-	if err != nil || !token.Valid {
+	pid := req.GetPid()
+	_, err := f.AuthClient.ParseUserInfo(pid)	
+	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
 
@@ -255,17 +215,9 @@ func (f *Facade) GetAgeHeightWeightSDMasters(ctx context.Context, req *proto.Get
 
 // GetBMIMasters get bmi masters
 func (f *Facade) GetBMIMasters(ctx context.Context, req *proto.GetBMIMasterRequest, rsp *proto.GetBMIMasterResponse) error {
-	md, ok := metadata.FromContext(ctx)
-	if !ok {
-		return utils.NewError(errorcode.GenericInvalidMetaData)
-	}
-
-	idtoken := req.GetToken()
-	jwks := md[sharedlib.MetaDataJwks]
-	_, token, err := sharedlib.ParseJWT(idtoken, jwks)
-
-	// vaidate the token
-	if err != nil || !token.Valid {
+	pid := req.GetPid()
+	_, err := f.AuthClient.ParseUserInfo(pid)	
+	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
 
@@ -294,17 +246,9 @@ func (f *Facade) GetBMIMasters(ctx context.Context, req *proto.GetBMIMasterReque
 
 // GetHeightToWeightPMasters get height to weight p masters
 func (f *Facade) GetHeightToWeightPMasters(ctx context.Context, req *proto.GetHeightToWeightPMasterRequest, rsp *proto.GetHeightToWeightPMasterResponse) error {
-	md, ok := metadata.FromContext(ctx)
-	if !ok {
-		return utils.NewError(errorcode.GenericInvalidMetaData)
-	}
-
-	idtoken := req.GetToken()
-	jwks := md[sharedlib.MetaDataJwks]
-	_, token, err := sharedlib.ParseJWT(idtoken, jwks)
-
-	// vaidate the token
-	if err != nil || !token.Valid {
+	pid := req.GetPid()
+	_, err := f.AuthClient.ParseUserInfo(pid)	
+	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
 
@@ -335,17 +279,9 @@ func (f *Facade) GetHeightToWeightPMasters(ctx context.Context, req *proto.GetHe
 
 // GetHeightToWeightSDMasters get height to weight sd masters
 func (f *Facade) GetHeightToWeightSDMasters(ctx context.Context, req *proto.GetHeightToWeightSDMasterRequest, rsp *proto.GetHeightToWeightSDMasterResponse) error {
-	md, ok := metadata.FromContext(ctx)
-	if !ok {
-		return utils.NewError(errorcode.GenericInvalidMetaData)
-	}
-
-	idtoken := req.GetToken()
-	jwks := md[sharedlib.MetaDataJwks]
-	_, token, err := sharedlib.ParseJWT(idtoken, jwks)
-
-	// vaidate the token
-	if err != nil || !token.Valid {
+	pid := req.GetPid()
+	_, err := f.AuthClient.ParseUserInfo(pid)	
+	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
 

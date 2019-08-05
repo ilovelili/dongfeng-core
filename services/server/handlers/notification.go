@@ -8,9 +8,7 @@ import (
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 	"github.com/ilovelili/dongfeng-core/services/utils"
 	errorcode "github.com/ilovelili/dongfeng-error-code"
-	proto "github.com/ilovelili/dongfeng-protobuf"
-	sharedlib "github.com/ilovelili/dongfeng-shared-lib"
-	"github.com/micro/go-micro/metadata"
+	proto "github.com/ilovelili/dongfeng-protobuf"	
 )
 
 // UpdateNotification update notification
@@ -32,24 +30,17 @@ func (f *Facade) UpdateNotification(ctx context.Context, req *proto.UpdateNotifi
 
 // UpdateNotifications update notification
 func (f *Facade) UpdateNotifications(ctx context.Context, req *proto.UpdateNotificationsRequest, rsp *proto.UpdateNotificationsResponse) error {
-	md, ok := metadata.FromContext(ctx)
-	if !ok {
-		return utils.NewError(errorcode.GenericInvalidMetaData)
-	}
-
-	idtoken := req.GetToken()
-	jwks := md[sharedlib.MetaDataJwks]
-	claims, token, err := sharedlib.ParseJWT(idtoken, jwks)
-
-	// vaidate the token
-	if err != nil || !token.Valid {
+	pid := req.GetPid()
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)	
+	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
 
-	// Unmarshal user info
-	userinfo, _ := json.Marshal(claims)
 	var user *models.User
 	err = json.Unmarshal(userinfo, &user)
+	if err != nil {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
 
 	// check if user exists or not
 	usercontroller := controllers.NewUserController()

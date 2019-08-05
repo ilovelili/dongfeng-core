@@ -11,29 +11,21 @@ import (
 	"github.com/ilovelili/dongfeng-error-code"
 	proto "github.com/ilovelili/dongfeng-protobuf"
 	"github.com/ilovelili/dongfeng-shared-lib"
-	"github.com/micro/go-micro/metadata"
 )
 
 // Dashboard handler returns data needed by dashboard
 func (f *Facade) Dashboard(ctx context.Context, req *proto.DashboardRequest, rsp *proto.DashboardResponse) error {
-	md, ok := metadata.FromContext(ctx)
-	if !ok {
-		return utils.NewError(errorcode.GenericInvalidMetaData)
-	}
-
-	idtoken := req.GetToken()
-	jwks := md[sharedlib.MetaDataJwks]
-	claims, token, err := sharedlib.ParseJWT(idtoken, jwks)
-
-	// vaidate the token
-	if err != nil || !token.Valid {
+	pid := req.GetPid()
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)	
+	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
-
-	// Unmarshal user info
-	userinfo, _ := json.Marshal(claims)
+		
 	var user *models.User
 	err = json.Unmarshal(userinfo, &user)
+	if err != nil {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
 
 	// check if user exists or not
 	usercontroller := controllers.NewUserController()

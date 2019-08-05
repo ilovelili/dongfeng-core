@@ -9,9 +9,7 @@ import (
 	"github.com/ilovelili/dongfeng-core/services/utils"
 	"github.com/ilovelili/dongfeng-error-code"
 	notification "github.com/ilovelili/dongfeng-notification"
-	proto "github.com/ilovelili/dongfeng-protobuf"
-	sharedlib "github.com/ilovelili/dongfeng-shared-lib"
-	"github.com/micro/go-micro/metadata"
+	proto "github.com/ilovelili/dongfeng-protobuf"	
 )
 
 // UpdateUser update user info
@@ -20,24 +18,17 @@ func (f *Facade) UpdateUser(ctx context.Context, req *proto.UpdateUserRequest, r
 		return utils.NewError(errorcode.CoreInvalidUpdateUserRequest)
 	}
 
-	md, ok := metadata.FromContext(ctx)
-	if !ok {
-		return utils.NewError(errorcode.GenericInvalidMetaData)
-	}
-
-	idtoken := req.GetToken()
-	jwks := md[sharedlib.MetaDataJwks]
-	claims, token, err := sharedlib.ParseJWT(idtoken, jwks)
-
-	// vaidate the token
-	if err != nil || !token.Valid {
+	pid := req.GetPid()
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)	
+	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
 
-	// Unmarshal user info
-	userinfo, _ := json.Marshal(claims)
 	var user *models.User
 	err = json.Unmarshal(userinfo, &user)
+	if err != nil {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
 
 	usercontroller := controllers.NewUserController()
 	user, err = usercontroller.GetUserByEmail(user.Email)
