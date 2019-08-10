@@ -4,18 +4,19 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"github.com/ilovelili/dongfeng-core/services/server/core/controllers"
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 	"github.com/ilovelili/dongfeng-core/services/utils"
-	"github.com/ilovelili/dongfeng-error-code"
-	proto "github.com/ilovelili/dongfeng-protobuf"	
+	errorcode "github.com/ilovelili/dongfeng-error-code"
+	proto "github.com/ilovelili/dongfeng-protobuf"
 )
 
 // Login handler returns all data needed by front end
 func (f *Facade) Login(ctx context.Context, req *proto.LoginRequest, rsp *proto.LoginResponse) error {
 	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)	
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)
 	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
@@ -24,6 +25,11 @@ func (f *Facade) Login(ctx context.Context, req *proto.LoginRequest, rsp *proto.
 	err = json.Unmarshal(userinfo, &user)
 	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
+	}
+
+	// user email empty caused by open ID login
+	if user.Email == "" {
+		user.Email = fmt.Sprintf("%s@dongfeng.cn", pid)
 	}
 
 	// check if user exists or not
@@ -43,7 +49,7 @@ func (f *Facade) Login(ctx context.Context, req *proto.LoginRequest, rsp *proto.
 
 	// user profile
 	rsp.User = &proto.User{
-		Newuser:  newUser,		
+		Newuser:  newUser,
 		Id:       user.ID,
 		Name:     user.Name,
 		Email:    user.Email,
