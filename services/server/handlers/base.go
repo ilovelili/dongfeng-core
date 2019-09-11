@@ -10,7 +10,7 @@ import (
 )
 
 // Facade api facade
-type Facade struct{
+type Facade struct {
 	AuthClient *sharedlib.Client
 }
 

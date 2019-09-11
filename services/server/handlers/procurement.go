@@ -8,13 +8,13 @@ import (
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 	"github.com/ilovelili/dongfeng-core/services/utils"
 	errorcode "github.com/ilovelili/dongfeng-error-code"
-	proto "github.com/ilovelili/dongfeng-protobuf"	
+	proto "github.com/ilovelili/dongfeng-protobuf"
 )
 
 // GetProcurements get procurement
 func (f *Facade) GetProcurements(ctx context.Context, req *proto.GetProcurementRequest, rsp *proto.GetProcurementResponse) error {
 	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)	
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)
 	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
@@ -47,7 +47,7 @@ func (f *Facade) GetProcurements(ctx context.Context, req *proto.GetProcurementR
 // UpdateProcurement update procurement
 func (f *Facade) UpdateProcurement(ctx context.Context, req *proto.UpdateProcurementRequest, rsp *proto.UpdateProcurementResponse) error {
 	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)	
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)
 	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}

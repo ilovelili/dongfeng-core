@@ -7,15 +7,15 @@ import (
 	"github.com/ilovelili/dongfeng-core/services/server/core/controllers"
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 	"github.com/ilovelili/dongfeng-core/services/utils"
-	"github.com/ilovelili/dongfeng-error-code"
+	errorcode "github.com/ilovelili/dongfeng-error-code"
 	notification "github.com/ilovelili/dongfeng-notification"
-	proto "github.com/ilovelili/dongfeng-protobuf"	
+	proto "github.com/ilovelili/dongfeng-protobuf"
 )
 
 // GetPupils get pupils
 func (f *Facade) GetPupils(ctx context.Context, req *proto.GetPupilRequest, rsp *proto.GetPupilResponse) error {
 	pid := req.GetPid()
-	_, err := f.AuthClient.ParseUserInfo(pid)	
+	_, err := f.AuthClient.ParseUserInfo(pid)
 	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
@@ -44,7 +44,7 @@ func (f *Facade) GetPupils(ctx context.Context, req *proto.GetPupilRequest, rsp 
 // UpdatePupil update pupil
 func (f *Facade) UpdatePupil(ctx context.Context, req *proto.UpdatePupilRequest, rsp *proto.UpdatePupilResponse) error {
 	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)	
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)
 	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
@@ -86,7 +86,7 @@ func (f *Facade) UpdatePupil(ctx context.Context, req *proto.UpdatePupilRequest,
 // UpdatePupils update pupils
 func (f *Facade) UpdatePupils(ctx context.Context, req *proto.UpdatePupilRequest, rsp *proto.UpdatePupilResponse) error {
 	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)	
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)
 	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}

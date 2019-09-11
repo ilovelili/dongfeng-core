@@ -9,14 +9,14 @@ import (
 	"github.com/ilovelili/dongfeng-core/services/utils"
 	errorcode "github.com/ilovelili/dongfeng-error-code"
 	notification "github.com/ilovelili/dongfeng-notification"
-	proto "github.com/ilovelili/dongfeng-protobuf"	
+	proto "github.com/ilovelili/dongfeng-protobuf"
 )
 
 // GetIngredients get ingredients
 func (f *Facade) GetIngredients(ctx context.Context, req *proto.GetIngredientRequest, rsp *proto.GetIngredientResponse) error {
 
 	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)	
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)
 	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
@@ -90,7 +90,7 @@ func (f *Facade) GetIngredientNames(ctx context.Context, req *proto.GetIngredien
 // UpdateIngredients update ingredient
 func (f *Facade) UpdateIngredients(ctx context.Context, req *proto.UpdateIngredientRequest, rsp *proto.UpdateIngredientResponse) error {
 	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)	
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)
 	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}

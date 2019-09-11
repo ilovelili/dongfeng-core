@@ -8,19 +8,19 @@ import (
 	"github.com/ilovelili/dongfeng-core/services/server/core/controllers"
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 	"github.com/ilovelili/dongfeng-core/services/utils"
-	"github.com/ilovelili/dongfeng-error-code"
+	errorcode "github.com/ilovelili/dongfeng-error-code"
 	proto "github.com/ilovelili/dongfeng-protobuf"
-	"github.com/ilovelili/dongfeng-shared-lib"
+	sharedlib "github.com/ilovelili/dongfeng-shared-lib"
 )
 
 // Dashboard handler returns data needed by dashboard
 func (f *Facade) Dashboard(ctx context.Context, req *proto.DashboardRequest, rsp *proto.DashboardResponse) error {
 	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)	
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)
 	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
-		
+
 	var user *models.User
 	err = json.Unmarshal(userinfo, &user)
 	if err != nil {

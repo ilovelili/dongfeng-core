@@ -8,7 +8,7 @@ import (
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 	"github.com/ilovelili/dongfeng-core/services/utils"
 	errorcode "github.com/ilovelili/dongfeng-error-code"
-	proto "github.com/ilovelili/dongfeng-protobuf"	
+	proto "github.com/ilovelili/dongfeng-protobuf"
 )
 
 // UpdateNotification update notification
@@ -31,7 +31,7 @@ func (f *Facade) UpdateNotification(ctx context.Context, req *proto.UpdateNotifi
 // UpdateNotifications update notification
 func (f *Facade) UpdateNotifications(ctx context.Context, req *proto.UpdateNotificationsRequest, rsp *proto.UpdateNotificationsResponse) error {
 	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)	
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)
 	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}

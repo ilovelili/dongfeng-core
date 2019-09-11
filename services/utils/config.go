@@ -120,7 +120,7 @@ type ServiceMeta struct {
 
 // Config config entry
 type Config struct {
-	Auth 		`json:"auth"`
+	Auth         `json:"auth"`
 	Services     `json:"services"`
 	Ebook        `json:"ebook"`
 	ServiceNames `json:"servicenames"`

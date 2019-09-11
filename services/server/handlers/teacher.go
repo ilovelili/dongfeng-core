@@ -7,15 +7,15 @@ import (
 	"github.com/ilovelili/dongfeng-core/services/server/core/controllers"
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 	"github.com/ilovelili/dongfeng-core/services/utils"
-	"github.com/ilovelili/dongfeng-error-code"
+	errorcode "github.com/ilovelili/dongfeng-error-code"
 	notification "github.com/ilovelili/dongfeng-notification"
-	proto "github.com/ilovelili/dongfeng-protobuf"	
+	proto "github.com/ilovelili/dongfeng-protobuf"
 )
 
 // GetTeachers get teachers
 func (f *Facade) GetTeachers(ctx context.Context, req *proto.GetTeacherRequest, rsp *proto.GetTeacherResponse) error {
 	pid := req.GetPid()
-	_, err := f.AuthClient.ParseUserInfo(pid)	
+	_, err := f.AuthClient.ParseUserInfo(pid)
 	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
@@ -46,7 +46,7 @@ func (f *Facade) GetTeachers(ctx context.Context, req *proto.GetTeacherRequest, 
 // UpdateTeacher update teacher
 func (f *Facade) UpdateTeacher(ctx context.Context, req *proto.UpdateTeacherRequest, rsp *proto.UpdateTeacherResponse) error {
 	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)	
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)
 	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
@@ -87,7 +87,7 @@ func (f *Facade) UpdateTeacher(ctx context.Context, req *proto.UpdateTeacherRequ
 // UpdateTeachers update teachers
 func (f *Facade) UpdateTeachers(ctx context.Context, req *proto.UpdateTeacherRequest, rsp *proto.UpdateTeacherResponse) error {
 	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)	
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)
 	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}

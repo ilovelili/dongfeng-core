@@ -9,7 +9,7 @@ import (
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 	"github.com/ilovelili/dongfeng-core/services/utils"
 	errorcode "github.com/ilovelili/dongfeng-error-code"
-	proto "github.com/ilovelili/dongfeng-protobuf"	
+	proto "github.com/ilovelili/dongfeng-protobuf"
 )
 
 type recipemapvalue struct {
@@ -24,7 +24,7 @@ type recipemapvalue struct {
 // GetRecipes get recipes
 func (f *Facade) GetRecipes(ctx context.Context, req *proto.GetRecipeRequest, rsp *proto.GetRecipeResponse) error {
 	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)	
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)
 	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}

@@ -7,15 +7,15 @@ import (
 	"github.com/ilovelili/dongfeng-core/services/server/core/controllers"
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 	"github.com/ilovelili/dongfeng-core/services/utils"
-	"github.com/ilovelili/dongfeng-error-code"
+	errorcode "github.com/ilovelili/dongfeng-error-code"
 	notification "github.com/ilovelili/dongfeng-notification"
-	proto "github.com/ilovelili/dongfeng-protobuf"	
+	proto "github.com/ilovelili/dongfeng-protobuf"
 )
 
 // GetPhysiques get physiques
 func (f *Facade) GetPhysiques(ctx context.Context, req *proto.GetPhysiqueRequest, rsp *proto.GetPhysiqueResponse) error {
 	pid := req.GetPid()
-	_, err := f.AuthClient.ParseUserInfo(pid)	
+	_, err := f.AuthClient.ParseUserInfo(pid)
 	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
@@ -57,7 +57,7 @@ func (f *Facade) GetPhysiques(ctx context.Context, req *proto.GetPhysiqueRequest
 // UpdatePhysique update physique
 func (f *Facade) UpdatePhysique(ctx context.Context, req *proto.UpdatePhysiqueRequest, rsp *proto.UpdatePhysiqueResponse) error {
 	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)	
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)
 	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
@@ -104,7 +104,7 @@ func (f *Facade) UpdatePhysique(ctx context.Context, req *proto.UpdatePhysiqueRe
 // UpdatePhysiques update physiques
 func (f *Facade) UpdatePhysiques(ctx context.Context, req *proto.UpdatePhysiqueRequest, rsp *proto.UpdatePhysiqueResponse) error {
 	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)	
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)
 	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
@@ -148,7 +148,7 @@ func (f *Facade) UpdatePhysiques(ctx context.Context, req *proto.UpdatePhysiqueR
 // GetAgeHeightWeightPMasters get age height weight p masters
 func (f *Facade) GetAgeHeightWeightPMasters(ctx context.Context, req *proto.GetAgeHeightWeightPMasterRequest, rsp *proto.GetAgeHeightWeightPMasterResponse) error {
 	pid := req.GetPid()
-	_, err := f.AuthClient.ParseUserInfo(pid)	
+	_, err := f.AuthClient.ParseUserInfo(pid)
 	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
@@ -183,7 +183,7 @@ func (f *Facade) GetAgeHeightWeightPMasters(ctx context.Context, req *proto.GetA
 // GetAgeHeightWeightSDMasters get age height weight sd masters
 func (f *Facade) GetAgeHeightWeightSDMasters(ctx context.Context, req *proto.GetAgeHeightWeightSDMasterRequest, rsp *proto.GetAgeHeightWeightSDMasterResponse) error {
 	pid := req.GetPid()
-	_, err := f.AuthClient.ParseUserInfo(pid)	
+	_, err := f.AuthClient.ParseUserInfo(pid)
 	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
@@ -216,7 +216,7 @@ func (f *Facade) GetAgeHeightWeightSDMasters(ctx context.Context, req *proto.Get
 // GetBMIMasters get bmi masters
 func (f *Facade) GetBMIMasters(ctx context.Context, req *proto.GetBMIMasterRequest, rsp *proto.GetBMIMasterResponse) error {
 	pid := req.GetPid()
-	_, err := f.AuthClient.ParseUserInfo(pid)	
+	_, err := f.AuthClient.ParseUserInfo(pid)
 	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
@@ -247,7 +247,7 @@ func (f *Facade) GetBMIMasters(ctx context.Context, req *proto.GetBMIMasterReque
 // GetHeightToWeightPMasters get height to weight p masters
 func (f *Facade) GetHeightToWeightPMasters(ctx context.Context, req *proto.GetHeightToWeightPMasterRequest, rsp *proto.GetHeightToWeightPMasterResponse) error {
 	pid := req.GetPid()
-	_, err := f.AuthClient.ParseUserInfo(pid)	
+	_, err := f.AuthClient.ParseUserInfo(pid)
 	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
@@ -280,7 +280,7 @@ func (f *Facade) GetHeightToWeightPMasters(ctx context.Context, req *proto.GetHe
 // GetHeightToWeightSDMasters get height to weight sd masters
 func (f *Facade) GetHeightToWeightSDMasters(ctx context.Context, req *proto.GetHeightToWeightSDMasterRequest, rsp *proto.GetHeightToWeightSDMasterResponse) error {
 	pid := req.GetPid()
-	_, err := f.AuthClient.ParseUserInfo(pid)	
+	_, err := f.AuthClient.ParseUserInfo(pid)
 	if err != nil {
 		return utils.NewError(errorcode.GenericInvalidToken)
 	}
