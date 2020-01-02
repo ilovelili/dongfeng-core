@@ -1,6 +1,6 @@
 -- create database schema
-CREATE DATABASE IF NOT EXISTS dongfeng_core;
-USE dongfeng_core;
+CREATE DATABASE IF NOT EXISTS dongfeng_zhonglou;
+USE dongfeng_zhonglou;
 
 CREATE TABLE `settings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

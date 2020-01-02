@@ -1,4 +1,4 @@
-USE dongfeng_core;
+USE dongfeng_zhonglou;
 
 INSERT INTO categories(`id`, `description`, `admin_only`) values ('男', '幼儿成长档案', 0);
 INSERT INTO categories(`id`, `description`, `admin_only`) VALUES (2, '幼儿体格检查表', 1);

@@ -16,7 +16,7 @@ BEGIN
         SELECT 
           n.*
         FROM
-          `dongfeng_core`.`notifications` n      
+          `dongfeng_zhonglou`.`notifications` n      
         WHERE n.user_id in (UserID,  'AgentSmith')
         AND n.read = 0
         ORDER BY n.user_id ASC, n.created_at DESC ;
@@ -24,7 +24,7 @@ BEGIN
         SELECT 
           n.*
         FROM
-          `dongfeng_core`.`notifications` n      
+          `dongfeng_zhonglou`.`notifications` n      
         WHERE n.user_id in (UserID,  'AgentSmith')        
         ORDER BY n.user_id ASC, n.created_at DESC ;
       END IF;
@@ -35,9 +35,9 @@ BEGIN
         SELECT 
           n.*
         FROM
-          `dongfeng_core`.`notifications` n
+          `dongfeng_zhonglou`.`notifications` n
         JOIN
-          `dongfeng_core`.`categories` c
+          `dongfeng_zhonglou`.`categories` c
         ON n.category_id = c.id
         WHERE n.user_id in (UserID,  'AgentSmith') 
         AND c.admin_only = 0
@@ -47,9 +47,9 @@ BEGIN
         SELECT 
           n.*
         FROM
-          `dongfeng_core`.`notifications` n
+          `dongfeng_zhonglou`.`notifications` n
         JOIN
-          `dongfeng_core`.`categories` c
+          `dongfeng_zhonglou`.`categories` c
         ON n.category_id = c.id
         WHERE n.user_id in (UserID,  'AgentSmith') 
         AND c.admin_only = 0        
@@ -69,7 +69,7 @@ CREATE PROCEDURE spDeleteRecipes
     IN RecipeName VARCHAR(50)
 )
 BEGIN
-    DELETE FROM `dongfeng_core`.`recipes` WHERE name = RecipeName;
+    DELETE FROM `dongfeng_zhonglou`.`recipes` WHERE name = RecipeName;
 END$$
 DELIMITER ;
 /* -------------------------------------------------------------------------------------------------------------------- */
@@ -82,7 +82,7 @@ CREATE PROCEDURE spDeletePupils
     IN Cls VARCHAR(10)
 )
 BEGIN
-    DELETE FROM `dongfeng_core`.`pupils` WHERE year = Year AND class = Cls;
+    DELETE FROM `dongfeng_zhonglou`.`pupils` WHERE year = Year AND class = Cls;
 END$$
 DELIMITER ;
 /* -------------------------------------------------------------------------------------------------------------------- */
@@ -94,7 +94,7 @@ CREATE PROCEDURE spDeleteTeachers
     IN Year VARCHAR(10)
 )
 BEGIN
-    DELETE FROM `dongfeng_core`.`teachers` WHERE year = Year;
+    DELETE FROM `dongfeng_zhonglou`.`teachers` WHERE year = Year;
 END$$
 DELIMITER ;
 /* -------------------------------------------------------------------------------------------------------------------- */
@@ -103,7 +103,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE spDeleteClasses()
 BEGIN
-    TRUNCATE TABLE `dongfeng_core`.`classes`;
+    TRUNCATE TABLE `dongfeng_zhonglou`.`classes`;
 END$$
 DELIMITER ;
 /* -------------------------------------------------------------------------------------------------------------------- */
@@ -117,7 +117,7 @@ CREATE PROCEDURE spDeleteAbsence(
     IN Name VARCHAR(10)
 )
 BEGIN
-    DELETE FROM `dongfeng_core`.`absences` WHERE year = Year AND class = Cls AND date = AbsenceDate AND name = Name;
+    DELETE FROM `dongfeng_zhonglou`.`absences` WHERE year = Year AND class = Cls AND date = AbsenceDate AND name = Name;
 END$$
 DELIMITER ;
 /* -------------------------------------------------------------------------------------------------------------------- */
@@ -130,7 +130,7 @@ CREATE PROCEDURE spDeleteAbsences(
     IN AbsenceDate VARCHAR(10)
 )
 BEGIN
-    DELETE FROM `dongfeng_core`.`absences` WHERE year = Year AND class = Cls AND date = AbsenceDate;
+    DELETE FROM `dongfeng_zhonglou`.`absences` WHERE year = Year AND class = Cls AND date = AbsenceDate;
 END$$
 DELIMITER ;
 /* -------------------------------------------------------------------------------------------------------------------- */
@@ -143,10 +143,10 @@ CREATE PROCEDURE spDeletePhysiques
     IN Cls VARCHAR(10)
 )
 BEGIN
-    DELETE FROM `dongfeng_core`.`physiques` WHERE year = Year AND class = Cls;
+    DELETE FROM `dongfeng_zhonglou`.`physiques` WHERE year = Year AND class = Cls;
 END$$
 DELIMITER ;
 /* -------------------------------------------------------------------------------------------------------------------- */
 
 -- show
-SHOW PROCEDURE STATUS WHERE db = 'dongfeng_core';
+SHOW PROCEDURE STATUS WHERE db = 'dongfeng_zhonglou';
