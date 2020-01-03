@@ -52,13 +52,6 @@ func GetConfig() *Config {
 	return instance
 }
 
-// Redis redis config
-type Redis struct {
-	Host     string `json:"host"`
-	Password string `json:"password,omitempty"`
-	Size     int    `json:"maxconnectioncount"`
-}
-
 // MySQL mysql config
 type MySQL struct {
 	Host       string `json:"host"`
@@ -89,7 +82,6 @@ type Auth struct {
 
 // Services external services like Mysql
 type Services struct {
-	Redis  `json:"redis"`
 	MySQL  `json:"mysql"`
 	Aliyun `json:"aliyun"`
 }
@@ -125,14 +117,6 @@ type Config struct {
 	Ebook        `json:"ebook"`
 	ServiceNames `json:"servicenames"`
 	ServiceMeta  `json:"servicemeta"`
-}
-
-// GetMaxConnectionCount get redis max connection count
-func (r *Redis) GetMaxConnectionCount() int {
-	if r.Size == 0 {
-		return 100
-	}
-	return r.Size
 }
 
 // GetRegistryTTL get registry ttl

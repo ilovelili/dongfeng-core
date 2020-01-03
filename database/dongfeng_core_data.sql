@@ -804,3 +804,5 @@ insert into `physique_height_to_weight_sd_master` (`gender`,`height`,`sdm3`,`sdm
 insert into `physique_height_to_weight_sd_master` (`gender`,`height`,`sdm3`,`sdm2`,`sdm1`,`sd0`,`sd1`,`sd2`,`sd3`) values ('女',119,16.9,18.5,20.3,22.4,24.7,27.4,30.6);
 insert into `physique_height_to_weight_sd_master` (`gender`,`height`,`sdm3`,`sdm2`,`sdm1`,`sd0`,`sd1`,`sd2`,`sd3`) values ('女',119.5,17.1,18.7,20.5,22.6,25.0,27.7,30.9);
 insert into `physique_height_to_weight_sd_master` (`gender`,`height`,`sdm3`,`sdm2`,`sdm1`,`sd0`,`sd1`,`sd2`,`sd3`) values ('女',120,17.3,18.9,20.7,22.8,25.2,28.0,31.2);
+
+insert into role_paths (role, path) values ('admin', '*');
