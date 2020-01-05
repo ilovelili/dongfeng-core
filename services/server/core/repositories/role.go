@@ -13,17 +13,19 @@ func NewRoleRepository() *RoleRepository {
 }
 
 // Select select access paths by user
-func (r *RoleRepository) Select(user string) (access []string, err error) {
+func (r *RoleRepository) Select(user string) (role *models.Role, err error) {
 	query := Table("roles").Alias("r").Where().Eq("r.user", user).Sql()
-	var roles []*models.Role
-	if err := session().Find(query, nil).All(&roles); norows(err) {
+
+	var _role models.Role
+	if err := session().Find(query, nil).Single(&_role); norows(err) {
 		err = nil
-		access = []string{"班级信息", "园儿信息"}
-	} else {
-		for _, r := range roles {
-			access = append(access, r.Path)
+		role = &models.Role{
+			User: user,
+			Role: "default",
 		}
+		return role, err
 	}
 
+	role = &_role
 	return
 }

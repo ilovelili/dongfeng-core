@@ -330,13 +330,11 @@ CREATE TABLE `ebooks` (
   UNIQUE KEY `profile_UNIQUE` (`year`,`class`,`date`,`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
-CREATE TABLE `role_paths` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `roles` (
+  `user` varchar(125) NOT NULL,
   `role` varchar(45) NOT NULL,
-  `path` varchar(45) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`),
-  UNIQUE KEY `role_path_UNIQUE` (`role`,`path`)
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`user`),
+  UNIQUE KEY `user_UNIQUE` (`user`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

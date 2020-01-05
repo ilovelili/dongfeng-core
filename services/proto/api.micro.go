@@ -75,7 +75,7 @@ type ApiService interface {
 	UpdateEbook(ctx context.Context, in *dongfeng_protobuf.UpdateEbookRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateEbookResponse, error)
 	UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateNotificationResponse, error)
 	UpdateNotifications(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationsRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateNotificationsResponse, error)
-	GetAccessiblePaths(ctx context.Context, in *dongfeng_protobuf.GetAccessiblePathsRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetAccessiblePathsResponse, error)
+	GetRole(ctx context.Context, in *dongfeng_protobuf.GetRoleRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetRoleResponse, error)
 }
 
 type apiService struct {
@@ -496,9 +496,9 @@ func (c *apiService) UpdateNotifications(ctx context.Context, in *dongfeng_proto
 	return out, nil
 }
 
-func (c *apiService) GetAccessiblePaths(ctx context.Context, in *dongfeng_protobuf.GetAccessiblePathsRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetAccessiblePathsResponse, error) {
-	req := c.c.NewRequest(c.name, "Api.GetAccessiblePaths", in)
-	out := new(dongfeng_protobuf.GetAccessiblePathsResponse)
+func (c *apiService) GetRole(ctx context.Context, in *dongfeng_protobuf.GetRoleRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetRoleResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.GetRole", in)
+	out := new(dongfeng_protobuf.GetRoleResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -549,7 +549,7 @@ type ApiHandler interface {
 	UpdateEbook(context.Context, *dongfeng_protobuf.UpdateEbookRequest, *dongfeng_protobuf.UpdateEbookResponse) error
 	UpdateNotification(context.Context, *dongfeng_protobuf.UpdateNotificationRequest, *dongfeng_protobuf.UpdateNotificationResponse) error
 	UpdateNotifications(context.Context, *dongfeng_protobuf.UpdateNotificationsRequest, *dongfeng_protobuf.UpdateNotificationsResponse) error
-	GetAccessiblePaths(context.Context, *dongfeng_protobuf.GetAccessiblePathsRequest, *dongfeng_protobuf.GetAccessiblePathsResponse) error
+	GetRole(context.Context, *dongfeng_protobuf.GetRoleRequest, *dongfeng_protobuf.GetRoleResponse) error
 }
 
 func RegisterApiHandler(s server.Server, hdlr ApiHandler, opts ...server.HandlerOption) error {
@@ -594,7 +594,7 @@ func RegisterApiHandler(s server.Server, hdlr ApiHandler, opts ...server.Handler
 		UpdateEbook(ctx context.Context, in *dongfeng_protobuf.UpdateEbookRequest, out *dongfeng_protobuf.UpdateEbookResponse) error
 		UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationRequest, out *dongfeng_protobuf.UpdateNotificationResponse) error
 		UpdateNotifications(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationsRequest, out *dongfeng_protobuf.UpdateNotificationsResponse) error
-		GetAccessiblePaths(ctx context.Context, in *dongfeng_protobuf.GetAccessiblePathsRequest, out *dongfeng_protobuf.GetAccessiblePathsResponse) error
+		GetRole(ctx context.Context, in *dongfeng_protobuf.GetRoleRequest, out *dongfeng_protobuf.GetRoleResponse) error
 	}
 	type Api struct {
 		api
@@ -767,6 +767,6 @@ func (h *apiHandler) UpdateNotifications(ctx context.Context, in *dongfeng_proto
 	return h.ApiHandler.UpdateNotifications(ctx, in, out)
 }
 
-func (h *apiHandler) GetAccessiblePaths(ctx context.Context, in *dongfeng_protobuf.GetAccessiblePathsRequest, out *dongfeng_protobuf.GetAccessiblePathsResponse) error {
-	return h.ApiHandler.GetAccessiblePaths(ctx, in, out)
+func (h *apiHandler) GetRole(ctx context.Context, in *dongfeng_protobuf.GetRoleRequest, out *dongfeng_protobuf.GetRoleResponse) error {
+	return h.ApiHandler.GetRole(ctx, in, out)
 }

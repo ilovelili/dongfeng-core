@@ -16,7 +16,11 @@ func NewRoleController() *RoleController {
 	}
 }
 
-// GetAccessiblePaths get accessible paths
-func (c *RoleController) GetAccessiblePaths(user string) ([]string, error) {
-	return c.repository.Select(user)
+// GetRole get role
+func (c *RoleController) GetRole(user string) (string, error) {
+	role, err := c.repository.Select(user)
+	if err != nil {
+		return "", err
+	}
+	return role.Role, nil
 }

@@ -61,5 +61,5 @@ service api {
     rpc UpdateNotification(dongfeng.protobuf.UpdateNotificationRequest) returns(dongfeng.protobuf.UpdateNotificationResponse) {};
     rpc UpdateNotifications(dongfeng.protobuf.UpdateNotificationsRequest) returns(dongfeng.protobuf.UpdateNotificationsResponse) {};
 
-    rpc GetAccessiblePaths(dongfeng.protobuf.GetAccessiblePathsRequest) returns(dongfeng.protobuf.GetAccessiblePathsResponse) {};
+    rpc GetRole(dongfeng.protobuf.GetRoleRequest) returns(dongfeng.protobuf.GetRoleResponse) {};
 }

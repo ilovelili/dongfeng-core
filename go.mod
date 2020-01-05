@@ -9,10 +9,10 @@ require (
 	github.com/golang/protobuf v1.3.2
 	github.com/hashicorp/golang-lru v0.5.3 // indirect
 	github.com/ilovelili/aliyun-client v0.0.0-20190605074008-4fbaa377d984
-	github.com/ilovelili/dongfeng-error-code v0.0.0-20190618065903-9bcc1dd6022c
+	github.com/ilovelili/dongfeng-error-code v0.0.0-20200104011801-7e29bf922183
 	github.com/ilovelili/dongfeng-logger v0.0.0-20190403091018-f20598e7c461
 	github.com/ilovelili/dongfeng-notification v0.0.0-20190403091005-c2220ec717b4
-	github.com/ilovelili/dongfeng-protobuf v0.0.0-20200103162733-c75f3b95e9db
+	github.com/ilovelili/dongfeng-protobuf v0.0.0-20200104022550-2229f52b606f
 	github.com/ilovelili/dongfeng-shared-lib v0.0.0-20190805031022-0b50afc09411
 	github.com/json-iterator/go v1.1.7 // indirect
 	github.com/lib/pq v1.2.0 // indirect
