@@ -48,8 +48,7 @@ func (r *TeacherRepository) Select(class, year string) (teachers []*models.Teach
 
 // Update update teacher
 func (r *TeacherRepository) Update(teacher *models.Teacher) (err error) {
-	teacher.Role = nil
-	return session().Update(teacher)
+	return session().Update(teacher.RemoveRole())
 }
 
 // DeleteInsert delete insert teachers
@@ -78,7 +77,7 @@ func (r *TeacherRepository) DeleteInsert(teachers []*proto.Teacher) (err error) 
 	}
 
 	for _, teacher := range teachers {
-		err = session().InsertTx(tx, &models.Teacher{
+		err = session().InsertTx(tx, &models.TeacherWithoutRole{
 			Year:      teacher.GetYear(),
 			Class:     teacher.GetClass(),
 			Name:      teacher.GetName(),
