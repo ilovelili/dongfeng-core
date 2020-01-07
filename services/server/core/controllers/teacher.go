@@ -14,6 +14,7 @@ import (
 type TeacherController struct {
 	repository      *repositories.TeacherRepository
 	classcontroller *ClassController
+	rolecontroller  *RoleController
 }
 
 // NewTeacherController new teacher controller
@@ -21,6 +22,7 @@ func NewTeacherController() *TeacherController {
 	return &TeacherController{
 		repository:      repositories.NewTeacherRepository(),
 		classcontroller: NewClassController(),
+		rolecontroller:  NewRoleController(),
 	}
 }
 
@@ -64,6 +66,23 @@ func (c *TeacherController) UpdateTeacher(teacher *models.Teacher) error {
 		if err := c.repository.Update(teacher); err != nil {
 			return utils.NewError(errorcode.CoreFailedToUpdateTeachers)
 		}
+
+		// update role
+		if teacher.Email != "" {
+			var r string
+			if teacher.Role == nil {
+				r = "教师"
+			} else {
+				r = *teacher.Role
+			}
+			if err := c.rolecontroller.SaveRole(&models.Role{
+				User: teacher.Email,
+				Role: r,
+			}); err != nil {
+				return utils.NewError(errorcode.CoreFailedToUpdateRole)
+			}
+		}
+
 		return nil
 	}
 
@@ -72,5 +91,26 @@ func (c *TeacherController) UpdateTeacher(teacher *models.Teacher) error {
 
 // UpdateTeachers update teachers
 func (c *TeacherController) UpdateTeachers(teachers []*proto.Teacher) error {
-	return c.repository.DeleteInsert(teachers)
+	if err := c.repository.DeleteInsert(teachers); err != nil {
+		return utils.NewError(errorcode.CoreFailedToUpdateTeachers)
+	}
+
+	// update role
+	for _, teacher := range teachers {
+		if teacher.GetEmail() != "" {
+			r := teacher.GetRole()
+			if r == "" {
+				r = "教师"
+			}
+
+			if err := c.rolecontroller.repository.Upsert(&models.Role{
+				User: teacher.GetEmail(),
+				Role: r,
+			}); err != nil {
+				return utils.NewError(errorcode.CoreFailedToUpdateRole)
+			}
+		}
+	}
+
+	return nil
 }

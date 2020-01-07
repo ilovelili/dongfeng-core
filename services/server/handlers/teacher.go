@@ -34,7 +34,7 @@ func (f *Facade) GetTeachers(ctx context.Context, req *proto.GetTeacherRequest, 
 			Name:      teacher.Name,
 			Class:     teacher.Class,
 			Email:     teacher.Email,
-			Role:      teacher.Role,
+			Role:      *teacher.Role,
 			CreatedBy: teacher.CreatedBy,
 		})
 	}
@@ -71,13 +71,14 @@ func (f *Facade) UpdateTeacher(ctx context.Context, req *proto.UpdateTeacherRequ
 
 	teacher := teachers[0]
 	teacher.CreatedBy = exsitinguser.Email
+	id, email, role, name, class := teacher.GetId(), teacher.GetEmail(), teacher.GetRole(), teacher.GetName(), teacher.GetClass()
 	teachercontroller := controllers.NewTeacherController()
 	err = teachercontroller.UpdateTeacher(&models.Teacher{
-		ID:    teacher.GetId(),
-		Name:  teacher.GetName(),
-		Class: teacher.GetClass(),
-		Role:  teacher.GetRole(),
-		Email: teacher.GetEmail(),
+		ID:    id,
+		Name:  name,
+		Class: class,
+		Role:  &role,
+		Email: email,
 	})
 
 	f.syslog(notification.NamelistUpdated(exsitinguser.ID))

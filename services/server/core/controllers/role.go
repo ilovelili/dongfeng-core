@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 	"github.com/ilovelili/dongfeng-core/services/server/core/repositories"
 )
 
@@ -23,4 +24,9 @@ func (c *RoleController) GetRole(user string) (string, error) {
 		return "", err
 	}
 	return role.Role, nil
+}
+
+// SaveRole save role
+func (c *RoleController) SaveRole(role *models.Role) error {
+	return c.repository.Upsert(role)
 }

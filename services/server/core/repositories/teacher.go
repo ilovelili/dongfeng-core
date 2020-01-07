@@ -17,7 +17,16 @@ func NewTeacherRepository() *TeacherRepository {
 
 // Select select teachers
 func (r *TeacherRepository) Select(class, year string) (teachers []*models.Teacher, err error) {
-	querybuilder := Table("teachers").Alias("t").Where()
+	querybuilder := Table("teachers").Alias("t").
+		LeftOuterJoin("roles").Alias("r").On("t.email", "r.user").Project(
+		`t.id as id`,
+		`t.year as year`,
+		`t.name as name`,
+		`t.class as class`,
+		`t.email as email`,
+		`t.created_by as created_by`,
+		`IFNULL(r.role, "教师") as role`,
+	).Query().Where()
 	var query string
 
 	if class == "" && year == "" {
@@ -39,6 +48,7 @@ func (r *TeacherRepository) Select(class, year string) (teachers []*models.Teach
 
 // Update update teacher
 func (r *TeacherRepository) Update(teacher *models.Teacher) (err error) {
+	teacher.Role = nil
 	return session().Update(teacher)
 }
 
@@ -73,7 +83,6 @@ func (r *TeacherRepository) DeleteInsert(teachers []*proto.Teacher) (err error) 
 			Class:     teacher.GetClass(),
 			Name:      teacher.GetName(),
 			Email:     teacher.GetEmail(),
-			Role:      teacher.GetRole(),
 			CreatedBy: teacher.GetCreatedBy(),
 		})
 

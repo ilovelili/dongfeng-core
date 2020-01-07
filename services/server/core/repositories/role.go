@@ -29,3 +29,19 @@ func (r *RoleRepository) Select(user string) (role *models.Role, err error) {
 	role = &_role
 	return
 }
+
+// Upsert upsert role
+func (r *RoleRepository) Upsert(role *models.Role) (err error) {
+	var _role models.Role
+	query := Table("roles").Alias("r").Where().Eq("r.user", role.User).Sql()
+	if err := session().Find(query, nil).Single(&_role); norows(err) {
+		return session().Insert(role)
+	}
+
+	if err != nil {
+		return
+	}
+
+	_role.Role = role.Role
+	return session().Update(_role)
+}
