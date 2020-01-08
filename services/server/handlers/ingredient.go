@@ -14,7 +14,6 @@ import (
 
 // GetIngredients get ingredients
 func (f *Facade) GetIngredients(ctx context.Context, req *proto.GetIngredientRequest, rsp *proto.GetIngredientResponse) error {
-
 	pid := req.GetPid()
 	userinfo, err := f.AuthClient.ParseUserInfo(pid)
 	if err != nil {

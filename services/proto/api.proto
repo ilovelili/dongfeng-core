@@ -62,4 +62,6 @@ service api {
     rpc UpdateNotifications(dongfeng.protobuf.UpdateNotificationsRequest) returns(dongfeng.protobuf.UpdateNotificationsResponse) {};
 
     rpc GetRole(dongfeng.protobuf.GetRoleRequest) returns(dongfeng.protobuf.GetRoleResponse) {};
+
+    rpc GetProfileTemplates(dongfeng.protobuf.GetProfileTemplatesRequest) returns(dongfeng.protobuf.GetProfileTemplatesResponse) {};
 }
