@@ -50,3 +50,35 @@ func (f *Facade) GetProfileTemplates(ctx context.Context, req *proto.GetProfileT
 	rsp.Templates = _templates
 	return nil
 }
+
+// UpdateProfileTemplate update profile tempalte
+func (f *Facade) UpdateProfileTemplate(ctx context.Context, req *proto.UpdateProfileTemplateRequest, rsp *proto.UpdateProfileTemplateResponse) error {
+	pid := req.GetPid()
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)
+	if err != nil {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
+
+	var user *models.User
+	err = json.Unmarshal(userinfo, &user)
+	if err != nil {
+		return utils.NewError(errorcode.GenericInvalidToken)
+	}
+
+	// check if user exists or not
+	usercontroller := controllers.NewUserController()
+	user, err = usercontroller.GetUserByEmail(user.Email)
+	if err != nil {
+		return utils.NewError(errorcode.CoreNoUser)
+	}
+
+	profiletemplatecontroller := controllers.NewProfileTemplateController()
+	err = profiletemplatecontroller.UpdateProfileTemplates(&models.ProfileTemplate{
+		Name:    req.GetName(),
+		Enabled: req.GetEnabled(),
+	})
+	if err != nil {
+		return utils.NewError(errorcode.CoreFailedToSaveProfileTemplate)
+	}
+	return nil
+}

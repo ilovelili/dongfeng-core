@@ -77,6 +77,7 @@ type ApiService interface {
 	UpdateNotifications(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationsRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateNotificationsResponse, error)
 	GetRole(ctx context.Context, in *dongfeng_protobuf.GetRoleRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetRoleResponse, error)
 	GetProfileTemplates(ctx context.Context, in *dongfeng_protobuf.GetProfileTemplatesRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetProfileTemplatesResponse, error)
+	UpdateProfileTemplate(ctx context.Context, in *dongfeng_protobuf.UpdateProfileTemplateRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateProfileTemplateResponse, error)
 }
 
 type apiService struct {
@@ -517,6 +518,16 @@ func (c *apiService) GetProfileTemplates(ctx context.Context, in *dongfeng_proto
 	return out, nil
 }
 
+func (c *apiService) UpdateProfileTemplate(ctx context.Context, in *dongfeng_protobuf.UpdateProfileTemplateRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateProfileTemplateResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.UpdateProfileTemplate", in)
+	out := new(dongfeng_protobuf.UpdateProfileTemplateResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Api service
 
 type ApiHandler interface {
@@ -562,6 +573,7 @@ type ApiHandler interface {
 	UpdateNotifications(context.Context, *dongfeng_protobuf.UpdateNotificationsRequest, *dongfeng_protobuf.UpdateNotificationsResponse) error
 	GetRole(context.Context, *dongfeng_protobuf.GetRoleRequest, *dongfeng_protobuf.GetRoleResponse) error
 	GetProfileTemplates(context.Context, *dongfeng_protobuf.GetProfileTemplatesRequest, *dongfeng_protobuf.GetProfileTemplatesResponse) error
+	UpdateProfileTemplate(context.Context, *dongfeng_protobuf.UpdateProfileTemplateRequest, *dongfeng_protobuf.UpdateProfileTemplateResponse) error
 }
 
 func RegisterApiHandler(s server.Server, hdlr ApiHandler, opts ...server.HandlerOption) error {
@@ -608,6 +620,7 @@ func RegisterApiHandler(s server.Server, hdlr ApiHandler, opts ...server.Handler
 		UpdateNotifications(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationsRequest, out *dongfeng_protobuf.UpdateNotificationsResponse) error
 		GetRole(ctx context.Context, in *dongfeng_protobuf.GetRoleRequest, out *dongfeng_protobuf.GetRoleResponse) error
 		GetProfileTemplates(ctx context.Context, in *dongfeng_protobuf.GetProfileTemplatesRequest, out *dongfeng_protobuf.GetProfileTemplatesResponse) error
+		UpdateProfileTemplate(ctx context.Context, in *dongfeng_protobuf.UpdateProfileTemplateRequest, out *dongfeng_protobuf.UpdateProfileTemplateResponse) error
 	}
 	type Api struct {
 		api
@@ -786,4 +799,8 @@ func (h *apiHandler) GetRole(ctx context.Context, in *dongfeng_protobuf.GetRoleR
 
 func (h *apiHandler) GetProfileTemplates(ctx context.Context, in *dongfeng_protobuf.GetProfileTemplatesRequest, out *dongfeng_protobuf.GetProfileTemplatesResponse) error {
 	return h.ApiHandler.GetProfileTemplates(ctx, in, out)
+}
+
+func (h *apiHandler) UpdateProfileTemplate(ctx context.Context, in *dongfeng_protobuf.UpdateProfileTemplateRequest, out *dongfeng_protobuf.UpdateProfileTemplateResponse) error {
+	return h.ApiHandler.UpdateProfileTemplate(ctx, in, out)
 }
