@@ -17,9 +17,14 @@ func NewProfileTemplateController() *ProfileTemplateController {
 	}
 }
 
-// GetProfileTemplates get profile templatees
+// GetProfileTemplates get profile templates
 func (c *ProfileTemplateController) GetProfileTemplates() ([]*models.ProfileTemplate, error) {
-	return c.repository.Select()
+	return c.repository.SelectAll()
+}
+
+// GetProfileTemplate get profile template
+func (c *ProfileTemplateController) GetProfileTemplate(name string) (*models.ProfileTemplate, error) {
+	return c.repository.Select(name)
 }
 
 // UpdateProfileTemplates update profile templatees

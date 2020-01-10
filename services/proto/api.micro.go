@@ -76,6 +76,7 @@ type ApiService interface {
 	UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateNotificationResponse, error)
 	UpdateNotifications(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationsRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateNotificationsResponse, error)
 	GetRole(ctx context.Context, in *dongfeng_protobuf.GetRoleRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetRoleResponse, error)
+	GetProfileTemplate(ctx context.Context, in *dongfeng_protobuf.GetProfileTemplateRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetProfileTemplateResponse, error)
 	GetProfileTemplates(ctx context.Context, in *dongfeng_protobuf.GetProfileTemplatesRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetProfileTemplatesResponse, error)
 	UpdateProfileTemplate(ctx context.Context, in *dongfeng_protobuf.UpdateProfileTemplateRequest, opts ...client.CallOption) (*dongfeng_protobuf.UpdateProfileTemplateResponse, error)
 }
@@ -508,6 +509,16 @@ func (c *apiService) GetRole(ctx context.Context, in *dongfeng_protobuf.GetRoleR
 	return out, nil
 }
 
+func (c *apiService) GetProfileTemplate(ctx context.Context, in *dongfeng_protobuf.GetProfileTemplateRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetProfileTemplateResponse, error) {
+	req := c.c.NewRequest(c.name, "Api.GetProfileTemplate", in)
+	out := new(dongfeng_protobuf.GetProfileTemplateResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *apiService) GetProfileTemplates(ctx context.Context, in *dongfeng_protobuf.GetProfileTemplatesRequest, opts ...client.CallOption) (*dongfeng_protobuf.GetProfileTemplatesResponse, error) {
 	req := c.c.NewRequest(c.name, "Api.GetProfileTemplates", in)
 	out := new(dongfeng_protobuf.GetProfileTemplatesResponse)
@@ -572,6 +583,7 @@ type ApiHandler interface {
 	UpdateNotification(context.Context, *dongfeng_protobuf.UpdateNotificationRequest, *dongfeng_protobuf.UpdateNotificationResponse) error
 	UpdateNotifications(context.Context, *dongfeng_protobuf.UpdateNotificationsRequest, *dongfeng_protobuf.UpdateNotificationsResponse) error
 	GetRole(context.Context, *dongfeng_protobuf.GetRoleRequest, *dongfeng_protobuf.GetRoleResponse) error
+	GetProfileTemplate(context.Context, *dongfeng_protobuf.GetProfileTemplateRequest, *dongfeng_protobuf.GetProfileTemplateResponse) error
 	GetProfileTemplates(context.Context, *dongfeng_protobuf.GetProfileTemplatesRequest, *dongfeng_protobuf.GetProfileTemplatesResponse) error
 	UpdateProfileTemplate(context.Context, *dongfeng_protobuf.UpdateProfileTemplateRequest, *dongfeng_protobuf.UpdateProfileTemplateResponse) error
 }
@@ -619,6 +631,7 @@ func RegisterApiHandler(s server.Server, hdlr ApiHandler, opts ...server.Handler
 		UpdateNotification(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationRequest, out *dongfeng_protobuf.UpdateNotificationResponse) error
 		UpdateNotifications(ctx context.Context, in *dongfeng_protobuf.UpdateNotificationsRequest, out *dongfeng_protobuf.UpdateNotificationsResponse) error
 		GetRole(ctx context.Context, in *dongfeng_protobuf.GetRoleRequest, out *dongfeng_protobuf.GetRoleResponse) error
+		GetProfileTemplate(ctx context.Context, in *dongfeng_protobuf.GetProfileTemplateRequest, out *dongfeng_protobuf.GetProfileTemplateResponse) error
 		GetProfileTemplates(ctx context.Context, in *dongfeng_protobuf.GetProfileTemplatesRequest, out *dongfeng_protobuf.GetProfileTemplatesResponse) error
 		UpdateProfileTemplate(ctx context.Context, in *dongfeng_protobuf.UpdateProfileTemplateRequest, out *dongfeng_protobuf.UpdateProfileTemplateResponse) error
 	}
@@ -795,6 +808,10 @@ func (h *apiHandler) UpdateNotifications(ctx context.Context, in *dongfeng_proto
 
 func (h *apiHandler) GetRole(ctx context.Context, in *dongfeng_protobuf.GetRoleRequest, out *dongfeng_protobuf.GetRoleResponse) error {
 	return h.ApiHandler.GetRole(ctx, in, out)
+}
+
+func (h *apiHandler) GetProfileTemplate(ctx context.Context, in *dongfeng_protobuf.GetProfileTemplateRequest, out *dongfeng_protobuf.GetProfileTemplateResponse) error {
+	return h.ApiHandler.GetProfileTemplate(ctx, in, out)
 }
 
 func (h *apiHandler) GetProfileTemplates(ctx context.Context, in *dongfeng_protobuf.GetProfileTemplatesRequest, out *dongfeng_protobuf.GetProfileTemplatesResponse) error {
