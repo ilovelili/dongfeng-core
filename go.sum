@@ -160,6 +160,10 @@ github.com/ilovelili/dongfeng-protobuf v0.0.0-20200110021500-99a6f2d15469 h1:uJK
 github.com/ilovelili/dongfeng-protobuf v0.0.0-20200110021500-99a6f2d15469/go.mod h1:SQozL1YHMM4xlh1XnlJNjPNqqnPa5egfn4IeQbkIGFM=
 github.com/ilovelili/dongfeng-protobuf v0.0.0-20200110022516-87d992c92bb6 h1:tqNq06DoHIPmQVUUgLHlZS1S4R50Ub+E6E1GtavxxTs=
 github.com/ilovelili/dongfeng-protobuf v0.0.0-20200110022516-87d992c92bb6/go.mod h1:SQozL1YHMM4xlh1XnlJNjPNqqnPa5egfn4IeQbkIGFM=
+github.com/ilovelili/dongfeng-protobuf v0.0.0-20200111114733-76959ddb1b64 h1:dqUHjW7RbwdO9E4TxbS2rOpJcmSte60rZk4uraxSV74=
+github.com/ilovelili/dongfeng-protobuf v0.0.0-20200111114733-76959ddb1b64/go.mod h1:SQozL1YHMM4xlh1XnlJNjPNqqnPa5egfn4IeQbkIGFM=
+github.com/ilovelili/dongfeng-protobuf v0.0.0-20200111120618-c39794febe7d h1:fD5jfdVN+DgOKH1dqrrLXV0/mXaiocmpaDzJlRq04bs=
+github.com/ilovelili/dongfeng-protobuf v0.0.0-20200111120618-c39794febe7d/go.mod h1:SQozL1YHMM4xlh1XnlJNjPNqqnPa5egfn4IeQbkIGFM=
 github.com/ilovelili/dongfeng-shared-lib v0.0.0-20190805031022-0b50afc09411 h1:ai5sxRQgZIsnl1cuahvh1vB75j5FgqEb63BzmfxsdZg=
 github.com/ilovelili/dongfeng-shared-lib v0.0.0-20190805031022-0b50afc09411/go.mod h1:mJSiOt/OMCEw7Isr44+g8Y8LYXotmZiaohxiFdB77Eg=
 github.com/imdario/mergo v0.3.7/go.mod h1:2EnlNZ0deacrJVfApfmtdGgDfMuh/nq6Ok1EcJh5FfA=

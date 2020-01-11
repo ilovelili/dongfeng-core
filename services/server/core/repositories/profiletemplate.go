@@ -38,12 +38,15 @@ func (r *ProfileTemplateRepository) Select(name string) (template *models.Profil
 
 // Upsert upsert  profile template
 func (r *ProfileTemplateRepository) Upsert(template *models.ProfileTemplate) (err error) {
-	query := Table("profile_templates").Alias("g").Project("g.id").Where().Eq("g.name", template.Name).Sql()
-	var id int64
-	err = session().Find(query, nil).Scalar(&id)
-	if err != nil || 0 == id {
+	query := Table("profile_templates").Alias("g").Project("g.name").Where().Eq("g.name", template.Name).Sql()
+	var _template models.ProfileTemplate
+	err = session().Find(query, nil).Single(&_template)
+	if err != nil || "" == _template.Name {
 		err = session().Insert(template)
 	} else {
+		if template.Profile == "" {
+			template.Profile = _template.Profile
+		}
 		err = session().Update(template)
 	}
 

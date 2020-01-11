@@ -38,10 +38,7 @@ func (f *Facade) GetProfileTemplate(ctx context.Context, req *proto.GetProfileTe
 		return utils.NewError(errorcode.CoreFailedToGetGrowthProfile)
 	}
 
-	rsp.Template = &proto.ProfileTemplate{
-		Name:      template.Name,
-		CreatedBy: template.CreatedBy,
-	}
+	rsp.Profile = template.Profile
 	return nil
 }
 
@@ -109,6 +106,7 @@ func (f *Facade) UpdateProfileTemplate(ctx context.Context, req *proto.UpdatePro
 	err = profiletemplatecontroller.UpdateProfileTemplates(&models.ProfileTemplate{
 		Name:      req.GetName(),
 		Enabled:   req.GetEnabled(),
+		Profile:   req.GetProfile(),
 		CreatedBy: user.Email,
 	})
 	if err != nil {
