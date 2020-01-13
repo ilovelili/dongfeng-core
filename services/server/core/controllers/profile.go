@@ -27,7 +27,7 @@ func (c *ProfileController) GetPrevProfile(year, class, name, date string) (prof
 	return c.repository.SelectPrev(year, class, name, date)
 }
 
-// GetProfile get next profile
+// GetNextProfile get next profile
 func (c *ProfileController) GetNextProfile(year, class, name, date string) (profile *models.Profile, err error) {
 	return c.repository.SelectNext(year, class, name, date)
 }

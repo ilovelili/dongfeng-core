@@ -25,8 +25,18 @@ func (r *ProfileRepository) Select(year, class, name, date string) (profile *mod
 		Sql()
 
 	var p models.Profile
-	if err = session().Find(query, nil).Single(&p); err != nil && norows(err) {
-		err = nil
+	if err = session().Find(query, nil).Single(&p); err != nil && norows(err) || p.Profile == "" {
+		query = Table("profiles").Alias("p").Where().
+			Eq("p.year", year).
+			Eq("p.class", class).
+			Eq("p.name", class).
+			Eq("p.date", date).
+			Eq("p.enabled", 1).
+			Sql()
+
+		if err = session().Find(query, nil).Single(&p); err != nil && norows(err) {
+			err = nil
+		}
 	}
 
 	if err != nil {
@@ -49,8 +59,18 @@ func (r *ProfileRepository) SelectPrev(year, class, name, date string) (profile 
 		Sql()
 
 	var p models.Profile
-	if err = session().Find(query, nil).Single(&p); err != nil && norows(err) {
-		err = nil
+	if err = session().Find(query, nil).Single(&p); err != nil && norows(err) || p.Profile == "" {
+		query = Table("profiles").Alias("p").Where().
+			Eq("p.year", year).
+			Eq("p.class", class).
+			Eq("p.name", class).
+			Lt("p.date", date).
+			Eq("p.enabled", 1).
+			Sql()
+
+		if err = session().Find(query, nil).Single(&p); err != nil && norows(err) {
+			err = nil
+		}
 	}
 
 	if err != nil {
@@ -73,8 +93,18 @@ func (r *ProfileRepository) SelectNext(year, class, name, date string) (profile 
 		Sql()
 
 	var p models.Profile
-	if err = session().Find(query, nil).Single(&p); err != nil && norows(err) {
-		err = nil
+	if err = session().Find(query, nil).Single(&p); err != nil && norows(err) || p.Profile == "" {
+		query = Table("profiles").Alias("p").Where().
+			Eq("p.year", year).
+			Eq("p.class", class).
+			Eq("p.name", class).
+			Gt("p.date", date).
+			Eq("p.enabled", 1).
+			Sql()
+
+		if err = session().Find(query, nil).Single(&p); err != nil && norows(err) {
+			err = nil
+		}
 	}
 
 	if err != nil {
@@ -87,8 +117,7 @@ func (r *ProfileRepository) SelectNext(year, class, name, date string) (profile 
 
 // SelectAll select all profiles
 func (r *ProfileRepository) SelectAll(year, class, name string) (profiles []*models.Profile, err error) {
-	querybuilder := Table("profiles").Alias("p").Where().Eq("p.enabled", 1)
-
+	querybuilder := Table("profiles").Alias("p").Where().Ne("p.name", class).Eq("p.enabled", 1)
 	if class == "" && year == "" && name == "" {
 		querybuilder = querybuilder.Eq("1", "1")
 	} else {
@@ -155,7 +184,6 @@ func (r *ProfileRepository) Insert(profile *models.Profile) (err error) {
 			profile.Enabled = true
 			return session().Insert(profile)
 		}
-		// return error
 		return
 	} else if len(profiles) == 0 {
 		profile.Enabled = true
