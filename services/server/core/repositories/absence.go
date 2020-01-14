@@ -93,7 +93,6 @@ func (r *AbsenceRepository) Update(absences []*models.Absence, attendances []*mo
 	}
 
 	return session().Commit(tx)
-
 }
 
 // DeleteInsert deleteinsert attendances

@@ -8,6 +8,7 @@ type Profile struct {
 	Name      string `dapper:"name"`
 	Date      string `dapper:"date"`
 	Profile   string `dapper:"profile"`
+	Template  string `dapper:"-"`
 	CreatedBy string `dapper:"created_by"`
 	Enabled   bool   `dapper:"enabled"`
 }

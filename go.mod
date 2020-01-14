@@ -12,7 +12,7 @@ require (
 	github.com/ilovelili/dongfeng-error-code v0.0.0-20200104011801-7e29bf922183
 	github.com/ilovelili/dongfeng-logger v0.0.0-20190403091018-f20598e7c461
 	github.com/ilovelili/dongfeng-notification v0.0.0-20190403091005-c2220ec717b4
-	github.com/ilovelili/dongfeng-protobuf v0.0.0-20200111120618-c39794febe7d
+	github.com/ilovelili/dongfeng-protobuf v0.0.0-20200114055314-eeaf62e9f055
 	github.com/ilovelili/dongfeng-shared-lib v0.0.0-20190805031022-0b50afc09411
 	github.com/json-iterator/go v1.1.7 // indirect
 	github.com/lib/pq v1.2.0 // indirect

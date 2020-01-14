@@ -155,6 +155,7 @@ func (f *Facade) CreateProfile(ctx context.Context, req *proto.UpdateProfileRequ
 		Class:     req.GetClass(),
 		Name:      req.GetName(),
 		Date:      req.GetDate(),
+		Template:  req.GetTemplateName(),
 		CreatedBy: exsitinguser.Email,
 	})
 	return err
