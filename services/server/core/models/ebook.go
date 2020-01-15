@@ -42,12 +42,12 @@ func (e *Ebook) ResolveHash() {
 	e.Hash = hex.EncodeToString(hash[:])
 }
 
-// ResolveCloudCSS replace image link with oss image
+// ResolveCloudCSS replace image link
 func (e *Ebook) ResolveCloudCSS() string {
 	return strings.Replace(e.CSS, "../img/", "../../../../../../img/", -1)
 }
 
 // ResolveCloudHTML replace style link with oss css
 func (e *Ebook) ResolveCloudHTML() string {
-	return e.HTML
+	return strings.Replace(e.HTML, "./img/", "../../../../../img/", -1)
 }
