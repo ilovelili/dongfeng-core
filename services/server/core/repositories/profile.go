@@ -190,7 +190,7 @@ func (r *ProfileRepository) Insert(profile *models.Profile) (err error) {
 		Eq("p.date", profile.Date).
 		Sql()
 
-	if err = session().Find(query, nil).All(&_profile); norows(err) {
+	if err = session().Find(query, nil).Single(&_profile); norows(err) {
 		// not exist, so insert
 		profile.Enabled = true
 		if profile.Profile == "" {
@@ -208,7 +208,11 @@ func (r *ProfileRepository) Insert(profile *models.Profile) (err error) {
 	}
 
 	profile.ID = _profile.ID
-	profile.Profile = template.Profile
+	if template == nil || template.Profile == "" {
+		profile.Profile = "{}"
+	} else {
+		profile.Profile = template.Profile
+	}
 	profile.Enabled = true
 	return session().Update(profile)
 }
