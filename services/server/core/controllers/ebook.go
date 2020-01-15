@@ -270,7 +270,9 @@ func (c *EbookController) convert(ebook *models.Ebook) (err error) {
 		}
 	}
 
-	if err = os.Rename(pdfOutput, path.Join(pdfdestdir, fmt.Sprintf("%s.pdf", ebook.Date))); err != nil {
+	newPdfOutput := path.Join(pdfdestdir, fmt.Sprintf("%s.pdf", ebook.Date))
+	fmt.Printf("moving pdf from %s to %s\n", pdfOutput, newPdfOutput)
+	if err = os.Rename(pdfOutput, newPdfOutput); err != nil {
 		return err
 	}
 
@@ -283,9 +285,10 @@ func (c *EbookController) convert(ebook *models.Ebook) (err error) {
 		}
 	}
 
-	err = os.Rename(imgOutput, path.Join(imgdestdir, fmt.Sprintf("%s.jpg", ebook.Date)))
+	newImgOutput := path.Join(imgdestdir, fmt.Sprintf("%s.jpg", ebook.Date))
+	fmt.Printf("moving img from %s to %s\n", pdfOutput, newPdfOutput)
+	err = os.Rename(imgOutput, newImgOutput)
 	return err
-
 }
 
 // merge merge pdf files into ebook
@@ -346,7 +349,6 @@ func (c *EbookController) merge(ebook *models.Ebook) (err error) {
 		cmdline := fmt.Sprintf("pdftk %s cat output %s", pdffiles, path.Join(dir, "merge.pdf"))
 		args := strings.Split(cmdline, " ")
 		cmd := exec.Command(args[0], args[1:]...)
-
 		var stderr bytes.Buffer
 		cmd.Stderr = &stderr
 
@@ -370,7 +372,10 @@ func (c *EbookController) merge(ebook *models.Ebook) (err error) {
 		if !info.IsDir() && path.Ext(info.Name()) == ".pdf" {
 			key := path.Dir(filepath)
 			if paths, ok := destfilepathmap[key]; ok {
-				destfilepathmap[key] = append(paths, filepath)
+				// exclude 全期间
+				if strings.Index(filepath, "全期间.pdf") == -1 {
+					destfilepathmap[key] = append(paths, filepath)
+				}
 			} else {
 				destfilepathmap[key] = []string{filepath}
 			}
@@ -384,7 +389,6 @@ func (c *EbookController) merge(ebook *models.Ebook) (err error) {
 
 	for dir, filepaths := range destfilepathmap {
 		sort.Strings(filepaths)
-
 		pdffiles := strings.Join(filepaths, " ")
 		// move to dest
 		segments := strings.Split(dir, "/")
@@ -393,7 +397,6 @@ func (c *EbookController) merge(ebook *models.Ebook) (err error) {
 		cmdline := fmt.Sprintf("pdftk %s cat output %s", pdffiles, path.Join(dir, fmt.Sprintf("电子书_%s_%s_全期间.pdf", name, class)))
 		args := strings.Split(cmdline, " ")
 		cmd := exec.Command(args[0], args[1:]...)
-
 		var stderr bytes.Buffer
 		cmd.Stderr = &stderr
 
