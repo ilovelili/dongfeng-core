@@ -44,17 +44,16 @@ func (f *Facade) syslog(notification *notification.Notification) {
 }
 
 // parseUser parse user
-func (f *Facade) parseUser(pid, email string) (user *models.User, err error) {
+func (f *Facade) parseUser(pid, email string) (*models.User, error) {
 	userinfo, err := f.AuthClient.ParseUserInfo(pid)
 	if err != nil {
-		err = utils.NewError(errorcode.GenericInvalidToken)
-		return
+		return nil, utils.NewError(errorcode.GenericInvalidToken)
 	}
 
+	var user *models.User
 	err = json.Unmarshal(userinfo, &user)
 	if err != nil {
-		err = utils.NewError(errorcode.GenericInvalidToken)
-		return
+		return nil, utils.NewError(errorcode.GenericInvalidToken)
 	}
 
 	// if user email is empty (for example, open id login without email bound), set it
@@ -64,10 +63,10 @@ func (f *Facade) parseUser(pid, email string) (user *models.User, err error) {
 
 	// check if user exists or not
 	usercontroller := controllers.NewUserController()
-	user, err = usercontroller.GetUserByEmail(user.Email)
+	_user, err := usercontroller.GetUserByEmail(user.Email)
 	if err != nil {
-		err = utils.NewError(errorcode.CoreNoUser)
+		return user, utils.NewError(errorcode.CoreNoUser)
 	}
 
-	return
+	return _user, nil
 }
