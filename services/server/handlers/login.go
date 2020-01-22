@@ -25,6 +25,7 @@ func (f *Facade) Login(ctx context.Context, req *proto.LoginRequest, rsp *proto.
 
 	usercontroller := controllers.NewUserController()
 	if newUser {
+		user.ID = ""
 		// new user, save to database
 		if err = usercontroller.Save(user); err != nil {
 			return utils.NewError(errorcode.CoreFailedToSaveUser)
