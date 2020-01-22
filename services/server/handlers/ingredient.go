@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/ilovelili/dongfeng-core/services/server/core/controllers"
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
@@ -14,23 +13,10 @@ import (
 
 // GetIngredients get ingredients
 func (f *Facade) GetIngredients(ctx context.Context, req *proto.GetIngredientRequest, rsp *proto.GetIngredientResponse) error {
-	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)
+	pid, email := req.GetPid(), req.GetEmail()
+	_, err := f.parseUser(pid, email)
 	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	var user *models.User
-	err = json.Unmarshal(userinfo, &user)
-	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	// check if user exists or not
-	usercontroller := controllers.NewUserController()
-	user, err = usercontroller.GetUserByEmail(user.Email)
-	if err != nil {
-		return utils.NewError(errorcode.CoreNoUser)
+		return err
 	}
 
 	ingredientcontroller := controllers.NewIngredientController()
@@ -88,23 +74,10 @@ func (f *Facade) GetIngredientNames(ctx context.Context, req *proto.GetIngredien
 
 // UpdateIngredients update ingredient
 func (f *Facade) UpdateIngredients(ctx context.Context, req *proto.UpdateIngredientRequest, rsp *proto.UpdateIngredientResponse) error {
-	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)
+	pid, email := req.GetPid(), req.GetEmail()
+	user, err := f.parseUser(pid, email)
 	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	var user *models.User
-	err = json.Unmarshal(userinfo, &user)
-	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	// check if user exists or not
-	usercontroller := controllers.NewUserController()
-	user, err = usercontroller.GetUserByEmail(user.Email)
-	if err != nil {
-		return utils.NewError(errorcode.CoreNoUser)
+		return err
 	}
 
 	ingredientcontroller := controllers.NewIngredientController()
@@ -140,7 +113,6 @@ func (f *Facade) UpdateIngredients(ctx context.Context, req *proto.UpdateIngredi
 	}
 
 	err = ingredientcontroller.SaveIngredientNutritions(ingredients)
-
 	f.syslog(notification.IngredientUpdated(user.ID))
 	return err
 }

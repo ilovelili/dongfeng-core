@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/ilovelili/dongfeng-core/services/server/core/controllers"
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
@@ -14,10 +13,10 @@ import (
 
 // GetPupils get pupils
 func (f *Facade) GetPupils(ctx context.Context, req *proto.GetPupilRequest, rsp *proto.GetPupilResponse) error {
-	pid := req.GetPid()
-	_, err := f.AuthClient.ParseUserInfo(pid)
+	pid, email := req.GetPid(), req.GetEmail()
+	_, err := f.parseUser(pid, email)
 	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
+		return err
 	}
 
 	pupilcontroller := controllers.NewPupilController()
@@ -43,23 +42,10 @@ func (f *Facade) GetPupils(ctx context.Context, req *proto.GetPupilRequest, rsp 
 
 // UpdatePupil update pupil
 func (f *Facade) UpdatePupil(ctx context.Context, req *proto.UpdatePupilRequest, rsp *proto.UpdatePupilResponse) error {
-	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)
+	pid, email := req.GetPid(), req.GetEmail()
+	user, err := f.parseUser(pid, email)
 	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	var user *models.User
-	err = json.Unmarshal(userinfo, &user)
-	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	// check if user exists or not
-	usercontroller := controllers.NewUserController()
-	exsitinguser, err := usercontroller.GetUserByEmail(user.Email)
-	if err != nil {
-		return utils.NewError(errorcode.CoreNoUser)
+		return err
 	}
 
 	pupils := req.GetPupils()
@@ -68,7 +54,7 @@ func (f *Facade) UpdatePupil(ctx context.Context, req *proto.UpdatePupilRequest,
 	}
 
 	pupil := pupils[0]
-	pupil.CreatedBy = exsitinguser.Email
+	pupil.CreatedBy = user.Email
 
 	pupilcontroller := controllers.NewPupilController()
 	err = pupilcontroller.UpdatePupil(&models.Pupil{
@@ -79,34 +65,21 @@ func (f *Facade) UpdatePupil(ctx context.Context, req *proto.UpdatePupilRequest,
 		CreatedBy: pupil.CreatedBy,
 	})
 
-	f.syslog(notification.NamelistUpdated(exsitinguser.ID))
+	f.syslog(notification.NamelistUpdated(user.ID))
 	return err
 }
 
 // UpdatePupils update pupils
 func (f *Facade) UpdatePupils(ctx context.Context, req *proto.UpdatePupilRequest, rsp *proto.UpdatePupilResponse) error {
-	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)
+	pid, email := req.GetPid(), req.GetEmail()
+	user, err := f.parseUser(pid, email)
 	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	var user *models.User
-	err = json.Unmarshal(userinfo, &user)
-	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	// check if user exists or not
-	usercontroller := controllers.NewUserController()
-	exsitinguser, err := usercontroller.GetUserByEmail(user.Email)
-	if err != nil {
-		return utils.NewError(errorcode.CoreNoUser)
+		return err
 	}
 
 	pupils := req.GetPupils()
 	for _, pupil := range pupils {
-		pupil.CreatedBy = exsitinguser.Email
+		pupil.CreatedBy = user.Email
 	}
 
 	pupilcontroller := controllers.NewPupilController()
@@ -115,6 +88,6 @@ func (f *Facade) UpdatePupils(ctx context.Context, req *proto.UpdatePupilRequest
 		return utils.NewError(errorcode.CoreFailedToUpdatePupils)
 	}
 
-	f.syslog(notification.NamelistUpdated(exsitinguser.ID))
+	f.syslog(notification.NamelistUpdated(user.ID))
 	return nil
 }

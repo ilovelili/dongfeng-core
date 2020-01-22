@@ -2,9 +2,12 @@
 package handlers
 
 import (
+	"encoding/json"
+
 	"github.com/ilovelili/dongfeng-core/services/server/core/controllers"
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 	"github.com/ilovelili/dongfeng-core/services/utils"
+	errorcode "github.com/ilovelili/dongfeng-error-code"
 	notification "github.com/ilovelili/dongfeng-notification"
 	sharedlib "github.com/ilovelili/dongfeng-shared-lib"
 )
@@ -38,4 +41,33 @@ func (f *Facade) syslog(notification *notification.Notification) {
 			},
 		})
 	}()
+}
+
+// parseUser parse user
+func (f *Facade) parseUser(pid, email string) (user *models.User, err error) {
+	userinfo, err := f.AuthClient.ParseUserInfo(pid)
+	if err != nil {
+		err = utils.NewError(errorcode.GenericInvalidToken)
+		return
+	}
+
+	err = json.Unmarshal(userinfo, &user)
+	if err != nil {
+		err = utils.NewError(errorcode.GenericInvalidToken)
+		return
+	}
+
+	// if user email is empty (for example, open id login without email bound), set it
+	if user.Email == "" {
+		user.Email = email
+	}
+
+	// check if user exists or not
+	usercontroller := controllers.NewUserController()
+	user, err = usercontroller.GetUserByEmail(user.Email)
+	if err != nil {
+		err = utils.NewError(errorcode.CoreNoUser)
+	}
+
+	return
 }

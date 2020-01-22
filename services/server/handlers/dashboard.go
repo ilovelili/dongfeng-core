@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/ilovelili/dongfeng-core/services/server/core/controllers"
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
@@ -15,23 +14,10 @@ import (
 
 // Dashboard handler returns data needed by dashboard
 func (f *Facade) Dashboard(ctx context.Context, req *proto.DashboardRequest, rsp *proto.DashboardResponse) error {
-	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)
+	pid, email := req.GetPid(), req.GetEmail()
+	user, err := f.parseUser(pid, email)
 	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	var user *models.User
-	err = json.Unmarshal(userinfo, &user)
-	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	// check if user exists or not
-	usercontroller := controllers.NewUserController()
-	user, err = usercontroller.GetUserByEmail(user.Email)
-	if err != nil {
-		return utils.NewError(errorcode.CoreNoUser)
+		return err
 	}
 
 	rsp.UserId = user.ID

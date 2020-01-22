@@ -2,10 +2,8 @@ package handlers
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/ilovelili/dongfeng-core/services/server/core/controllers"
-	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 	"github.com/ilovelili/dongfeng-core/services/utils"
 	errorcode "github.com/ilovelili/dongfeng-error-code"
 	notification "github.com/ilovelili/dongfeng-notification"
@@ -18,22 +16,10 @@ func (f *Facade) UpdateUser(ctx context.Context, req *proto.UpdateUserRequest, r
 		return utils.NewError(errorcode.CoreInvalidUpdateUserRequest)
 	}
 
-	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)
+	pid, email := req.GetPid(), req.GetEmail()
+	user, err := f.parseUser(pid, email)
 	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	var user *models.User
-	err = json.Unmarshal(userinfo, &user)
-	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	usercontroller := controllers.NewUserController()
-	user, err = usercontroller.GetUserByEmail(user.Email)
-	if err != nil {
-		return utils.NewError(errorcode.CoreNoUser)
+		return err
 	}
 
 	if req.GetName() != "" {
@@ -44,6 +30,7 @@ func (f *Facade) UpdateUser(ctx context.Context, req *proto.UpdateUserRequest, r
 		user.Avatar = req.GetAvatar()
 	}
 
+	usercontroller := controllers.NewUserController()
 	err = usercontroller.Save(user)
 	if err != nil {
 		return utils.NewError(errorcode.CoreFailedToSaveUser)

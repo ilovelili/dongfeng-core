@@ -3,8 +3,6 @@ package handlers
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
 
 	"github.com/ilovelili/dongfeng-core/services/server/core/controllers"
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
@@ -15,36 +13,22 @@ import (
 
 // Login handler returns all data needed by front end
 func (f *Facade) Login(ctx context.Context, req *proto.LoginRequest, rsp *proto.LoginResponse) error {
-	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)
+	pid, email, newUser := req.GetPid(), req.GetEmail(), false
+	user, err := f.parseUser(pid, email)
 	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
+		if err.Error() == utils.NewError(errorcode.CoreNoUser).Error() {
+			newUser = true
+		} else {
+			return err
+		}
 	}
 
-	var user *models.User
-	err = json.Unmarshal(userinfo, &user)
-	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	// user email empty caused by open ID login
-	if user.Email == "" {
-		user.Email = fmt.Sprintf("%s@dongfeng.cn", pid)
-	}
-
-	// check if user exists or not
-	var newUser bool
 	usercontroller := controllers.NewUserController()
-	exsitinguser, err := usercontroller.GetUserByEmail(user.Email)
-	newUser = err != nil
-
 	if newUser {
 		// new user, save to database
 		if err = usercontroller.Save(user); err != nil {
 			return utils.NewError(errorcode.CoreFailedToSaveUser)
 		}
-	} else {
-		user = exsitinguser
 	}
 
 	// user profile

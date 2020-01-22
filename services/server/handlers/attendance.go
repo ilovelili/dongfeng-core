@@ -16,10 +16,10 @@ import (
 
 // GetAttendances get attendances
 func (f *Facade) GetAttendances(ctx context.Context, req *proto.GetAttendanceRequest, rsp *proto.GetAttendanceResponse) error {
-	pid := req.GetPid()
-	_, err := f.AuthClient.ParseUserInfo(pid)
+	pid, email := req.GetPid(), req.GetEmail()
+	_, err := f.parseUser(pid, email)
 	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
+		return err
 	}
 
 	attendancecontroller := controllers.NewAttendanceController()

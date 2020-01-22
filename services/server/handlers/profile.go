@@ -2,12 +2,12 @@ package handlers
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/ilovelili/dongfeng-core/services/server/core/controllers"
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 	"github.com/ilovelili/dongfeng-core/services/utils"
 	errorcode "github.com/ilovelili/dongfeng-error-code"
+	notification "github.com/ilovelili/dongfeng-notification"
 	proto "github.com/ilovelili/dongfeng-protobuf"
 )
 
@@ -67,10 +67,10 @@ func (f *Facade) GetNextProfile(ctx context.Context, req *proto.GetPrevOrNextPro
 
 // GetProfiles get profile
 func (f *Facade) GetProfiles(ctx context.Context, req *proto.GetProfilesRequest, rsp *proto.GetProfilesResponse) error {
-	pid := req.GetPid()
-	_, err := f.AuthClient.ParseUserInfo(pid)
+	pid, email := req.GetPid(), req.GetEmail()
+	_, err := f.parseUser(pid, email)
 	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
+		return err
 	}
 
 	profilecontroller := controllers.NewProfileController()
@@ -96,22 +96,10 @@ func (f *Facade) GetProfiles(ctx context.Context, req *proto.GetProfilesRequest,
 
 // UpdateProfile update profile
 func (f *Facade) UpdateProfile(ctx context.Context, req *proto.UpdateProfileRequest, rsp *proto.UpdateProfileResponse) error {
-	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)
+	pid, email := req.GetPid(), req.GetEmail()
+	user, err := f.parseUser(pid, email)
 	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	var user *models.User
-	err = json.Unmarshal(userinfo, &user)
-	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-	// check if user exists or not
-	usercontroller := controllers.NewUserController()
-	exsitinguser, err := usercontroller.GetUserByEmail(user.Email)
-	if err != nil {
-		return utils.NewError(errorcode.CoreNoUser)
+		return err
 	}
 
 	profilecontroller := controllers.NewProfileController()
@@ -122,31 +110,19 @@ func (f *Facade) UpdateProfile(ctx context.Context, req *proto.UpdateProfileRequ
 		Date:      req.GetDate(),
 		Profile:   req.GetProfile(),
 		Enabled:   req.GetEnabled(),
-		CreatedBy: exsitinguser.Email,
+		CreatedBy: user.Email,
 	})
 
+	f.syslog(notification.GrowthProfileUpdated(user.ID))
 	return err
 }
 
 // CreateProfile create profile
 func (f *Facade) CreateProfile(ctx context.Context, req *proto.UpdateProfileRequest, rsp *proto.UpdateProfileResponse) error {
-	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)
+	pid, email := req.GetPid(), req.GetEmail()
+	user, err := f.parseUser(pid, email)
 	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	var user *models.User
-	err = json.Unmarshal(userinfo, &user)
-	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	// check if user exists or not
-	usercontroller := controllers.NewUserController()
-	exsitinguser, err := usercontroller.GetUserByEmail(user.Email)
-	if err != nil {
-		return utils.NewError(errorcode.CoreNoUser)
+		return err
 	}
 
 	profilecontroller := controllers.NewProfileController()
@@ -156,30 +132,19 @@ func (f *Facade) CreateProfile(ctx context.Context, req *proto.UpdateProfileRequ
 		Name:      req.GetName(),
 		Date:      req.GetDate(),
 		Template:  req.GetTemplateName(),
-		CreatedBy: exsitinguser.Email,
+		CreatedBy: user.Email,
 	})
+
+	f.syslog(notification.GrowthProfileUpdated(user.ID))
 	return err
 }
 
 // DeleteProfile delete profile
 func (f *Facade) DeleteProfile(ctx context.Context, req *proto.UpdateProfileRequest, rsp *proto.UpdateProfileResponse) error {
-	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)
+	pid, email := req.GetPid(), req.GetEmail()
+	user, err := f.parseUser(pid, email)
 	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	var user *models.User
-	err = json.Unmarshal(userinfo, &user)
-	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	// check if user exists or not
-	usercontroller := controllers.NewUserController()
-	exsitinguser, err := usercontroller.GetUserByEmail(user.Email)
-	if err != nil {
-		return utils.NewError(errorcode.CoreNoUser)
+		return err
 	}
 
 	profilecontroller := controllers.NewProfileController()
@@ -188,7 +153,9 @@ func (f *Facade) DeleteProfile(ctx context.Context, req *proto.UpdateProfileRequ
 		Class:     req.GetClass(),
 		Name:      req.GetName(),
 		Date:      req.GetDate(),
-		CreatedBy: exsitinguser.Email,
+		CreatedBy: user.Email,
 	})
+
+	f.syslog(notification.GrowthProfileUpdated(user.ID))
 	return err
 }

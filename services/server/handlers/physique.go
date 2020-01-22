@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/ilovelili/dongfeng-core/services/server/core/controllers"
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
@@ -14,10 +13,10 @@ import (
 
 // GetPhysiques get physiques
 func (f *Facade) GetPhysiques(ctx context.Context, req *proto.GetPhysiqueRequest, rsp *proto.GetPhysiqueResponse) error {
-	pid := req.GetPid()
-	_, err := f.AuthClient.ParseUserInfo(pid)
+	pid, email := req.GetPid(), req.GetEmail()
+	_, err := f.parseUser(pid, email)
 	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
+		return err
 	}
 
 	physiquecontroller := controllers.NewPhysiqueController()
@@ -56,23 +55,10 @@ func (f *Facade) GetPhysiques(ctx context.Context, req *proto.GetPhysiqueRequest
 
 // UpdatePhysique update physique
 func (f *Facade) UpdatePhysique(ctx context.Context, req *proto.UpdatePhysiqueRequest, rsp *proto.UpdatePhysiqueResponse) error {
-	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)
+	pid, email := req.GetPid(), req.GetEmail()
+	user, err := f.parseUser(pid, email)
 	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	var user *models.User
-	err = json.Unmarshal(userinfo, &user)
-	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	// check if user exists or not
-	usercontroller := controllers.NewUserController()
-	exsitinguser, err := usercontroller.GetUserByEmail(user.Email)
-	if err != nil {
-		return utils.NewError(errorcode.CoreNoUser)
+		return err
 	}
 
 	physiques := req.GetPhysiques()
@@ -81,7 +67,7 @@ func (f *Facade) UpdatePhysique(ctx context.Context, req *proto.UpdatePhysiqueRe
 	}
 
 	physique := physiques[0]
-	physique.CreatedBy = exsitinguser.Email
+	physique.CreatedBy = user.Email
 
 	physiquecontroller := controllers.NewPhysiqueController()
 	err = physiquecontroller.UpdatePhysique(&models.Physique{
@@ -97,29 +83,16 @@ func (f *Facade) UpdatePhysique(ctx context.Context, req *proto.UpdatePhysiqueRe
 		CreatedBy: physique.GetCreatedBy(),
 	})
 
-	f.syslog(notification.PhysiqueUpdated(exsitinguser.ID))
+	f.syslog(notification.PhysiqueUpdated(user.ID))
 	return err
 }
 
 // UpdatePhysiques update physiques
 func (f *Facade) UpdatePhysiques(ctx context.Context, req *proto.UpdatePhysiqueRequest, rsp *proto.UpdatePhysiqueResponse) error {
-	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)
+	pid, email := req.GetPid(), req.GetEmail()
+	user, err := f.parseUser(pid, email)
 	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	var user *models.User
-	err = json.Unmarshal(userinfo, &user)
-	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	// check if user exists or not
-	usercontroller := controllers.NewUserController()
-	exsitinguser, err := usercontroller.GetUserByEmail(user.Email)
-	if err != nil {
-		return utils.NewError(errorcode.CoreNoUser)
+		return err
 	}
 
 	physiques := []*models.Physique{}
@@ -134,14 +107,14 @@ func (f *Facade) UpdatePhysiques(ctx context.Context, req *proto.UpdatePhysiqueR
 			ExamDate:  physique.GetExamDate(),
 			Height:    physique.GetHeight(),
 			Weight:    physique.GetWeight(),
-			CreatedBy: exsitinguser.Email,
+			CreatedBy: user.Email,
 		})
 	}
 
 	physiquecontroller := controllers.NewPhysiqueController()
 	err = physiquecontroller.UpdatePhysiques(physiques)
 
-	f.syslog(notification.PhysiqueUpdated(exsitinguser.ID))
+	f.syslog(notification.PhysiqueUpdated(user.ID))
 	return err
 }
 

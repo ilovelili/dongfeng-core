@@ -2,21 +2,21 @@ package handlers
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/ilovelili/dongfeng-core/services/server/core/controllers"
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 	"github.com/ilovelili/dongfeng-core/services/utils"
 	errorcode "github.com/ilovelili/dongfeng-error-code"
+	notification "github.com/ilovelili/dongfeng-notification"
 	proto "github.com/ilovelili/dongfeng-protobuf"
 )
 
 // GetEbooks get ebooks
 func (f *Facade) GetEbooks(ctx context.Context, req *proto.GetEbooksRequest, rsp *proto.GetEbooksResponse) error {
-	pid := req.GetPid()
-	_, err := f.AuthClient.ParseUserInfo(pid)
+	pid, email := req.GetPid(), req.GetEmail()
+	_, err := f.parseUser(pid, email)
 	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
+		return err
 	}
 
 	ebookcontroller := controllers.NewEbookController()
@@ -40,23 +40,10 @@ func (f *Facade) GetEbooks(ctx context.Context, req *proto.GetEbooksRequest, rsp
 
 // UpdateEbook update ebook
 func (f *Facade) UpdateEbook(ctx context.Context, req *proto.UpdateEbookRequest, rsp *proto.UpdateEbookResponse) error {
-	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)
+	pid, email := req.GetPid(), req.GetEmail()
+	user, err := f.parseUser(pid, email)
 	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	var user *models.User
-	err = json.Unmarshal(userinfo, &user)
-	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	// check if user exists or not
-	usercontroller := controllers.NewUserController()
-	_, err = usercontroller.GetUserByEmail(user.Email)
-	if err != nil {
-		return utils.NewError(errorcode.CoreNoUser)
+		return err
 	}
 
 	ebookcontroller := controllers.NewEbookController()
@@ -70,5 +57,6 @@ func (f *Facade) UpdateEbook(ctx context.Context, req *proto.UpdateEbookRequest,
 		Images: req.GetImages(),
 	})
 
+	f.syslog(notification.EbookUpdated(user.ID))
 	return err
 }

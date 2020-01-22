@@ -2,10 +2,8 @@ package handlers
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/ilovelili/dongfeng-core/services/server/core/controllers"
-	"github.com/ilovelili/dongfeng-core/services/server/core/models"
 	"github.com/ilovelili/dongfeng-core/services/utils"
 	errorcode "github.com/ilovelili/dongfeng-error-code"
 	notification "github.com/ilovelili/dongfeng-notification"
@@ -14,10 +12,10 @@ import (
 
 // GetClasses get classes
 func (f *Facade) GetClasses(ctx context.Context, req *proto.GetClassRequest, rsp *proto.GetClassResponse) error {
-	pid := req.GetPid()
-	_, err := f.AuthClient.ParseUserInfo(pid)
+	pid, email := req.GetPid(), req.GetEmail()
+	_, err := f.parseUser(pid, email)
 	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
+		return err
 	}
 
 	classcontroller := controllers.NewClassController()
@@ -41,28 +39,15 @@ func (f *Facade) GetClasses(ctx context.Context, req *proto.GetClassRequest, rsp
 
 // UpdateClasses update classes
 func (f *Facade) UpdateClasses(ctx context.Context, req *proto.UpdateClassRequest, rsp *proto.UpdateClassResponse) error {
-	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)
+	pid, email := req.GetPid(), req.GetEmail()
+	user, err := f.parseUser(pid, email)
 	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	var user *models.User
-	err = json.Unmarshal(userinfo, &user)
-	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	// check if user exists or not
-	usercontroller := controllers.NewUserController()
-	exsitinguser, err := usercontroller.GetUserByEmail(user.Email)
-	if err != nil {
-		return utils.NewError(errorcode.CoreNoUser)
+		return err
 	}
 
 	classes := req.GetClasses()
 	for _, class := range classes {
-		class.CreatedBy = exsitinguser.Email
+		class.CreatedBy = user.Email
 	}
 
 	classcontroller := controllers.NewClassController()
@@ -71,6 +56,6 @@ func (f *Facade) UpdateClasses(ctx context.Context, req *proto.UpdateClassReques
 		return utils.NewError(errorcode.CoreFailedToUpdateClasses)
 	}
 
-	f.syslog(notification.ClasslistUpdated(exsitinguser.ID))
+	f.syslog(notification.ClasslistUpdated(user.ID))
 	return nil
 }

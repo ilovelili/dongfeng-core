@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/ilovelili/dongfeng-core/services/server/core/controllers"
 	"github.com/ilovelili/dongfeng-core/services/server/core/models"
@@ -14,10 +13,10 @@ import (
 
 // GetTeachers get teachers
 func (f *Facade) GetTeachers(ctx context.Context, req *proto.GetTeacherRequest, rsp *proto.GetTeacherResponse) error {
-	pid := req.GetPid()
-	_, err := f.AuthClient.ParseUserInfo(pid)
+	pid, email := req.GetPid(), req.GetEmail()
+	_, err := f.parseUser(pid, email)
 	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
+		return err
 	}
 
 	teachercontroller := controllers.NewTeacherController()
@@ -45,23 +44,10 @@ func (f *Facade) GetTeachers(ctx context.Context, req *proto.GetTeacherRequest, 
 
 // UpdateTeacher update teacher
 func (f *Facade) UpdateTeacher(ctx context.Context, req *proto.UpdateTeacherRequest, rsp *proto.UpdateTeacherResponse) error {
-	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)
+	pid, email := req.GetPid(), req.GetEmail()
+	user, err := f.parseUser(pid, email)
 	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	var user *models.User
-	err = json.Unmarshal(userinfo, &user)
-	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	// check if user exists or not
-	usercontroller := controllers.NewUserController()
-	exsitinguser, err := usercontroller.GetUserByEmail(user.Email)
-	if err != nil {
-		return utils.NewError(errorcode.CoreNoUser)
+		return err
 	}
 
 	teachers := req.GetTeachers()
@@ -70,7 +56,7 @@ func (f *Facade) UpdateTeacher(ctx context.Context, req *proto.UpdateTeacherRequ
 	}
 
 	teacher := teachers[0]
-	teacher.CreatedBy = exsitinguser.Email
+	teacher.CreatedBy = user.Email
 	id, email, role, name, class := teacher.GetId(), teacher.GetEmail(), teacher.GetRole(), teacher.GetName(), teacher.GetClass()
 	teachercontroller := controllers.NewTeacherController()
 	err = teachercontroller.UpdateTeacher(&models.Teacher{
@@ -81,34 +67,21 @@ func (f *Facade) UpdateTeacher(ctx context.Context, req *proto.UpdateTeacherRequ
 		Email: email,
 	})
 
-	f.syslog(notification.NamelistUpdated(exsitinguser.ID))
+	f.syslog(notification.NamelistUpdated(user.ID))
 	return err
 }
 
 // UpdateTeachers update teachers
 func (f *Facade) UpdateTeachers(ctx context.Context, req *proto.UpdateTeacherRequest, rsp *proto.UpdateTeacherResponse) error {
-	pid := req.GetPid()
-	userinfo, err := f.AuthClient.ParseUserInfo(pid)
+	pid, email := req.GetPid(), req.GetEmail()
+	user, err := f.parseUser(pid, email)
 	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	var user *models.User
-	err = json.Unmarshal(userinfo, &user)
-	if err != nil {
-		return utils.NewError(errorcode.GenericInvalidToken)
-	}
-
-	// check if user exists or not
-	usercontroller := controllers.NewUserController()
-	exsitinguser, err := usercontroller.GetUserByEmail(user.Email)
-	if err != nil {
-		return utils.NewError(errorcode.CoreNoUser)
+		return err
 	}
 
 	teachers := req.GetTeachers()
 	for _, teacher := range teachers {
-		teacher.CreatedBy = exsitinguser.Email
+		teacher.CreatedBy = user.Email
 	}
 
 	teachercontroller := controllers.NewTeacherController()
@@ -117,6 +90,6 @@ func (f *Facade) UpdateTeachers(ctx context.Context, req *proto.UpdateTeacherReq
 		return utils.NewError(errorcode.CoreFailedToUpdateTeachers)
 	}
 
-	f.syslog(notification.TeacherlistUpdated(exsitinguser.ID))
+	f.syslog(notification.TeacherlistUpdated(user.ID))
 	return nil
 }
